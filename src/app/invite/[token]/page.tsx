@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { getInviteDetails, acceptInvite } from "@/actions/invite";
 import { Button } from "@/components/ui/button";
@@ -11,13 +11,13 @@ import { toast } from "sonner";
 import { Trip } from "@/types";
 
 interface InvitePageProps {
-    params: {
+    params: Promise<{
         token: string;
-    };
+    }>;
 }
 
 export default function InvitePage({ params }: InvitePageProps) {
-    const { token } = params;
+    const { token } = use(params);
     const router = useRouter();
     const [user, setUser] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true); // Loading invite details
