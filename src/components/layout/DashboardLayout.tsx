@@ -106,9 +106,11 @@ export default function DashboardLayout({
 
             <div className="flex items-center gap-2 px-3 py-3 rounded-xl bg-muted/30 mt-2">
               {/* <UserButton afterSignOutUrl="/" /> */}
-              <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
-                JD
-              </div>
+              <Link href="/profile" className="flex-1 flex justify-center">
+                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary cursor-pointer hover:bg-primary/30 transition-colors">
+                  JD
+                </div>
+              </Link>
               <div className="flex-1" />
               <ThemeToggle />
             </div>
@@ -129,9 +131,11 @@ export default function DashboardLayout({
               <div className="flex items-center gap-4">
                 <ThemeToggle />
                 {/* <UserButton afterSignOutUrl="/" /> */}
-                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
-                  JD
-                </div>
+                <Link href="/profile">
+                  <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary cursor-pointer hover:bg-primary/30 transition-colors">
+                    JD
+                  </div>
+                </Link>
               </div>
             </div>
           </header>

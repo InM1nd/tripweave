@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { Plus, Sparkles, TrendingUp } from "lucide-react";
 import { CreateTripModal } from "@/components/trip/CreateTripModal";
 import { TripCard } from "@/components/trip/TripCard";
@@ -9,7 +11,6 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function DashboardPage() {
   const upcomingTrips = mockTrips.filter(t => t.startDate > new Date());
-  // const pastTrips = mockTrips.filter(t => t.endDate < new Date());
 
   return (
     <DashboardLayout>
@@ -24,7 +25,7 @@ export default function DashboardPage() {
               <span className="text-sm font-medium text-primary">Welcome back</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-              Your Adventures
+              Dashboard
             </h1>
             <p className="text-muted-foreground mt-2 text-base">
               Plan, explore, and share unforgettable journeys with friends.
@@ -44,40 +45,28 @@ export default function DashboardPage() {
         </div>
 
         {/* Trip Grid */}
-        {mockTrips.length > 0 ? (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Recent Trips</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {mockTrips.map((trip) => (
-                <TripCard key={trip.id} trip={trip} />
-              ))}
-
-              {/* Add New Trip Card - Desktop */}
-              <div className="hidden md:flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-2xl border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer group min-h-[280px]">
-                <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-600/10 group-hover:from-emerald-500/20 group-hover:to-teal-600/20 flex items-center justify-center mb-4 transition-all">
-                  <Plus className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="font-semibold text-lg mb-1">New Adventure</h3>
-                <p className="text-sm text-muted-foreground text-center max-w-[180px]">
-                  Start planning your next trip
-                </p>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Your Adventures</h2>
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/profile">View All</Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {mockTrips.map((trip) => (
+              <TripCard key={trip.id} trip={trip} />
+            ))}
+            <div className="hidden md:flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-2xl border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer group min-h-[280px]" onClick={() => document.getElementById("create-trip-trigger")?.click()}>
+              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-600/10 group-hover:from-emerald-500/20 group-hover:to-teal-600/20 flex items-center justify-center mb-4 transition-all">
+                <Plus className="h-8 w-8 text-primary" />
               </div>
+              <h3 className="font-semibold text-lg mb-1">New Adventure</h3>
+              <p className="text-sm text-muted-foreground text-center max-w-[180px]">
+                Start planning your next trip
+              </p>
             </div>
           </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="h-24 w-24 rounded-3xl bg-gradient-to-br from-emerald-500/10 to-teal-600/10 flex items-center justify-center mb-6">
-              <Plus className="h-12 w-12 text-primary" />
-            </div>
-            <h3 className="text-2xl font-semibold mb-2">No adventures yet</h3>
-            <p className="text-muted-foreground max-w-sm mb-8">
-              Create your first trip and start exploring the world with friends.
-            </p>
-            <CreateTripModal />
-          </div>
-        )}
+        </div>
 
         {/* Mobile FAB */}
         <div className="md:hidden fixed bottom-24 right-4 z-40">

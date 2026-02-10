@@ -61,7 +61,7 @@ const getIcon = (type: string) => {
 export default function NotificationsPage() {
   return (
     <DashboardLayout>
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-3xl mx-auto space-y-6 p-4 md:p-0">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold">Notifications</h2>

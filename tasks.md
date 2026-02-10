@@ -5,7 +5,7 @@
   - [x] Setup Tailwind CSS (validated config)
   - [x] Setup Shadcn/ui (User installed components)
   - [x] Configure Prisma with Postgres (Schema created)
-  - [x] Setup Clerk authentication (Middleware created)
+  - [-] Setup Clerk authentication (Disabled for Vercel build)
   - [x] Create base layouts (DashboardLayout, TripLayout, AuthLayout created)
   - [x] Setup environment variables (.env.example exists)
   - [x] Initialize Git repo (Implied)
@@ -37,27 +37,27 @@
 - [/] Phase 5: Timeline & Events (Backend & Logic)
   - [x] Timeline UI (Vertical layout, grouped by day)
   - [x] Event Cards (Type styling)
-  - [ ] Add Event Modal (Form & Validation) <!-- id: 20 -->
+  - [x] Add Event Modal (UI done, Drawer for mobile) <!-- id: 20 -->
   - [ ] Connect to Database (API Routes) <!-- id: 21 -->
   - [ ] Edit/Delete Event functionality <!-- id: 22 -->
 
-- [ ] Phase 6: Map Integration
-  - [ ] Setup React Leaflet <!-- id: 23 -->
-  - [ ] Create Map Page (`/trip/[id]/map`) <!-- id: 24 -->
-  - [ ] Display event pins on map <!-- id: 25 -->
-  - [ ] Event Popup implementation <!-- id: 26 -->
+- [-] Phase 6: Map Integration
+  - [x] Setup React Leaflet <!-- id: 23 -->
+  - [x] Create Map Page (`/trip/[id]/map`) (UI done, Mock data) <!-- id: 24 -->
+  - [x] Display event pins on map (Mock data) <!-- id: 25 -->
+  - [x] Event Popup implementation <!-- id: 26 -->
 
-- [/] Phase 7: Budget Tracker (Backend & Logic)
+- [-] Phase 7: Budget Tracker (Backend & Logic)
   - [x] Budget Overview UI (Cards, Progress bars)
   - [x] Expenses List UI
   - [x] Category Breakdown UI
-  - [ ] Add Expense Modal <!-- id: 27 -->
+  - [x] Add Expense Modal (UI done, Drawer for mobile) <!-- id: 27 -->
   - [ ] Connect to Database (API Routes) <!-- id: 28 -->
 
-- [ ] Phase 8: Document Management
-  - [ ] Create Documents Page (`/trip/[id]/documents`) <!-- id: 29 -->
+- [-] Phase 8: Document Management
+  - [x] Create Documents Page (`/trip/[id]/documents`) (UI done, Mock data) <!-- id: 29 -->
   - [ ] Setup File Upload (UploadThing/Cloudinary) <!-- id: 30 -->
-  - [ ] Document Grid/List UI <!-- id: 31 -->
+  - [x] Document Grid/List UI <!-- id: 31 -->
   - [ ] Connect to Database <!-- id: 32 -->
 
 - [ ] Phase 9: Notifications
