@@ -6,7 +6,7 @@ import { getInviteDetails, acceptInvite } from "@/actions/invite";
 import { Button } from "@/components/ui/button";
 import { Loader2, Calendar, MapPin, Users } from "lucide-react";
 import { format } from "date-fns";
-import { useUser } from "@clerk/nextjs";
+import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { Trip } from "@/types";
 
@@ -19,10 +19,21 @@ interface InvitePageProps {
 export default function InvitePage({ params }: InvitePageProps) {
     const { token } = params;
     const router = useRouter();
-    const { user, isLoaded, isSignedIn } = useUser();
-    const [invite, setInvite] = useState<any>(null); // Type this properly if possible
-    const [isLoading, setIsLoading] = useState(true);
+    const [user, setUser] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true); // Loading invite details
+    const [isAuthLoading, setIsAuthLoading] = useState(true); // Loading auth state
+    const [invite, setInvite] = useState<any>(null);
     const [isJoining, setIsJoining] = useState(false);
+    const supabase = createClient();
+
+    useEffect(() => {
+        const checkUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            setUser(user);
+            setIsAuthLoading(false);
+        };
+        checkUser();
+    }, [supabase]);
 
     useEffect(() => {
         const fetchInvite = async () => {
@@ -41,10 +52,10 @@ export default function InvitePage({ params }: InvitePageProps) {
     }, [token]);
 
     const handleJoin = async () => {
-        if (!isSignedIn) {
-            // Redirect to sign in, then back to this page
+        if (!user) {
+            // Redirect to login, then back to this page
             const redirectUrl = `/invite/${token}`;
-            router.push(`/sign-in?redirect_url=${encodeURIComponent(redirectUrl)}`);
+            router.push(`/login?next=${encodeURIComponent(redirectUrl)}`);
             return;
         }
 
@@ -61,7 +72,7 @@ export default function InvitePage({ params }: InvitePageProps) {
         }
     };
 
-    if (isLoading || !isLoaded) {
+    if (isLoading || isAuthLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-50">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -137,14 +148,14 @@ export default function InvitePage({ params }: InvitePageProps) {
                                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                                     Joining...
                                 </>
-                            ) : isSignedIn ? (
+                            ) : user ? (
                                 "Join Trip"
                             ) : (
                                 "Sign in to Join"
                             )}
                         </Button>
 
-                        {!isSignedIn && (
+                        {!user && (
                             <p className="text-xs text-center text-muted-foreground">
                                 You'll be redirected to sign in or create an account before joining.
                             </p>

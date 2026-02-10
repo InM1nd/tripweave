@@ -25,13 +25,13 @@ export default function Home() {
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link
             className="text-sm font-medium hover:underline underline-offset-4 text-zinc-200 hover:text-white"
-            href="/sign-in"
+            href="/login"
           >
             Sign In
           </Link>
           <Link
             className="text-sm font-medium hover:underline underline-offset-4 text-zinc-200 hover:text-white"
-            href="/sign-up"
+            href="/login?signup=true"
           >
             Sign Up
           </Link>

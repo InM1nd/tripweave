@@ -1,16 +1,17 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function inviteToTrip(tripId: string, email: string, role: "ADMIN" | "MEMBER" = "MEMBER") {
-    const { userId } = await auth();
-    if (!userId) throw new Error("Unauthorized");
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+    if (!authUser || !authUser.id) throw new Error("Unauthorized");
 
     // Find the current user
     const currentUser = await prisma.user.findUnique({
-        where: { clerkId: userId },
+        where: { authId: authUser.id },
     });
     if (!currentUser) throw new Error("User not found");
 
@@ -64,11 +65,12 @@ export async function inviteToTrip(tripId: string, email: string, role: "ADMIN" 
 }
 
 export async function createPublicInvite(tripId: string, role: "ADMIN" | "MEMBER" = "MEMBER") {
-    const { userId } = await auth();
-    if (!userId) throw new Error("Unauthorized");
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+    if (!authUser || !authUser.id) throw new Error("Unauthorized");
 
     const currentUser = await prisma.user.findUnique({
-        where: { clerkId: userId },
+        where: { authId: authUser.id },
     });
     if (!currentUser) throw new Error("User not found");
 
@@ -81,8 +83,6 @@ export async function createPublicInvite(tripId: string, role: "ADMIN" | "MEMBER
     }
 
     // Create a new public invite (email is null)
-    // We don't use upsert because email is null and unique constraint might behave differently or we want to allow multiple links
-    // But for simplicity, let's try to reuse an existing active public invite if one exists to avoid clutter
     const existingInvite = await prisma.tripInvite.findFirst({
         where: {
             tripId,
@@ -111,11 +111,12 @@ export async function createPublicInvite(tripId: string, role: "ADMIN" | "MEMBER
 }
 
 export async function acceptInvite(token: string) {
-    const { userId } = await auth();
-    if (!userId) throw new Error("Unauthorized");
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+    if (!authUser || !authUser.id) throw new Error("Unauthorized");
 
     const currentUser = await prisma.user.findUnique({
-        where: { clerkId: userId },
+        where: { authId: authUser.id },
     });
     if (!currentUser) throw new Error("User not found");
 
@@ -202,11 +203,12 @@ export async function getInviteDetails(token: string) {
 }
 
 export async function getPendingInvites(tripId: string) {
-    const { userId } = await auth();
-    if (!userId) return [];
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+    if (!authUser || !authUser.id) return [];
 
     const currentUser = await prisma.user.findUnique({
-        where: { clerkId: userId },
+        where: { authId: authUser.id },
     });
     if (!currentUser) return [];
 
@@ -221,11 +223,12 @@ export async function getPendingInvites(tripId: string) {
 }
 
 export async function cancelInvite(inviteId: string) {
-    const { userId } = await auth();
-    if (!userId) throw new Error("Unauthorized");
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+    if (!authUser || !authUser.id) throw new Error("Unauthorized");
 
     const currentUser = await prisma.user.findUnique({
-        where: { clerkId: userId },
+        where: { authId: authUser.id },
     });
     if (!currentUser) throw new Error("User not found");
 
@@ -247,11 +250,12 @@ export async function cancelInvite(inviteId: string) {
 }
 
 export async function getTripMembers(tripId: string) {
-    const { userId } = await auth();
-    if (!userId) return [];
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+    if (!authUser || !authUser.id) return [];
 
     const currentUser = await prisma.user.findUnique({
-        where: { clerkId: userId },
+        where: { authId: authUser.id },
     });
     if (!currentUser) return [];
 

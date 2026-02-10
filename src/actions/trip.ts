@@ -2,13 +2,14 @@
 
 import { prisma } from "@/lib/prisma";
 import { createTripSchema, CreateTripValues } from "@/lib/validations/trip";
-import { auth } from "@clerk/nextjs/server";
+import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function createTrip(data: CreateTripValues) {
-    const { userId } = await auth();
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
 
-    if (!userId) {
+    if (!authUser || !authUser.id) {
         throw new Error("Unauthorized");
     }
 
@@ -22,7 +23,7 @@ export async function createTrip(data: CreateTripValues) {
 
     // Find user in DB
     const user = await prisma.user.findUnique({
-        where: { clerkId: userId },
+        where: { authId: authUser.id },
     });
 
     if (!user) {
@@ -64,14 +65,15 @@ export async function createTrip(data: CreateTripValues) {
 }
 
 export async function getTrips() {
-    const { userId } = await auth();
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
 
-    if (!userId) {
+    if (!authUser || !authUser.id) {
         return [];
     }
 
     const user = await prisma.user.findUnique({
-        where: { clerkId: userId },
+        where: { authId: authUser.id },
     });
 
     if (!user) {
@@ -108,14 +110,15 @@ export async function getTrips() {
 }
 
 export async function getTrip(tripId: string) {
-    const { userId } = await auth();
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
 
-    if (!userId) {
+    if (!authUser || !authUser.id) {
         return null;
     }
 
     const user = await prisma.user.findUnique({
-        where: { clerkId: userId },
+        where: { authId: authUser.id },
     });
 
     if (!user) {
