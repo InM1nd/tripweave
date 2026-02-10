@@ -105,7 +105,10 @@ export default function DashboardLayout({
             </Link>
 
             <div className="flex items-center gap-2 px-3 py-3 rounded-xl bg-muted/30 mt-2">
-              <UserButton afterSignOutUrl="/" />
+              {/* <UserButton afterSignOutUrl="/" /> */}
+              <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+                JD
+              </div>
               <div className="flex-1" />
               <ThemeToggle />
             </div>
@@ -123,9 +126,12 @@ export default function DashboardLayout({
                 </div>
                 <span className="font-bold">TripWeave</span>
               </Link>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
                 <ThemeToggle />
-                <UserButton afterSignOutUrl="/" />
+                {/* <UserButton afterSignOutUrl="/" /> */}
+                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+                  JD
+                </div>
               </div>
             </div>
           </header>
