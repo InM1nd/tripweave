@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Loader2, Euro, CreditCard, Wallet, Receipt } from "lucide-react";
+import { Loader2, Euro } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,12 +32,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils";
 
 const expenseSchema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters"),
   amount: z.string().regex(/^\d+(\.\d{1,2})?$/, "Invalid amount"),
-  currency: z.string().default("EUR"),
+  currency: z.string().min(1, "Currency is required"),
   category: z.enum(["accommodation", "transport", "food", "activity", "shopping", "other"]),
   paidBy: z.string().min(1, "Payer is required"),
   splitType: z.enum(["equal", "custom", "you"]),
@@ -54,7 +54,7 @@ export function AddExpenseModal({ children }: AddExpenseModalProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<ExpenseFormValues>({
-    resolver: zodResolver(expenseSchema) as any,
+    resolver: zodResolver(expenseSchema),
     defaultValues: {
       title: "",
       amount: "",

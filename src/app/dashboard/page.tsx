@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function DashboardPage() {
   const upcomingTrips = mockTrips.filter(t => t.startDate > new Date());
-  const pastTrips = mockTrips.filter(t => t.endDate < new Date());
+  // const pastTrips = mockTrips.filter(t => t.endDate < new Date());
 
   return (
     <DashboardLayout>

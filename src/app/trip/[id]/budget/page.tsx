@@ -4,7 +4,7 @@ import { use } from "react";
 import TripLayout from "@/components/layout/TripLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Wallet, TrendingUp, TrendingDown, Users } from "lucide-react";
+import { ArrowUpRight, ArrowDownLeft, DollarSign, PieChart, TrendingUp, TrendingDown, Wallet, Plus, Download, Filter } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { AddExpenseModal } from "@/components/trip/AddExpenseModal";
 

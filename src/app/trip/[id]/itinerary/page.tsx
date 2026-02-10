@@ -5,7 +5,7 @@ import TripLayout from "@/components/layout/TripLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, MoreHorizontal, Plus } from "lucide-react";
+import { Calendar, Calendar as CalendarIcon, Clock, Plus, MoreHorizontal } from "lucide-react";
 
 // Mock data re-used/adapted
 const mockDays = [

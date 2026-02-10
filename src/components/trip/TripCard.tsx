@@ -13,11 +13,6 @@ interface TripCardProps {
 }
 
 export function TripCard({ trip }: TripCardProps) {
-  const formattedDateRange = `${format(trip.startDate, "MMM d")} - ${format(
-    trip.endDate,
-    "MMM d, yyyy"
-  )}`;
-
   const daysDuration = Math.ceil(
     (trip.endDate.getTime() - trip.startDate.getTime()) / (1000 * 60 * 60 * 24)
   );

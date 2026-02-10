@@ -6,7 +6,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Clock } from "lucide-react";
 
 // Fix for default marker icons in Next.js
 const iconUrl = "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png";

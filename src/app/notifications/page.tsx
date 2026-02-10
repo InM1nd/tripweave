@@ -2,7 +2,6 @@
 
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Bell, Calendar, Check, UserPlus, Wallet } from "lucide-react";
 
