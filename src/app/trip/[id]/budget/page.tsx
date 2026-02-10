@@ -9,27 +9,17 @@ import { Progress } from "@/components/ui/progress";
 import { AddExpenseModal } from "@/components/trip/AddExpenseModal";
 
 // Mock budget data
-const mockBudget = {
-  total: 5000,
-  spent: 2340,
-  categories: [
-    { name: "Flights", amount: 1200, color: "bg-blue-500" },
-    { name: "Hotels", amount: 800, color: "bg-purple-500" },
-    { name: "Food", amount: 240, color: "bg-orange-500" },
-    { name: "Activities", amount: 100, color: "bg-emerald-500" },
-  ],
-  recentExpenses: [
-    { id: "1", title: "Flight to Tokyo", amount: 1200, paidBy: "Alex", category: "Flights" },
-    { id: "2", title: "Park Hyatt Tokyo", amount: 800, paidBy: "Sarah", category: "Hotels" },
-    { id: "3", title: "Sushi Lunch", amount: 120, paidBy: "Alex", category: "Food" },
-    { id: "4", title: "Temple Entrance", amount: 20, paidBy: "Mike", category: "Activities" },
-  ],
+const budget = {
+  total: 0,
+  spent: 0,
+  categories: [],
+  recentExpenses: [],
 };
 
 export default function BudgetPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const percentSpent = (mockBudget.spent / mockBudget.total) * 100;
-  const remaining = mockBudget.total - mockBudget.spent;
+  const percentSpent = (budget.spent / (budget.total || 1)) * 100;
+  const remaining = budget.total - budget.spent;
 
   return (
     <TripLayout tripId={id}>
@@ -58,7 +48,7 @@ export default function BudgetPage({ params }: { params: Promise<{ id: string }>
                 </div>
                 <span className="text-xs md:text-sm text-muted-foreground">Total Budget</span>
               </div>
-              <p className="text-xl md:text-3xl font-bold">€{mockBudget.total.toLocaleString()}</p>
+              <p className="text-xl md:text-3xl font-bold">€{budget.total.toLocaleString()}</p>
             </CardContent>
           </Card>
 
@@ -70,7 +60,7 @@ export default function BudgetPage({ params }: { params: Promise<{ id: string }>
                 </div>
                 <span className="text-xs md:text-sm text-muted-foreground">Spent</span>
               </div>
-              <p className="text-xl md:text-3xl font-bold">€{mockBudget.spent.toLocaleString()}</p>
+              <p className="text-xl md:text-3xl font-bold">€{budget.spent.toLocaleString()}</p>
               <Progress value={percentSpent} className="mt-2 h-1.5 md:h-2" />
             </CardContent>
           </Card>
@@ -93,8 +83,8 @@ export default function BudgetPage({ params }: { params: Promise<{ id: string }>
           <CardContent className="p-4 md:p-6">
             <h3 className="font-semibold mb-3 md:mb-4 text-sm md:text-base">By Category</h3>
             <div className="space-y-3 md:space-y-4">
-              {mockBudget.categories.map((category) => {
-                const percent = (category.amount / mockBudget.spent) * 100;
+              {budget.categories.map((category: any) => {
+                const percent = (category.amount / budget.spent) * 100;
                 return (
                   <div key={category.name} className="flex items-center gap-3 md:gap-4">
                     <div className={`h-2.5 w-2.5 md:h-3 md:w-3 rounded-full ${category.color}`} />
@@ -115,7 +105,7 @@ export default function BudgetPage({ params }: { params: Promise<{ id: string }>
           <CardContent className="p-4 md:p-6">
             <h3 className="font-semibold mb-3 md:mb-4 text-sm md:text-base">Recent Expenses</h3>
             <div className="space-y-2 md:space-y-3">
-              {mockBudget.recentExpenses.map((expense) => (
+              {budget.recentExpenses.map((expense: any) => (
                 <div key={expense.id} className="flex items-center gap-3 md:gap-4 p-2.5 md:p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer">
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-xs md:text-sm truncate">{expense.title}</p>

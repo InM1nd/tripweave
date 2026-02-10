@@ -8,34 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Calendar as CalendarIcon, Clock, Plus, MoreHorizontal } from "lucide-react";
 
 // Mock data re-used/adapted
-const mockDays = [
-  {
-    day: 1,
-    date: "Apr 1",
-    title: "Arrival in Tokyo",
-    activities: [
-      { id: "1", title: "Flight Arrival", time: "10:00", type: "transport" },
-      { id: "2", title: "Check-in Hotel", time: "14:00", type: "accommodation" },
-      { id: "3", title: "Shibuya Crossing", time: "18:00", type: "activity" },
-    ]
-  },
-  {
-    day: 2,
-    date: "Apr 2",
-    title: "Old & New Tokyo",
-    activities: [
-      { id: "4", title: "Senso-ji Temple", time: "09:00", type: "activity" },
-      { id: "5", title: "Tokyo Skytree", time: "13:00", type: "activity" },
-      { id: "6", title: "Dinner @ Izakaya", time: "19:00", type: "food" },
-    ]
-  },
-  {
-    day: 3,
-    date: "Apr 3",
-    title: "Day Trip to Hakim",
-    activities: []
-  },
-];
+const days: any[] = [];
 
 const typeColors: Record<string, string> = {
   transport: "bg-blue-500/10 text-blue-500",
@@ -62,7 +35,7 @@ export default function ItineraryPage({ params }: { params: Promise<{ id: string
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockDays.map((day) => (
+          {days.map((day) => (
             <Card key={day.day} className="h-full border-border/40 bg-card/50 flex flex-col">
               <CardHeader className="pb-3 border-b border-border/40 bg-muted/20">
                 <div className="flex items-center justify-between">
@@ -82,7 +55,7 @@ export default function ItineraryPage({ params }: { params: Promise<{ id: string
               </CardHeader>
               <CardContent className="p-3 flex-1 flex flex-col gap-2">
                 {day.activities.length > 0 ? (
-                  day.activities.map((act) => (
+                  day.activities.map((act: any) => (
                     <div key={act.id} className="p-3 rounded-lg bg-background border border-border/50 hover:border-primary/50 transition-colors group cursor-grab active:cursor-grabbing">
                       <div className="flex justify-between items-start mb-1">
                         <span className="text-xs font-mono text-muted-foreground">{act.time}</span>

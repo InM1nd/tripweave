@@ -9,44 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { AddEventModal } from "@/components/trip/AddEventModal";
 
 // Mock timeline events
-const mockEvents = [
-  {
-    id: "1",
-    date: new Date("2026-04-01"),
-    title: "Flight to Tokyo",
-    type: "transport",
-    time: "10:00",
-    description: "Departure from Paris CDG",
-    location: "Narita Airport",
-  },
-  {
-    id: "2",
-    date: new Date("2026-04-01"),
-    title: "Hotel Check-in",
-    type: "accommodation",
-    time: "18:00",
-    description: "Park Hyatt Tokyo",
-    location: "Shinjuku, Tokyo",
-  },
-  {
-    id: "3",
-    date: new Date("2026-04-02"),
-    title: "Senso-ji Temple",
-    type: "activity",
-    time: "09:00",
-    description: "Visit the famous temple in Asakusa",
-    location: "Asakusa, Tokyo",
-  },
-  {
-    id: "4",
-    date: new Date("2026-04-02"),
-    title: "Lunch at Tsukiji",
-    type: "food",
-    time: "12:30",
-    description: "Fresh sushi at the outer market",
-    location: "Tsukiji Market",
-  },
-];
+const events: any[] = [];
 
 const eventTypeColors: Record<string, string> = {
   transport: "bg-blue-500/10 text-blue-500 border-blue-500/20",
@@ -60,14 +23,14 @@ export default function TimelinePage({ params }: { params: Promise<{ id: string 
   const { id } = use(params);
 
   // Group events by date
-  const groupedEvents = mockEvents.reduce((acc, event) => {
+  const groupedEvents: Record<string, any[]> = events.reduce((acc: any, event: any) => {
     const dateKey = event.date.toISOString().split("T")[0];
     if (!acc[dateKey]) {
       acc[dateKey] = [];
     }
     acc[dateKey].push(event);
     return acc;
-  }, {} as Record<string, typeof mockEvents>);
+  }, {});
 
   return (
     <TripLayout tripId={id}>
@@ -88,7 +51,7 @@ export default function TimelinePage({ params }: { params: Promise<{ id: string 
 
         {/* Timeline */}
         <div className="space-y-6 md:space-y-8">
-          {Object.entries(groupedEvents).map(([dateKey, events]) => {
+          {Object.entries(groupedEvents).map(([dateKey, events]: [string, any[]]) => {
             const date = new Date(dateKey);
             return (
               <div key={dateKey} className="relative">
@@ -114,7 +77,7 @@ export default function TimelinePage({ params }: { params: Promise<{ id: string 
 
                 {/* Events */}
                 <div className="ml-5 md:ml-6 pl-4 md:pl-6 border-l-2 border-border/50 space-y-3 md:space-y-4">
-                  {events.map((event) => (
+                  {events.map((event: any) => (
                     <Card key={event.id} className="border-border/40 bg-card/50 backdrop-blur-sm hover:shadow-md transition-shadow cursor-pointer">
                       <CardContent className="p-3 md:p-4">
                         <div className="flex items-start gap-3 md:gap-4">

@@ -7,174 +7,174 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // Core Models
 
 model User {
-  id            String       @id @default(cuid())
-  clerkId       String       @unique // Clerk user ID
-  email         String       @unique
-  name          String
-  avatar        String?
-  
-  trips         TripMember[]
-  votes         Vote[]
-  
+  id      String  @id @default(cuid())
+  clerkId String  @unique // Clerk user ID
+  email   String  @unique
+  name    String
+  avatar  String?
+
+  trips TripMember[]
+  votes Vote[]
+
   // Gamification
-  totalTrips    Int      @default(0)
-  achievements  String[] // ["planner_pro", "budget_master"]
-  
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  totalTrips   Int      @default(0)
+  achievements String[] // ["planner_pro", "budget_master"]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Trip {
   id          String   @id @default(cuid())
-  name        String   // "Japan 2026"
-  destination String   // "Tokyo, Kyoto, Osaka"
+  name        String // "Japan 2026"
+  destination String // "Tokyo, Kyoto, Osaka"
   startDate   DateTime
   endDate     DateTime
   coverImage  String?
   currency    String   @default("EUR")
   timezone    String   @default("UTC")
-  
-  members     TripMember[]
-  events      Event[]
-  documents   Document[]
-  budget      Budget?
-  
-  createdBy   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  members   TripMember[]
+  invites   TripInvite[]
+  events    Event[]
+  documents Document[]
+  budget    Budget?
+
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model TripMember {
-  id       String  @id @default(cuid())
-  tripId   String
-  userId   String
-  role     Role    @default(MEMBER)
-  
+  id     String @id @default(cuid())
+  tripId String
+  userId String
+  role   Role   @default(MEMBER)
+
   // Gamification
-  eventsAdded    Int @default(0)
-  documentsAdded Int @default(0)
+  eventsAdded    Int   @default(0)
+  documentsAdded Int   @default(0)
   totalSpent     Float @default(0)
-  
-  trip     Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  user     User    @relation(fields: [userId], references: [id])
-  
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
   joinedAt DateTime @default(now())
-  
+
   @@unique([tripId, userId])
 }
 
 model Event {
   id          String    @id @default(cuid())
   tripId      String
-  title       String    // "Senso-ji Temple Visit"
+  title       String // "Senso-ji Temple Visit"
   description String?   @db.Text
   type        EventType
-  
+
   // Timing
-  startTime   DateTime
-  endTime     DateTime?
-  allDay      Boolean   @default(false)
-  
+  startTime DateTime
+  endTime   DateTime?
+  allDay    Boolean   @default(false)
+
   // Location
-  location    String?
-  address     String?
-  lat         Float?
-  lng         Float?
-  
+  location String?
+  address  String?
+  lat      Float?
+  lng      Float?
+
   // Budget
-  cost        Float?
-  currency    String?
-  category    String?   // "Food", "Transport", "Activities"
-  paidBy      String?   // userId
+  cost         Float?
+  currency     String?
+  category     String? // "Food", "Transport", "Activities"
+  paidBy       String? // userId
   splitBetween String[] // [userId1, userId2]
-  
+
   // Engagement
   votes       Vote[]
-  attachments String[]  // File URLs
-  url         String?   // External link (booking, restaurant)
-  
+  attachments String[] // File URLs
+  url         String? // External link (booking, restaurant)
+
   // Notifications
-  reminderSent Boolean  @default(false)
+  reminderSent Boolean   @default(false)
   reminderTime DateTime? // When to send reminder
-  
-  createdBy   String
-  trip        Trip      @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+
+  createdBy String
+  trip      Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Vote {
-  id        String   @id @default(cuid())
-  eventId   String
-  userId    String
-  
-  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id])
-  
+  id      String @id @default(cuid())
+  eventId String
+  userId  String
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id])
+
   createdAt DateTime @default(now())
-  
+
   @@unique([eventId, userId])
 }
 
 model Document {
-  id          String   @id @default(cuid())
-  tripId      String
-  name        String   // "ANA_Flight_Ticket.pdf"
-  type        DocType
-  url         String   // Storage URL
-  fileSize    Int      // bytes
-  mimeType    String
-  
+  id       String  @id @default(cuid())
+  tripId   String
+  name     String // "ANA_Flight_Ticket.pdf"
+  type     DocType
+  url      String // Storage URL
+  fileSize Int // bytes
+  mimeType String
+
   // Optional linking
   linkedEventId String? // Link to specific event
-  
-  uploadedBy  String
-  trip        Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  
-  createdAt   DateTime @default(now())
+
+  uploadedBy String
+  trip       Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }
 
 model Budget {
-  id          String  @id @default(cuid())
-  tripId      String  @unique
+  id          String @id @default(cuid())
+  tripId      String @unique
   totalBudget Float
-  currency    String  @default("EUR")
-  
-  categories  BudgetCategory[]
-  trip        Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  currency    String @default("EUR")
+
+  categories BudgetCategory[]
+  trip       Trip             @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model BudgetCategory {
-  id        String  @id @default(cuid())
+  id        String @id @default(cuid())
   budgetId  String
-  name      String  // "Flights", "Hotels", "Food", "Activities"
+  name      String // "Flights", "Hotels", "Food", "Activities"
   allocated Float
-  color     String  @default("#3b82f6") // For charts
-  
-  budget    Budget  @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  color     String @default("#3b82f6") // For charts
+
+  budget Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 }
 
 model Notification {
-  id        String   @id @default(cuid())
-  userId    String
-  tripId    String?
-  eventId   String?
-  
-  type      NotificationType
-  title     String
-  message   String
-  read      Boolean  @default(false)
-  
+  id      String  @id @default(cuid())
+  userId  String
+  tripId  String?
+  eventId String?
+
+  type    NotificationType
+  title   String
+  message String
+  read    Boolean          @default(false)
+
   createdAt DateTime @default(now())
 }
 
@@ -211,4 +211,28 @@ enum NotificationType {
   EVENT_ADDED
   BUDGET_ALERT
   DOCUMENT_ADDED
+}
+
+model TripInvite {
+  id        String       @id @default(cuid())
+  tripId    String
+  email     String?
+  token     String       @unique @default(cuid())
+  role      Role         @default(MEMBER)
+  invitedBy String
+  status    InviteStatus @default(PENDING)
+  uses      Int          @default(0)
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@unique([tripId, email])
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
 }

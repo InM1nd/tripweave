@@ -62,7 +62,7 @@
 
 - [ ] Phase 9: Notifications
   - [ ] Notification Data Model <!-- id: 33 -->
-  - [ ] UI for Notification Center (`/notifications`) <!-- id: 34 -->
+  - [x] UI for Notification Center (`/notifications`) (Mock data) <!-- id: 34 -->
   - [ ] Email Reminders (Resend) <!-- id: 35 -->
 
 - [ ] Phase 10: Voting System
@@ -70,8 +70,8 @@
   - [ ] Backend Logic for Voting <!-- id: 37 -->
 
 - [ ] Phase 11: Gamification
-  - [ ] Profile Page with Stats <!-- id: 38 -->
-  - [ ] Achievement Badges UI <!-- id: 39 -->
+  - [x] Profile Page with Stats (Mock data) <!-- id: 38 -->
+  - [x] Achievement Badges UI (In Profile) <!-- id: 39 -->
   - [ ] Achievement Logic <!-- id: 40 -->
 
 - [ ] Phase 12: PWA & Offline
@@ -80,6 +80,18 @@
   - [ ] Manifest.json <!-- id: 43 -->
 
 - [ ] Phase 13: Polish & Launch
+  - [x] Responsive design (Mobile adaptations)
   - [ ] Loading Skeletons <!-- id: 44 -->
   - [ ] Error Boundaries <!-- id: 45 -->
   - [ ] Final Testing <!-- id: 46 -->
+
+- [x] Phase 14: New Pages & Refactoring (Added)
+  - [x] Create Maps Page (`/maps`)
+  - [x] Create Explore Page (`/explore`) (Recommendations)
+  - [x] Refactor Dashboard (Trips + Quick Skills)
+  - [x] Move "Your Adventures" to Profile (and back to Dashboard)
+
+- [x] Phase 15: Refinement (Added)
+  - [x] Adapt `/maps` for mobile
+  - [x] Sidebar adjustments (Narrower on Desktop)
+  - [x] Avatar links to Profile

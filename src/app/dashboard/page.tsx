@@ -1,16 +1,18 @@
-"use client";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plus, Sparkles, TrendingUp } from "lucide-react";
 import { CreateTripModal } from "@/components/trip/CreateTripModal";
 import { TripCard } from "@/components/trip/TripCard";
-import { mockTrips } from "@/lib/mock-data";
+import { NewTripCard } from "@/components/trip/NewTripCard";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
+import { getTrips } from "@/actions/trip";
 
-export default function DashboardPage() {
-  const upcomingTrips = mockTrips.filter(t => t.startDate > new Date());
+import { Trip } from "@/types";
+
+export default async function DashboardPage() {
+  const trips = await getTrips() as unknown as Trip[];
+  const upcomingTrips = trips.filter((t: Trip) => t.startDate > new Date());
 
   return (
     <DashboardLayout>
@@ -38,10 +40,10 @@ export default function DashboardPage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard label="Total Trips" value={mockTrips.length} icon={TrendingUp} />
+          <StatCard label="Total Trips" value={trips.length} icon={TrendingUp} />
           <StatCard label="Upcoming" value={upcomingTrips.length} icon={Sparkles} />
-          <StatCard label="Countries" value={3} icon={TrendingUp} />
-          <StatCard label="Travel Days" value={27} icon={TrendingUp} />
+          <StatCard label="Countries" value={new Set(trips.map((t: Trip) => t.destination)).size} icon={TrendingUp} />
+          <StatCard label="Trip Types" value={1} icon={TrendingUp} />
         </div>
 
         {/* Trip Grid */}
@@ -53,18 +55,10 @@ export default function DashboardPage() {
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {mockTrips.map((trip) => (
+            {trips.map((trip: Trip) => (
               <TripCard key={trip.id} trip={trip} />
             ))}
-            <div className="hidden md:flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-2xl border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all cursor-pointer group min-h-[280px]" onClick={() => document.getElementById("create-trip-trigger")?.click()}>
-              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-600/10 group-hover:from-emerald-500/20 group-hover:to-teal-600/20 flex items-center justify-center mb-4 transition-all">
-                <Plus className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-semibold text-lg mb-1">New Adventure</h3>
-              <p className="text-sm text-muted-foreground text-center max-w-[180px]">
-                Start planning your next trip
-              </p>
-            </div>
+            <NewTripCard />
           </div>
         </div>
 

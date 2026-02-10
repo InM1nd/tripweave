@@ -3,10 +3,13 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
+import { createTripSchema } from "@/lib/validations/trip";
+import { useState, useEffect } from "react";
 import { CalendarIcon, Loader2, MapPin, Globe } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { createTrip } from "@/actions/trip";
+import { CreateTripValues } from "@/lib/validations/trip";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -51,17 +54,7 @@ import {
 import { toast } from "sonner";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-const createTripSchema = z.object({
-  name: z.string().min(3, { message: "Trip name must be at least 3 characters." }),
-  destination: z.string().min(2, { message: "Destination is required." }),
-  dateRange: z.object({
-    from: z.date({ message: "Start date is required." }),
-    to: z.date({ message: "End date is required." }),
-  }).refine((data) => data.from <= data.to, { message: "End date cannot be before start date.", path: ["to"] }),
-  currency: z.string().min(1, { message: "Currency is required." }),
-});
 
-type CreateTripValues = z.infer<typeof createTripSchema>;
 
 export function CreateTripModal() {
   const [open, setOpen] = useState(false);
@@ -78,18 +71,25 @@ export function CreateTripModal() {
     },
   });
 
+  useEffect(() => {
+    if (open) {
+      form.reset();
+    }
+  }, [open, form]);
+
   async function onSubmit(data: CreateTripValues) {
     setIspending(true);
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    console.log("Creating trip:", data);
-    toast.success("Trip created successfully!");
-
-    setIspending(false);
-    setOpen(false);
-    form.reset();
+    try {
+      await createTrip(data);
+      toast.success("Trip created successfully!");
+      setOpen(false);
+      form.reset();
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to create trip. Please try again.");
+    } finally {
+      setIspending(false);
+    }
   }
 
   const FormContent = (
@@ -227,7 +227,7 @@ export function CreateTripModal() {
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
+        <DialogTrigger asChild id="create-trip-trigger">
           <Button className="gap-2">
             Create Trip
           </Button>

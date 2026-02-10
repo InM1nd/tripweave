@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-// import { UserButton } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import {
   Home,
   Bell,
@@ -37,7 +37,7 @@ export default function DashboardLayout({
       <div className="min-h-screen flex bg-background">
         {/* Desktop Sidebar */}
         <aside
-          className="hidden md:flex flex-col border-r border-border/40 bg-sidebar/50 backdrop-blur-sm sticky top-0 h-screen w-64 lg:w-72 shrink-0 transition-all duration-300 ease-in-out"
+          className="hidden md:flex flex-col border-r border-border/40 bg-sidebar/50 backdrop-blur-sm sticky top-0 h-screen w-56 lg:w-60 shrink-0 transition-all duration-300 ease-in-out"
         >
           {/* Logo */}
           <div className="h-16 flex items-center justify-between border-b border-border/40 px-6 shrink-0">
@@ -106,11 +106,9 @@ export default function DashboardLayout({
 
             <div className="flex items-center gap-2 px-3 py-3 rounded-xl bg-muted/30 mt-2">
               {/* <UserButton afterSignOutUrl="/" /> */}
-              <Link href="/profile" className="flex-1 flex justify-center">
-                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary cursor-pointer hover:bg-primary/30 transition-colors">
-                  JD
-                </div>
-              </Link>
+              <div className="flex-1 flex justify-center">
+                <UserButton afterSignOutUrl="/" />
+              </div>
               <div className="flex-1" />
               <ThemeToggle />
             </div>
@@ -131,11 +129,7 @@ export default function DashboardLayout({
               <div className="flex items-center gap-4">
                 <ThemeToggle />
                 {/* <UserButton afterSignOutUrl="/" /> */}
-                <Link href="/profile">
-                  <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary cursor-pointer hover:bg-primary/30 transition-colors">
-                    JD
-                  </div>
-                </Link>
+                <UserButton afterSignOutUrl="/" />
               </div>
             </div>
           </header>

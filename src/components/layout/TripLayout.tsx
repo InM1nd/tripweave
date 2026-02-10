@@ -3,7 +3,10 @@
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { TripHeader } from "@/components/trip/TripHeader";
 import { TripTabs } from "@/components/trip/TripTabs";
-import { mockTrips } from "@/lib/mock-data";
+import { getTrip } from "@/actions/trip";
+import { useEffect, useState } from "react";
+import { Trip } from "@/types";
+import { Loader2 } from "lucide-react";
 
 interface TripLayoutProps {
   children: React.ReactNode;
@@ -11,8 +14,44 @@ interface TripLayoutProps {
 }
 
 export default function TripLayout({ children, tripId }: TripLayoutProps) {
-  // In real app, fetch trip data based on tripId
-  const trip = mockTrips.find(t => t.id === tripId) || mockTrips[0];
+  const [trip, setTrip] = useState<Trip | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTrip = async () => {
+      try {
+        const data = await getTrip(tripId);
+        setTrip(data as unknown as Trip);
+      } catch (error) {
+        console.error("Failed to fetch trip:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTrip();
+  }, [tripId]);
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-[50vh]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (!trip) {
+    return (
+      <DashboardLayout>
+        <div className="text-center py-12">
+          <h2 className="text-xl font-semibold">Trip not found</h2>
+          <p className="text-muted-foreground">The trip you are looking for does not exist or you don't have access to it.</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>

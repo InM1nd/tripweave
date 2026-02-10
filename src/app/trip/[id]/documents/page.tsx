@@ -24,40 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 // Mock documents
-const mockDocs = [
-  {
-    id: "1",
-    name: "Flight Tickets.pdf",
-    type: "pdf",
-    size: "2.4 MB",
-    uploadedBy: "Alex",
-    date: "2024-03-15",
-  },
-  {
-    id: "2",
-    name: "Hotel Reservation.pdf",
-    type: "pdf",
-    size: "1.1 MB",
-    uploadedBy: "Sarah",
-    date: "2024-03-16",
-  },
-  {
-    id: "3",
-    name: "Itinerary Draft.docx",
-    type: "doc",
-    size: "540 KB",
-    uploadedBy: "Alex",
-    date: "2024-03-10",
-  },
-  {
-    id: "4",
-    name: "Passport Copies.jpg",
-    type: "image",
-    size: "3.2 MB",
-    uploadedBy: "You",
-    date: "2024-03-12",
-  },
-];
+const docs: any[] = [];
 
 const FileIcon = ({ type }: { type: string }) => {
   switch (type) {
@@ -108,7 +75,7 @@ export default function DocumentsPage({ params }: { params: Promise<{ id: string
 
         {/* File Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-          {mockDocs.map((doc) => (
+          {docs.map((doc) => (
             <Card key={doc.id} className="border-border/40 bg-card/50 hover:bg-muted/30 transition-colors group cursor-pointer">
               <CardContent className="p-3 md:p-4 flex flex-col gap-2 md:gap-3">
                 <div className="flex justify-between items-start">
