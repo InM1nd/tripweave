@@ -34,48 +34,48 @@ export default function MembersPage({ params }: { params: Promise<{ id: string }
 
   return (
     <TripLayout tripId={id}>
-      <div className="space-y-6 max-w-4xl mx-auto">
+      <div className="space-y-4 md:space-y-6 max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold">Members</h2>
-            <p className="text-muted-foreground">{trip.members.length} people on this trip</p>
+            <h2 className="text-xl md:text-2xl font-bold">Members</h2>
+            <p className="text-sm md:text-base text-muted-foreground">{trip.members.length} people on this trip</p>
           </div>
-          <Button className="gap-2">
+          <Button className="gap-2" size="sm">
             <UserPlus className="h-4 w-4" />
-            Invite
+            <span className="hidden sm:inline">Invite</span>
           </Button>
         </div>
 
         {/* Member List */}
-        <div className="space-y-3">
+        <div className="space-y-2 md:space-y-3">
           {trip.members.map((member) => {
             const RoleIcon = roleIcons[member.role];
             return (
               <Card key={member.id} className="border-border/40 bg-card/50">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-4">
-                    <Avatar className="h-12 w-12">
+                <CardContent className="p-3 md:p-4">
+                  <div className="flex items-center gap-3 md:gap-4">
+                    <Avatar className="h-10 w-10 md:h-12 md:w-12">
                       <AvatarImage src={member.user.avatar} alt={member.user.name} />
-                      <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+                      <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-sm">
                         {member.user.name[0]}
                       </AvatarFallback>
                     </Avatar>
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-semibold truncate">{member.user.name}</h3>
-                        <Badge variant="outline" className={roleColors[member.role]}>
-                          <RoleIcon className="h-3 w-3 mr-1" />
+                      <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
+                        <h3 className="font-semibold text-sm md:text-base truncate">{member.user.name}</h3>
+                        <Badge variant="outline" className={`text-[10px] md:text-xs px-1.5 py-0 h-5 ${roleColors[member.role]}`}>
+                          <RoleIcon className="h-3 w-3 mr-0.5 md:mr-1" />
                           {member.role}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground truncate">{member.user.email}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground truncate">{member.user.email}</p>
                     </div>
 
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
@@ -101,11 +101,11 @@ export default function MembersPage({ params }: { params: Promise<{ id: string }
         </div>
 
         {/* Pending Invites */}
-        <div className="space-y-4">
-          <h3 className="font-semibold text-muted-foreground">Pending Invites</h3>
+        <div className="space-y-3 md:space-y-4">
+          <h3 className="font-semibold text-sm md:text-base text-muted-foreground">Pending Invites</h3>
           <Card className="border-dashed border-border/40 bg-muted/20">
-            <CardContent className="p-6 text-center">
-              <p className="text-sm text-muted-foreground">No pending invitations</p>
+            <CardContent className="p-4 md:p-6 text-center">
+              <p className="text-xs md:text-sm text-muted-foreground">No pending invitations</p>
             </CardContent>
           </Card>
         </div>

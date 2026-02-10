@@ -16,11 +16,11 @@ export default function TripLayout({ children, tripId }: TripLayoutProps) {
 
   return (
     <DashboardLayout>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4 md:gap-6">
         <TripHeader trip={trip} />
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 md:gap-6">
           <TripTabs tripId={tripId} />
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 px-4 md:px-0">
             {children}
           </div>
         </div>

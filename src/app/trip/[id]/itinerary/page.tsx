@@ -50,12 +50,12 @@ export default function ItineraryPage({ params }: { params: Promise<{ id: string
   return (
     <TripLayout tripId={id}>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-bold">Itinerary Board</h2>
-            <p className="text-muted-foreground">High-level plan by day</p>
+            <h2 className="text-xl md:text-2xl font-bold">Itinerary Board</h2>
+            <p className="text-sm md:text-base text-muted-foreground">High-level plan by day</p>
           </div>
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="w-full md:w-auto gap-2">
             <Calendar className="h-4 w-4" />
             Calendar View
           </Button>

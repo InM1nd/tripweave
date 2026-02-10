@@ -87,15 +87,15 @@ export default function TimelinePage({ params }: { params: Promise<{ id: string 
         </div>
 
         {/* Timeline */}
-        <div className="space-y-8">
+        <div className="space-y-6 md:space-y-8">
           {Object.entries(groupedEvents).map(([dateKey, events]) => {
             const date = new Date(dateKey);
             return (
               <div key={dateKey} className="relative">
-                {/* Date Header */}
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex flex-col items-center justify-center">
-                    <span className="text-lg font-bold text-primary leading-none">
+                {/* Date Header - Mobile optimized */}
+                <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4 sticky top-28 z-20 bg-background/95 backdrop-blur-sm py-2 bo rounded-lg">
+                  <div className="h-10 w-10 md:h-12 md:w-12 rounded-xl bg-primary/10 flex flex-col items-center justify-center shrink-0">
+                    <span className="text-base md:text-lg font-bold text-primary leading-none">
                       {date.getDate()}
                     </span>
                     <span className="text-[10px] text-primary uppercase">
@@ -103,38 +103,38 @@ export default function TimelinePage({ params }: { params: Promise<{ id: string 
                     </span>
                   </div>
                   <div>
-                    <h3 className="font-semibold">
+                    <h3 className="font-semibold text-sm md:text-base">
                       {date.toLocaleDateString("en-US", { weekday: "long" })}
                     </h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs md:text-sm text-muted-foreground">
                       {events.length} {events.length === 1 ? "event" : "events"}
                     </p>
                   </div>
                 </div>
 
                 {/* Events */}
-                <div className="ml-6 pl-6 border-l-2 border-border/50 space-y-4">
+                <div className="ml-5 md:ml-6 pl-4 md:pl-6 border-l-2 border-border/50 space-y-3 md:space-y-4">
                   {events.map((event) => (
                     <Card key={event.id} className="border-border/40 bg-card/50 backdrop-blur-sm hover:shadow-md transition-shadow cursor-pointer">
-                      <CardContent className="p-4">
-                        <div className="flex items-start gap-4">
-                          <div className="flex flex-col items-center gap-1">
-                            <Clock className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-sm font-medium">{event.time}</span>
+                      <CardContent className="p-3 md:p-4">
+                        <div className="flex items-start gap-3 md:gap-4">
+                          <div className="flex flex-col items-center gap-1 shrink-0 mt-0.5">
+                            <Clock className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
+                            <span className="text-xs md:text-sm font-medium">{event.time}</span>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h4 className="font-semibold truncate">{event.title}</h4>
-                              <Badge variant="outline" className={eventTypeColors[event.type] || eventTypeColors.other}>
+                            <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2 mb-1">
+                              <h4 className="font-semibold truncate text-sm md:text-base">{event.title}</h4>
+                              <Badge variant="outline" className={`w-fit text-[10px] px-1.5 py-0 h-5 ${eventTypeColors[event.type] || eventTypeColors.other}`}>
                                 {event.type}
                               </Badge>
                             </div>
-                            <p className="text-sm text-muted-foreground mb-2">
+                            <p className="text-xs md:text-sm text-muted-foreground mb-1.5 line-clamp-2">
                               {event.description}
                             </p>
                             <div className="flex items-center gap-1 text-xs text-muted-foreground">
                               <MapPin className="h-3 w-3" />
-                              <span>{event.location}</span>
+                              <span className="truncate">{event.location}</span>
                             </div>
                           </div>
                         </div>

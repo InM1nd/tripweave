@@ -27,32 +27,32 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
 
   return (
     <TripLayout tripId={id}>
-      <div className="space-y-6 max-w-4xl mx-auto">
+      <div className="space-y-4 md:space-y-6 max-w-4xl mx-auto">
         <div>
-          <h2 className="text-2xl font-bold">Trip Settings</h2>
-          <p className="text-muted-foreground">Manage your trip details and preferences</p>
+          <h2 className="text-xl md:text-2xl font-bold">Trip Settings</h2>
+          <p className="text-sm md:text-base text-muted-foreground">Manage your trip details and preferences</p>
         </div>
 
-        <div className="grid gap-6">
+        <div className="grid gap-4 md:gap-6">
           {/* General Settings */}
           <Card className="border-border/40 bg-card/50">
-            <CardHeader>
-              <CardTitle>General Information</CardTitle>
-              <CardDescription>Update the basic details of your trip.</CardDescription>
+            <CardHeader className="p-4 md:p-6 pb-2 md:pb-2">
+              <CardTitle className="text-base md:text-lg">General Information</CardTitle>
+              <CardDescription className="text-xs md:text-sm">Update the basic details of your trip.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 p-4 md:p-6 pt-2 md:pt-4">
               <div className="grid gap-2">
-                <Label htmlFor="name">Trip Name</Label>
+                <Label htmlFor="name" className="text-sm">Trip Name</Label>
                 <Input id="name" defaultValue={defaultValues.tripName} />
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="destination">Destination</Label>
+                <Label htmlFor="destination" className="text-sm">Destination</Label>
                 <Input id="destination" defaultValue={defaultValues.destination} />
               </div>
 
               <div className="grid gap-2">
-                <Label>Dates</Label>
+                <Label className="text-sm">Dates</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -78,7 +78,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description" className="text-sm">Description</Label>
                 <Textarea
                   id="description"
                   defaultValue={defaultValues.description}
@@ -86,8 +86,8 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
                 />
               </div>
             </CardContent>
-            <CardFooter className="border-t border-border/40 px-6 py-4">
-              <Button className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
+            <CardFooter className="border-t border-border/40 px-4 md:px-6 py-3 md:py-4">
+              <Button className="w-full md:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
                 <Save className="h-4 w-4 mr-2" />
                 Save Changes
               </Button>
@@ -96,21 +96,21 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
 
           {/* Danger Zone */}
           <Card className="border-red-500/20 bg-red-500/5">
-            <CardHeader>
-              <CardTitle className="text-red-500">Danger Zone</CardTitle>
-              <CardDescription>
+            <CardHeader className="p-4 md:p-6 pb-2 md:pb-2">
+              <CardTitle className="text-base md:text-lg text-red-500">Danger Zone</CardTitle>
+              <CardDescription className="text-xs md:text-sm">
                 Irreversible actions for this trip.
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <h4 className="font-medium">Delete this trip</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Once you delete a trip, there is no going back. Please be certain.
+            <CardContent className="p-4 md:p-6 pt-2 md:pt-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="space-y-0.5 md:space-y-1">
+                  <h4 className="font-medium text-sm md:text-base">Delete this trip</h4>
+                  <p className="text-xs md:text-sm text-muted-foreground">
+                    Once you delete a trip, there is no going back.
                   </p>
                 </div>
-                <Button variant="destructive">
+                <Button variant="destructive" className="w-full sm:w-auto shrink-0">
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete Trip
                 </Button>

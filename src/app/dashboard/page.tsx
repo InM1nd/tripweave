@@ -13,7 +13,7 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-10 max-w-7xl">
+      <div className="space-y-10 max-w-7xl p-4 md:p-0">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>

@@ -33,9 +33,9 @@ export function TripTabs({ tripId }: TripTabsProps) {
   const currentTab = pathname.split("/").pop();
 
   return (
-    <div className="sticky top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-border/40">
-      <ScrollArea className="w-full">
-        <nav className="flex items-center gap-1 px-4 md:px-6 py-2 min-w-max">
+    <div className="sticky top-14 md:top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-border/40 transition-all">
+      <div className="w-full max-w-[100vw] overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <nav className="flex items-center gap-2 px-4 md:px-6 py-2 w-max min-w-full">
           {tabs.map((tab) => {
             const isActive = currentTab === tab.href;
             return (
@@ -43,9 +43,9 @@ export function TripTabs({ tripId }: TripTabsProps) {
                 key={tab.href}
                 href={`/trip/${tripId}/${tab.href}`}
                 className={cn(
-                  "flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap",
+                  "flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full text-sm font-medium transition-all whitespace-nowrap select-none shrink-0",
                   isActive
-                    ? "bg-primary/10 text-primary"
+                    ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 )}
               >
@@ -55,8 +55,7 @@ export function TripTabs({ tripId }: TripTabsProps) {
             );
           })}
         </nav>
-        <ScrollBar orientation="horizontal" className="invisible" />
-      </ScrollArea>
+      </div>
     </div>
   );
 }
