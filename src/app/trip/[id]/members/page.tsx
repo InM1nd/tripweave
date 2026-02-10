@@ -42,7 +42,7 @@ export default async function MembersPage({ params }: { params: Promise<{ id: st
 
         {/* Member List */}
         <div className="space-y-2 md:space-y-3">
-          {members.map((member) => {
+          {members.map((member: any) => {
             const role = member.role as Role;
             const RoleIcon = roleIcons[role];
             return (
@@ -84,7 +84,7 @@ export default async function MembersPage({ params }: { params: Promise<{ id: st
             </Card>
           ) : (
             <div className="space-y-2">
-              {pendingInvites.map((invite) => (
+              {pendingInvites.map((invite: any) => (
                 <Card key={invite.id} className="border-border/40 bg-card/50 border-dashed">
                   <CardContent className="p-3 md:p-4">
                     <div className="flex items-center justify-between">
