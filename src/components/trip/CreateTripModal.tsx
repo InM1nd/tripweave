@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { createTrip } from "@/actions/trip";
 import { CreateTripValues } from "@/lib/validations/trip";
+import { ImageUpload } from "@/components/ui/image-upload";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -106,6 +107,25 @@ export function CreateTripModal() {
                   <Input placeholder="e.g. Japan Spring 2026" {...field} className="pl-9" />
                   <Globe className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                 </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="coverImage"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cover Image (Optional)</FormLabel>
+              <FormControl>
+                <ImageUpload
+                  value={field.value}
+                  onChange={field.onChange}
+                  endpoint="trip-covers"
+                  folder="uploads"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

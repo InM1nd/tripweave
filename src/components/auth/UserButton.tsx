@@ -57,7 +57,14 @@ export function UserButton({ afterSignOutUrl = "/" }: { afterSignOutUrl?: string
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSignOut}>
+                <DropdownMenuItem asChild>
+                    <a href="/profile" className="cursor-pointer flex items-center w-full">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                    </a>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                 </DropdownMenuItem>

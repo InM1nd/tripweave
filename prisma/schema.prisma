@@ -38,6 +38,7 @@ model Trip {
   coverImage  String?
   currency    String   @default("EUR")
   timezone    String   @default("UTC")
+  description String?  @db.Text
 
   members   TripMember[]
   invites   TripInvite[]
@@ -74,6 +75,7 @@ model Event {
   tripId      String
   title       String // "Senso-ji Temple Visit"
   description String?   @db.Text
+  coverImage  String?
   type        EventType
 
   // Timing

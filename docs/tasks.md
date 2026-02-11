@@ -5,22 +5,23 @@
   - [x] Setup Tailwind CSS (validated config)
   - [x] Setup Shadcn/ui (User installed components)
   - [x] Configure Prisma with Postgres (Schema created)
-  - [-] Setup Clerk authentication (Disabled for Vercel build)
+  - [x] Setup Supabase authentication (Working in actions)
   - [x] Create base layouts (DashboardLayout, TripLayout, AuthLayout created)
-  - [x] Setup environment variables (.env.example exists)
-  - [x] Initialize Git repo (Implied)
+  - [x] Setup environment variables (.env.local verified)
+  - [x] Initialize Project Structure
   
-- [-] Phase 2: Database & Models (Postponed)
+- [/] Phase 2: Database & Models
   - [x] Write Prisma schema
-  - [ ] Configure .env with database credentials <!-- id: 6 -->
-  - [ ] Run initial migration (init) <!-- id: 7 -->
-  - [ ] Create seed script <!-- id: 8 -->
-  - [ ] Generate Prisma Client types <!-- id: 9 -->
+  - [x] Configure .env with database credentials
+  - [x] Run initial migration
+  - [/] Create seed script (Mock data exists in some files)
+  - [x] Generate Prisma Client types
 
-- [x] Phase 3: Trip Management (UI Focus)
+- [x] Phase 3: Trip Management
   - [x] Create TripCard component
-  - [x] Create Dashboard page with mock data
-  - [x] Create CreateTripModal component
+  - [x] Create Dashboard page (Connected to DB)
+  - [x] Create CreateTripModal (Connected to DB)
+  - [x] Backend Trip CRUD (Server Actions implemented)
 
 - [x] Phase 4: Mobile UI Polish & Trip Details
   - [x] Implement sidebar-based DashboardLayout (collapsible)
@@ -30,35 +31,29 @@
   - [x] Create TripHeader component
   - [x] Create TripTabs component (scrollable horizontal nav)
   - [x] Update TripLayout with new components
-  - [x] Create Timeline page with mock events
-  - [x] Create Budget page with expense tracking
-  - [x] Create Members page with role management
+  - [x] Create Timeline page (UI Shell)
+  - [x] Create Budget page (UI Shell)
+  - [x] Create Members page (Connected to DB)
 
-- [/] Phase 5: Timeline & Events (Backend & Logic)
+- [/] Phase 5: Timeline & Events
   - [x] Timeline UI (Vertical layout, grouped by day)
   - [x] Event Cards (Type styling)
-  - [x] Add Event Modal (UI done, Drawer for mobile) <!-- id: 20 -->
-  - [ ] Connect to Database (API Routes) <!-- id: 21 -->
-  - [ ] Edit/Delete Event functionality <!-- id: 22 -->
+  - [x] Add Event Modal (UI done)
+  - [/] Connect to Database (API Routes/Server Actions) [/]
+  - [ ] Edit/Delete Event functionality
 
-- [-] Phase 6: Map Integration
-  - [x] Setup React Leaflet <!-- id: 23 -->
-  - [x] Create Map Page (`/trip/[id]/map`) (UI done, Mock data) <!-- id: 24 -->
-  - [x] Display event pins on map (Mock data) <!-- id: 25 -->
-  - [x] Event Popup implementation <!-- id: 26 -->
-
-- [-] Phase 7: Budget Tracker (Backend & Logic)
+- [/] Phase 7: Budget Tracker
   - [x] Budget Overview UI (Cards, Progress bars)
   - [x] Expenses List UI
   - [x] Category Breakdown UI
-  - [x] Add Expense Modal (UI done, Drawer for mobile) <!-- id: 27 -->
-  - [ ] Connect to Database (API Routes) <!-- id: 28 -->
+  - [x] Add Expense Modal (UI Shell)
+  - [ ] Connect to Database (API Routes/Server Actions)
 
-- [-] Phase 8: Document Management
-  - [x] Create Documents Page (`/trip/[id]/documents`) (UI done, Mock data) <!-- id: 29 -->
-  - [ ] Setup File Upload (UploadThing/Cloudinary) <!-- id: 30 -->
-  - [x] Document Grid/List UI <!-- id: 31 -->
-  - [ ] Connect to Database <!-- id: 32 -->
+- [/] Phase 8: Document Management
+  - [x] Create Documents Page (`/trip/[id]/documents`) (UI Shell)
+  - [ ] Setup File Upload (UploadThing/Cloudinary)
+  - [x] Document Grid/List UI
+  - [ ] Connect to Database
 
 - [ ] Phase 9: Notifications
   - [ ] Notification Data Model <!-- id: 33 -->

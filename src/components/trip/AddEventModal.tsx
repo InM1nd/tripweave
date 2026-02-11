@@ -51,46 +51,55 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-const eventSchema = z.object({
-  title: z.string().min(2, "Title must be at least 2 characters"),
-  type: z.enum(["transport", "accommodation", "activity", "food", "other"]),
-  location: z.string().optional(),
-  startDate: z.date(),
-  startTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"),
-  description: z.string().optional(),
-  cost: z.string().optional(),
-});
-
-type EventFormValues = z.infer<typeof eventSchema>;
+import { createEvent } from "@/actions/event";
+import { eventFormSchema, EventFormValues } from "@/lib/validations/event";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { ImageUpload } from "@/components/ui/image-upload";
 
 interface AddEventModalProps {
   children?: React.ReactNode;
+  tripId: string;
 }
 
-export function AddEventModal({ children }: AddEventModalProps) {
+export function AddEventModal({ children, tripId }: AddEventModalProps) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const router = useRouter();
 
   const form = useForm<EventFormValues>({
-    resolver: zodResolver(eventSchema),
+    resolver: zodResolver(eventFormSchema),
     defaultValues: {
       title: "",
       type: "activity",
       location: "",
       startTime: "12:00",
       description: "",
+      coverImage: "",
       cost: "",
     },
   });
 
   async function onSubmit(data: EventFormValues) {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Form submitted:", data);
-    setIsLoading(false);
-    setOpen(false);
-    form.reset();
+    try {
+      // ImageUpload component handles the upload and updates the form value
+      const result = await createEvent(tripId, data);
+
+      if (result.success) {
+        toast.success("Event added successfully");
+        setOpen(false);
+        form.reset();
+        router.refresh();
+      } else {
+        toast.error(result.error || "Failed to add event");
+      }
+    } catch (error) {
+      toast.error("An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const FormContent = (

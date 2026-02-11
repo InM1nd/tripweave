@@ -43,25 +43,22 @@ import {
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-const expenseSchema = z.object({
-  title: z.string().min(2, "Title must be at least 2 characters"),
-  amount: z.string().regex(/^\d+(\.\d{1,2})?$/, "Invalid amount"),
-  currency: z.string().min(1, "Currency is required"),
-  category: z.enum(["accommodation", "transport", "food", "activity", "shopping", "other"]),
-  paidBy: z.string().min(1, "Payer is required"),
-  splitType: z.enum(["equal", "custom", "you"]),
-});
-
-type ExpenseFormValues = z.infer<typeof expenseSchema>;
+import { createExpense } from "@/actions/budget";
+import { expenseSchema, ExpenseFormValues } from "@/lib/validations/budget";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface AddExpenseModalProps {
   children?: React.ReactNode;
+  tripId: string;
+  members: any[]; // refined type would be better but any for now to match Prisma result structure
 }
 
-export function AddExpenseModal({ children }: AddExpenseModalProps) {
+export function AddExpenseModal({ children, tripId, members }: AddExpenseModalProps) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const router = useRouter();
 
   const form = useForm<ExpenseFormValues>({
     resolver: zodResolver(expenseSchema),
@@ -77,11 +74,21 @@ export function AddExpenseModal({ children }: AddExpenseModalProps) {
 
   async function onSubmit(data: ExpenseFormValues) {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Expense submitted:", data);
-    setIsLoading(false);
-    setOpen(false);
-    form.reset();
+    try {
+      const result = await createExpense(tripId, data);
+      if (result.success) {
+        toast.success("Expense added successfully");
+        setOpen(false);
+        form.reset();
+        router.refresh();
+      } else {
+        toast.error(result.error || "Failed to add expense");
+      }
+    } catch (error) {
+      toast.error("An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const FormContent = (
@@ -160,9 +167,10 @@ export function AddExpenseModal({ children }: AddExpenseModalProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="me">You</SelectItem>
-                    <SelectItem value="alex">Alex</SelectItem>
-                    <SelectItem value="sarah">Sarah</SelectItem>
+                    <SelectItem value="me">Me</SelectItem>
+                    {members.filter(m => m.user.id /* Assuming we filter out current user if we want 'me' to be distinct, or just list everyone */).map((member: any) => (
+                      <SelectItem key={member.user.id} value={member.user.id}>{member.user.name}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
