@@ -42,6 +42,7 @@ model Trip {
   coverImage  String?
   currency    String   @default("EUR")
   timezone    String   @default("UTC")
+  description String?  @db.Text
   
   members     TripMember[]
   events      Event[]
@@ -287,8 +288,8 @@ enum NotificationType {
 - **API**: Next.js API Routes + tRPC (optional)
 - **ORM**: Prisma
 - **Database**: Postgres (Supabase/Vercel)
-- **Auth**: Clerk
-- **Storage**: UploadThing/Cloudinary
+- **Auth**: Clerk (or Supabase Auth)
+- **Storage**: Supabase Storage
 - **Email**: Resend
 
 ### PWA
@@ -342,9 +343,9 @@ enum NotificationType {
 - [ ] Dashboard page with trip cards
 - [ ] "Create Trip" modal (form with validation)
 - [ ] Trip overview page (tabs layout)
-- [ ] Edit trip settings
-- [ ] Delete trip (with confirmation)
-- [ ] Trip cover image upload
+- [x] Edit trip settings
+- [x] Delete trip (with confirmation)
+- [x] Trip cover image upload (Drag & Drop on Creation/Settings)
 
 **Components**:
 - `TripCard.tsx`
@@ -381,9 +382,9 @@ enum NotificationType {
 
 **Tasks**:
 - [ ] Timeline UI (vertical, grouped by day)
-- [ ] Add Event modal (all fields + validation)
-- [ ] Event cards (different styles per type)
-- [ ] Edit/Delete event
+- [x] Add Event modal (all fields + validation)
+- [x] Event cards (different styles per type)
+- [x] Edit/Delete event (Settings Sheet)
 - [ ] Event type icons (✈️🏨🍜🎭🚇)
 - [ ] Filter events by type
 - [ ] Sort events by date/time
@@ -424,12 +425,12 @@ enum NotificationType {
 
 **Tasks**:
 - [ ] Budget setup (total + categories)
-- [ ] Add expense (link to event or standalone)
-- [ ] Expenses list (grouped by category)
-- [ ] Budget overview (total spent vs allocated)
-- [ ] Category breakdown (pie chart)
+- [x] Add expense (link to event or standalone)
+- [x] Expenses list (grouped by category)
+- [x] Budget overview (total spent vs allocated)
+- [x] Category breakdown (pie chart)
 - [ ] Spending timeline (line chart)
-- [ ] Split expenses between members
+- [x] Split expenses between members
 
 **Components**:
 - `BudgetOverview.tsx`
@@ -446,11 +447,11 @@ enum NotificationType {
 **Goal**: Upload, organize, preview documents
 
 **Tasks**:
-- [ ] File upload (drag&drop + click)
-- [ ] Document grid/list view
-- [ ] Filter by type (ticket, booking, etc.)
+- [x] File upload (Drag & Drop to Supabase)
+- [x] Document grid/list view
+- [x] Filter by type (ticket, booking, etc.)
 - [ ] Preview modal (PDF/images)
-- [ ] Download documents
+- [x] Download documents
 - [ ] Link documents to events
 - [ ] Delete documents
 

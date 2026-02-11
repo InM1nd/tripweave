@@ -14,7 +14,7 @@
   - [x] Write Prisma schema
   - [x] Configure .env with database credentials
   - [x] Run initial migration
-  - [/] Create seed script (Mock data exists in some files)
+  - [x] Create seed script (Mock data exists in some files)
   - [x] Generate Prisma Client types
 
 - [x] Phase 3: Trip Management
@@ -39,21 +39,21 @@
   - [x] Timeline UI (Vertical layout, grouped by day)
   - [x] Event Cards (Type styling)
   - [x] Add Event Modal (UI done)
-  - [/] Connect to Database (API Routes/Server Actions) [/]
-  - [ ] Edit/Delete Event functionality
+  - [/] Connect to Database (API Routes/Server Actions) [x]
+  - [x] Edit/Delete Event functionality
 
 - [/] Phase 7: Budget Tracker
   - [x] Budget Overview UI (Cards, Progress bars)
   - [x] Expenses List UI
   - [x] Category Breakdown UI
   - [x] Add Expense Modal (UI Shell)
-  - [ ] Connect to Database (API Routes/Server Actions)
+  - [x] Connect to Database (API Routes/Server Actions)
 
 - [/] Phase 8: Document Management
   - [x] Create Documents Page (`/trip/[id]/documents`) (UI Shell)
-  - [ ] Setup File Upload (UploadThing/Cloudinary)
+  - [x] Setup File Upload (Supabase Storage)
   - [x] Document Grid/List UI
-  - [ ] Connect to Database
+  - [x] Connect to Database
 
 - [ ] Phase 9: Notifications
   - [ ] Notification Data Model <!-- id: 33 -->
@@ -90,3 +90,10 @@
   - [x] Adapt `/maps` for mobile
   - [x] Sidebar adjustments (Narrower on Desktop)
   - [x] Avatar links to Profile
+
+- [x] Phase 16: Backend Integration & Cleanup (Added)
+  - [x] Fix User Profile Navigation
+  - [x] Trip Settings Page (Update/Delete)
+  - [x] Drag-and-Drop Image Upload Component
+  - [x] Move Cover Image Upload to Create Trip
+  - [x] Event Cover Image (Supabase Storage)

@@ -18,6 +18,7 @@ import { ImageUpload } from "@/components/ui/image-upload";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Trip } from "@prisma/client";
 
 import { getTrip, updateTrip, deleteTrip } from "@/actions/trip";
 import { updateTripSchema, UpdateTripValues } from "@/lib/validations/trip";
@@ -27,7 +28,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [trip, setTrip] = useState<any>(null);
+  const [trip, setTrip] = useState<Trip | null>(null);
 
   const form = useForm<UpdateTripValues>({
     resolver: zodResolver(updateTripSchema),
@@ -44,6 +45,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
       try {
         const data = await getTrip(id);
         if (data) {
+          // @ts-ignore - data format from server might include relations but we only save Trip parts to state
           setTrip(data);
           form.reset({
             name: data.name,

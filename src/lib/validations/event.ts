@@ -24,6 +24,7 @@ export const eventFormSchema = z.object({
     description: z.string().optional(),
     coverImage: z.string().url("Must be a valid URL").optional().or(z.literal("")),
     cost: z.string().optional(), // Input is string
+    url: z.string().url("Must be a valid URL").optional().or(z.literal("")),
 });
 
 export type EventFormValues = z.infer<typeof eventFormSchema>;

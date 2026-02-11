@@ -1,7 +1,8 @@
 import { getTripEvents } from "@/actions/event";
 import { Button } from "@/components/ui/button";
-import { Plus, Calendar } from "lucide-react";
+import { Plus, Calendar, FileSpreadsheet } from "lucide-react";
 import { AddEventModal } from "@/components/trip/AddEventModal";
+import { ImportPlanModal } from "@/components/trip/ImportPlanModal";
 import { format } from "date-fns";
 import { TimelineEventList } from "@/components/trip/TimelineEventList"; // New client component
 
@@ -30,12 +31,20 @@ export default async function TimelinePage({ params }: { params: Promise<{ id: s
           <h2 className="text-2xl font-bold">Timeline</h2>
           <p className="text-muted-foreground">Your trip schedule day by day</p>
         </div>
-        <AddEventModal tripId={id}>
-          <Button className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all">
-            <Plus className="h-4 w-4" />
-            Add Event
-          </Button>
-        </AddEventModal>
+        <div className="flex gap-2">
+          <ImportPlanModal tripId={id}>
+            <Button variant="outline" className="gap-2">
+              <FileSpreadsheet className="h-4 w-4" />
+              <span className="hidden sm:inline">Import</span>
+            </Button>
+          </ImportPlanModal>
+          <AddEventModal tripId={id}>
+            <Button className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all">
+              <Plus className="h-4 w-4" />
+              Add Event
+            </Button>
+          </AddEventModal>
+        </div>
       </div>
 
       {/* Timeline List (Client Component for interactivity) */}
