@@ -18,7 +18,7 @@ export async function createDocument(tripId: string, data: DocumentFormValues) {
         throw new Error("Invalid document data");
     }
 
-    const { name, url, type } = validation.data;
+    const { name, url, type, fileSize, mimeType } = validation.data;
 
     // Verify membership
     const isMember = await prisma.tripMember.findFirst({
@@ -35,10 +35,10 @@ export async function createDocument(tripId: string, data: DocumentFormValues) {
             data: {
                 tripId,
                 name,
-                url, // For now, this is just a link
+                url,
                 type: type as any,
-                fileSize: 0, // Mock size since we are just linking
-                mimeType: "application/link", // Mock mime type
+                fileSize: fileSize || 0,
+                mimeType: mimeType || "application/link",
                 uploadedBy: user.id
             }
         });

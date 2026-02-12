@@ -80,7 +80,7 @@ export default async function DocumentsPage({ params }: { params: Promise<{ id: 
       {/* File Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
         {docs.map((doc) => (
-          <Card key={doc.id} className="border-border/40 bg-card/50 hover:bg-muted/30 transition-colors group cursor-pointer" onClick={() => {/* Handle click to open link */ }}>
+          <Card key={doc.id} className="border-border/40 bg-card/50 hover:bg-muted/30 transition-colors group cursor-pointer">
             <a href={doc.url} target="_blank" rel="noopener noreferrer" className="block h-full">
               <CardContent className="p-3 md:p-4 flex flex-col gap-2 md:gap-3 h-full">
                 <div className="flex justify-between items-start">
