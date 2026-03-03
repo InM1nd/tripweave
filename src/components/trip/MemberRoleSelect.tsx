@@ -75,7 +75,7 @@ export function MemberRoleSelect({
                 </SelectItem>
                 <SelectItem value="ADMIN">
                     <div className="flex items-center gap-2">
-                        <Shield className="w-3 h-3 text-blue-500" />
+                        <Shield className="w-3 h-3 text-teal" />
                         <span>Admin</span>
                     </div>
                 </SelectItem>

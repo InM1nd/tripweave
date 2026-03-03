@@ -47,7 +47,7 @@ export function FileUpload({
                     }
                     toast.success("File uploaded");
                 }
-            } catch (error) {
+            } catch {
                 toast.error("Upload failed");
                 setFileName(null);
             } finally {
@@ -73,7 +73,7 @@ export function FileUpload({
         <div className={cn("w-full", className)}>
             {value ? (
                 <div className="relative flex items-center p-4 rounded-lg border border-border bg-muted/50 group">
-                    <FileText className="h-8 w-8 text-blue-500 mr-3 shrink-0" />
+                    <FileText className="h-8 w-8 text-teal mr-3 shrink-0" />
                     <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium truncate pr-8">
                             {fileName || value.split("/").pop()}
@@ -108,7 +108,7 @@ export function FileUpload({
                         className
                     )}
                 >
-                    <Input {...getInputProps()} />
+                    <input {...getInputProps()} />
                     {isUploading ? (
                         <div className="flex flex-col items-center gap-2">
                             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -134,5 +134,3 @@ export function FileUpload({
         </div>
     );
 }
-
-const Input = (props: any) => <input {...props} />;

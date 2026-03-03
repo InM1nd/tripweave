@@ -17,7 +17,7 @@ const roleIcons = {
 
 const roleColors = {
   [Role.OWNER]: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-  [Role.ADMIN]: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+  [Role.ADMIN]: "bg-teal/10 text-teal border-teal/20",
   [Role.MEMBER]: "bg-muted text-muted-foreground border-border",
 };
 
@@ -62,7 +62,7 @@ export default async function MembersPage({ params }: { params: Promise<{ id: st
                 <div className="flex items-center gap-3 md:gap-4">
                   <Avatar className="h-10 w-10 md:h-12 md:w-12">
                     <AvatarImage src={member.user.avatar || undefined} alt={member.user.name} />
-                    <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-sm">
+                    <AvatarFallback className="bg-accent]/20 text-accent] text-sm">
                       {member.user.name[0]}
                     </AvatarFallback>
                   </Avatar>

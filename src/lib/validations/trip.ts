@@ -9,6 +9,7 @@ export const createTripSchema = z.object({
     }).refine((data) => data.from <= data.to, { message: "End date cannot be before start date.", path: ["to"] }),
     currency: z.string().min(1, { message: "Currency is required." }),
     coverImage: z.string().optional(),
+    coverColor: z.enum(["electric", "coral", "lime", "sky", "amber", "pink"]).optional(),
 });
 
 export const updateTripSchema = z.object({
@@ -18,6 +19,7 @@ export const updateTripSchema = z.object({
     startDate: z.date().optional(),
     endDate: z.date().optional(),
     coverImage: z.string().optional(),
+    coverColor: z.enum(["electric", "coral", "lime", "sky", "amber", "pink"]).optional(),
 });
 
 export type CreateTripValues = z.infer<typeof createTripSchema>;

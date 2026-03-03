@@ -47,4 +47,40 @@ const AvatarFallback = React.forwardRef<
 ))
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
 
-export { Avatar, AvatarImage, AvatarFallback }
+function AvatarGroup({
+  children,
+  className,
+  max = 3,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  max?: number;
+}) {
+  const childArray = React.Children.toArray(children);
+  const visible = childArray.slice(0, max);
+  const remaining = Math.max(0, childArray.length - max);
+
+  return (
+    <div className={cn("flex -space-x-2", className)}>
+      {visible.map((child, i) => (
+        <div
+          key={i}
+          className="ring-2 ring-card rounded-full"
+          style={{ zIndex: visible.length - i }}
+        >
+          {child}
+        </div>
+      ))}
+      {remaining > 0 && (
+        <div
+          className="h-7 w-7 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold ring-2 ring-card"
+          style={{ zIndex: 0 }}
+        >
+          +{remaining}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export { Avatar, AvatarImage, AvatarFallback, AvatarGroup }

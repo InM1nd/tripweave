@@ -1,6 +1,6 @@
 "use client";
 
-import DashboardLayout from "@/components/layout/DashboardLayout";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -95,7 +95,7 @@ export default function ProfilePage() {
                     <Card className="h-full">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <Trophy className="h-5 w-5 text-yellow-500" />
+                                <Trophy className="h-5 w-5 text-gold" />
                                 Achievements
                             </CardTitle>
                             <CardDescription>Badges earned from your travels</CardDescription>

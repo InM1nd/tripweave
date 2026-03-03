@@ -244,7 +244,7 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-1.5">
-                                        <currentType.icon className="h-4 w-4 text-indigo-500" />
+                                        <currentType.icon className="h-4 w-4 text-rose" />
                                         <span className="capitalize">{event.type.toLowerCase()}</span>
                                     </div>
                                 </div>
@@ -259,7 +259,7 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
                                         rel="noreferrer"
                                         className="flex items-start gap-3 p-3 rounded-lg border bg-card/50 hover:bg-accent/50 hover:border-accent transition-colors group"
                                     >
-                                        <div className="mt-0.5 bg-blue-100 dark:bg-blue-900/30 p-1.5 rounded-md text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                                        <div className="mt-0.5 bg-teal/15 dark:bg-teal/20 p-1.5 rounded-md text-teal dark:text-teal group-hover:scale-110 transition-transform">
                                             <MapPin className="h-4 w-4" />
                                         </div>
                                         <div className="flex-1 min-w-0">
@@ -278,7 +278,7 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
                                         rel="noreferrer"
                                         className="flex items-start gap-3 p-3 rounded-lg border bg-card/50 hover:bg-accent/50 hover:border-accent transition-colors group"
                                     >
-                                        <div className="mt-0.5 bg-purple-100 dark:bg-purple-900/30 p-1.5 rounded-md text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
+                                        <div className="mt-0.5 bg-violet/15 dark:bg-violet/20 p-1.5 rounded-md text-violet dark:text-violet group-hover:scale-110 transition-transform">
                                             <LinkIcon className="h-4 w-4" />
                                         </div>
                                         <div className="flex-1 min-w-0">

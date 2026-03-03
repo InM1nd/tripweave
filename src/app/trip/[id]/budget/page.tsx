@@ -9,10 +9,10 @@ import { AddExpenseModal } from "@/components/trip/AddExpenseModal";
 import { format } from "date-fns";
 
 const categoryColors: Record<string, string> = {
-  accommodation: "bg-purple-500",
-  transport: "bg-blue-500",
+  accommodation: "bg-violet",
+  transport: "bg-teal",
   food: "bg-orange-500",
-  activity: "bg-emerald-500",
+  activity: "bg-accent]",
   shopping: "bg-pink-500",
   other: "bg-gray-500",
 };
@@ -44,7 +44,7 @@ export default async function BudgetPage({ params }: { params: Promise<{ id: str
           <p className="text-sm md:text-base text-muted-foreground">Track expenses and split costs</p>
         </div>
         <AddExpenseModal tripId={id} members={members}>
-          <Button className="w-full md:w-auto gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all">
+          <Button className="w-full md:w-auto gap-2 bg-accent] hover:bg-accent]/90 text-white transition-all">
             <Plus className="h-4 w-4" />
             Add Expense
           </Button>
@@ -68,8 +68,8 @@ export default async function BudgetPage({ params }: { params: Promise<{ id: str
         <Card className="border-border/40 bg-card/50">
           <CardContent className="p-4 md:p-6">
             <div className="flex items-center gap-3 mb-2 md:mb-4">
-              <div className="h-8 w-8 md:h-10 md:w-10 rounded-xl bg-red-500/10 flex items-center justify-center">
-                <TrendingDown className="h-4 w-4 md:h-5 md:w-5 text-red-500" />
+              <div className="h-8 w-8 md:h-10 md:w-10 rounded-xl bg-danger/10 flex items-center justify-center">
+                <TrendingDown className="h-4 w-4 md:h-5 md:w-5 text-danger" />
               </div>
               <span className="text-xs md:text-sm text-muted-foreground">Spent</span>
             </div>
@@ -81,12 +81,12 @@ export default async function BudgetPage({ params }: { params: Promise<{ id: str
         <Card className="border-border/40 bg-card/50">
           <CardContent className="p-4 md:p-6">
             <div className="flex items-center gap-3 mb-2 md:mb-4">
-              <div className="h-8 w-8 md:h-10 md:w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-emerald-500" />
+              <div className="h-8 w-8 md:h-10 md:w-10 rounded-xl bg-success]/10 flex items-center justify-center">
+                <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-success]" />
               </div>
               <span className="text-xs md:text-sm text-muted-foreground">Remaining</span>
             </div>
-            <p className={`text-xl md:text-3xl font-bold ${remaining < 0 ? "text-red-500" : "text-emerald-500"}`}>
+            <p className={`text-xl md:text-3xl font-bold ${remaining < 0 ? "text-mango]" : "text-success]"}`}>
               {currency} {remaining.toLocaleString()}
             </p>
           </CardContent>

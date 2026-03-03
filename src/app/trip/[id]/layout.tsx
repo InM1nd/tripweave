@@ -1,5 +1,5 @@
 import { getTrip } from "@/actions/trip";
-import DashboardLayout from "@/components/layout/DashboardLayout";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { TripHeader } from "@/components/trip/TripHeader";
 import { TripTabs } from "@/components/trip/TripTabs";
 import { Trip } from "@/types";

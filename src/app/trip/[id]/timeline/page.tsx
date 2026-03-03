@@ -39,7 +39,7 @@ export default async function TimelinePage({ params }: { params: Promise<{ id: s
             </Button>
           </ImportPlanModal>
           <AddEventModal tripId={id}>
-            <Button className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all">
+            <Button className="gap-2 bg-accent] hover:bg-accent]/90 text-white transition-all">
               <Plus className="h-4 w-4" />
               Add Event
             </Button>
@@ -61,7 +61,7 @@ export default async function TimelinePage({ params }: { params: Promise<{ id: s
             Start building your itinerary by adding events.
           </p>
           <AddEventModal tripId={id}>
-            <Button className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all">
+            <Button className="bg-accent] hover:bg-accent]/90 text-white transition-all">
               <Plus className="h-4 w-4 mr-2" />
               Add First Event
             </Button>

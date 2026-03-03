@@ -144,13 +144,13 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
             <div className="grid gap-2">
               <Label htmlFor="name" className="text-sm">Trip Name</Label>
               <Input id="name" {...form.register("name")} />
-              {form.formState.errors.name && <p className="text-red-500 text-xs">{form.formState.errors.name.message}</p>}
+              {form.formState.errors.name && <p className="text-danger text-xs">{form.formState.errors.name.message}</p>}
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="destination" className="text-sm">Destination</Label>
               <Input id="destination" {...form.register("destination")} />
-              {form.formState.errors.destination && <p className="text-red-500 text-xs">{form.formState.errors.destination.message}</p>}
+              {form.formState.errors.destination && <p className="text-danger text-xs">{form.formState.errors.destination.message}</p>}
             </div>
 
             <div className="grid gap-2">
@@ -216,7 +216,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
             <Button
               onClick={form.handleSubmit(onSubmit)}
               disabled={saving}
-              className="w-full md:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 text-white"
+              className="w-full md:w-auto bg-accent] hover:bg-accent]/90 text-white"
             >
               {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
               Save Changes
@@ -225,9 +225,9 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
         </Card>
 
         {/* Danger Zone */}
-        <Card className="border-red-500/20 bg-red-500/5">
+        <Card className="border-danger/20 bg-danger/5">
           <CardHeader className="p-4 md:p-6 pb-2 md:pb-2">
-            <CardTitle className="text-base md:text-lg text-red-500">Danger Zone</CardTitle>
+            <CardTitle className="text-base md:text-lg text-danger">Danger Zone</CardTitle>
             <CardDescription className="text-xs md:text-sm">
               Irreversible actions for this trip.
             </CardDescription>

@@ -213,7 +213,7 @@ export function AddExpenseModal({ children, tripId, members }: AddExpenseModalPr
               Cancel
             </Button>
           )}
-          <Button type="submit" disabled={isLoading} className={cn("bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md", !isDesktop && "flex-1")}>
+          <Button type="submit" disabled={isLoading} className={cn("bg-accent] hover:bg-accent]/90 text-white shadow-md", !isDesktop && "flex-1")}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Save Expense
           </Button>

@@ -4,30 +4,135 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import * as cheerio from "cheerio";
+import { generateTextWithFallback, isLlmConfigured } from "@/lib/ai/llm";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-
-const COMPLEX_SITES = [
+const SOCIAL_MEDIA_SITES = [
     'instagram.com',
     'tiktok.com',
     'youtube.com/shorts',
+    'youtube.com/watch',
     'facebook.com',
     't.me',
-    'google.com/maps',
-    'goo.gl',
+    'twitter.com',
+    'x.com',
 ];
 
-export interface ParsedLink {
+const GOOGLE_MAPS_SITES = [
+    'google.com/maps',
+    'google.co',
+    'maps.app.goo.gl',
+    'goo.gl/maps',
+    'maps.google',
+];
+
+const SHORT_URL_DOMAINS = [
+    'goo.gl',
+    'bit.ly',
+    'vm.tiktok.com',
+    't.co',
+    'youtu.be',
+];
+
+export interface ParsedPlace {
     title: string;
     description: string;
     image: string;
-    url: string;
-    address?: string;
+    url: string; // original source URL
+    address: string;
+    googleMapsUrl: string; // always a Google Maps link
+    type: string; // Restaurant, Cafe, Bar, Hotel, Attraction, etc.
 }
 
-// Fetch post caption/metadata via oEmbed APIs (free, no auth needed for TikTok)
+// ---------- HELPERS ----------
+
+/** Generate a Google Maps search URL from place name + address */
+function buildGoogleMapsUrl(name: string, address?: string): string {
+    const query = [name, address].filter(Boolean).join(", ");
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+/** Generate a Google Maps URL from lat/lng */
+function buildGoogleMapsUrlFromCoords(lat: number, lng: number, placeName?: string): string {
+    if (placeName) {
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(placeName)}&query_place_id=&center=${lat},${lng}`;
+    }
+    return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+}
+
+/** Resolve short URLs (goo.gl, vm.tiktok.com, etc.) by following redirects */
+async function resolveShortUrl(url: string): Promise<string> {
+    try {
+        const response = await fetch(url, {
+            method: "HEAD",
+            redirect: "follow",
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            },
+        });
+        return response.url || url;
+    } catch {
+        // Fallback: try GET
+        try {
+            const response = await fetch(url, {
+                redirect: "follow",
+                headers: {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                },
+            });
+            return response.url || url;
+        } catch {
+            return url;
+        }
+    }
+}
+
+/** Extract place name and coordinates from Google Maps URL patterns */
+function parseGoogleMapsUrlData(url: string): { placeName?: string; lat?: number; lng?: number } {
+    const result: { placeName?: string; lat?: number; lng?: number } = {};
+
+    try {
+        // Pattern 1: /maps/place/Place+Name/...
+        const placeMatch = url.match(/\/maps\/place\/([^/@]+)/);
+        if (placeMatch) {
+            result.placeName = decodeURIComponent(placeMatch[1].replace(/\+/g, " "));
+        }
+
+        // Pattern 2: /@lat,lng,zoom
+        const coordMatch = url.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+        if (coordMatch) {
+            result.lat = parseFloat(coordMatch[1]);
+            result.lng = parseFloat(coordMatch[2]);
+        }
+
+        // Pattern 3: ?q=Place+Name or &q=Place+Name
+        const qMatch = url.match(/[?&]q=([^&]+)/);
+        if (qMatch && !result.placeName) {
+            result.placeName = decodeURIComponent(qMatch[1].replace(/\+/g, " "));
+        }
+
+        // Pattern 4: /maps/search/Place+Name
+        const searchMatch = url.match(/\/maps\/search\/([^/@?]+)/);
+        if (searchMatch && !result.placeName) {
+            result.placeName = decodeURIComponent(searchMatch[1].replace(/\+/g, " "));
+        }
+
+        // Pattern 5: data segment e.g. !3d35.123!4d139.456 (lat/lng)       
+        if (!result.lat || !result.lng) {
+            const dataLatMatch = url.match(/!3d(-?\d+\.?\d*)/);
+            const dataLngMatch = url.match(/!4d(-?\d+\.?\d*)/);
+            if (dataLatMatch && dataLngMatch) {
+                result.lat = parseFloat(dataLatMatch[1]);
+                result.lng = parseFloat(dataLngMatch[1]);
+            }
+        }
+    } catch {
+        // Ignore parsing errors
+    }
+
+    return result;
+}
+
+/** Fetch post caption/metadata via oEmbed APIs */
 async function fetchOEmbed(url: string): Promise<{ caption: string; authorName: string; thumbnailUrl: string } | null> {
     const lowerUrl = url.toLowerCase();
 
@@ -35,10 +140,9 @@ async function fetchOEmbed(url: string): Promise<{ caption: string; authorName: 
         // TikTok oEmbed
         if (lowerUrl.includes("tiktok.com")) {
             const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`;
-            const res = await fetch(oembedUrl);
+            const res = await fetch(oembedUrl, { next: { revalidate: 3600 } });
             if (res.ok) {
                 const data = await res.json();
-                console.log(`[oEmbed] TikTok raw response keys: ${Object.keys(data).join(", ")}`);
                 return {
                     caption: data.title || "",
                     authorName: data.author_name || "",
@@ -47,13 +151,12 @@ async function fetchOEmbed(url: string): Promise<{ caption: string; authorName: 
             }
         }
 
-        // Instagram oEmbed (may require token in production, but basic endpoint often works)
+        // Instagram oEmbed (often requires token, but try anyway)
         if (lowerUrl.includes("instagram.com")) {
             const oembedUrl = `https://api.instagram.com/oembed?url=${encodeURIComponent(url)}&omitscript=true`;
-            const res = await fetch(oembedUrl);
+            const res = await fetch(oembedUrl, { next: { revalidate: 3600 } });
             if (res.ok) {
                 const data = await res.json();
-                console.log(`[oEmbed] Instagram raw response keys: ${Object.keys(data).join(", ")}`);
                 return {
                     caption: data.title || "",
                     authorName: data.author_name || "",
@@ -62,13 +165,12 @@ async function fetchOEmbed(url: string): Promise<{ caption: string; authorName: 
             }
         }
 
-        // YouTube Shorts oEmbed
-        if (lowerUrl.includes("youtube.com/shorts")) {
+        // YouTube oEmbed
+        if (lowerUrl.includes("youtube.com") || lowerUrl.includes("youtu.be")) {
             const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
-            const res = await fetch(oembedUrl);
+            const res = await fetch(oembedUrl, { next: { revalidate: 3600 } });
             if (res.ok) {
                 const data = await res.json();
-                console.log(`[oEmbed] YouTube raw response keys: ${Object.keys(data).join(", ")}`);
                 return {
                     caption: data.title || "",
                     authorName: data.author_name || "",
@@ -83,11 +185,19 @@ async function fetchOEmbed(url: string): Promise<{ caption: string; authorName: 
     return null;
 }
 
+// ---------- MAIN PARSER ----------
+
 export async function parseLink(
     url: string,
     forceAi: boolean = false,
     userContext?: string
-): Promise<{ success: boolean; data?: ParsedLink; error?: string; isAiUsed?: boolean; isSocialMedia?: boolean }> {
+): Promise<{
+    success: boolean;
+    places?: ParsedPlace[];
+    error?: string;
+    isAiUsed?: boolean;
+    isSocialMedia?: boolean;
+}> {
     try {
         // Basic validation
         if (!url) return { success: false, error: "URL is required" };
@@ -95,57 +205,85 @@ export async function parseLink(
             url = `https://${url}`;
         }
 
-        const isSocialMedia = COMPLEX_SITES.some(site => url.toLowerCase().includes(site));
-        const shouldUseAi = isSocialMedia || forceAi;
-        console.log(`[Parser] Starting parse for: ${url} (isSocialMedia: ${isSocialMedia}, shouldUseAi: ${shouldUseAi})`);
+
+
+        // Step 0: Resolve short URLs
+        const isShortUrl = SHORT_URL_DOMAINS.some(d => url.toLowerCase().includes(d));
+        let resolvedUrl = url;
+        if (isShortUrl) {
+            resolvedUrl = await resolveShortUrl(url);
+
+        }
+
+        const isGoogleMaps = GOOGLE_MAPS_SITES.some(site => resolvedUrl.toLowerCase().includes(site));
+        const isSocialMedia = SOCIAL_MEDIA_SITES.some(site => resolvedUrl.toLowerCase().includes(site));
+        const shouldUseAi = isSocialMedia || isGoogleMaps || forceAi;
+
+
 
         let title = "";
         let description = "";
         let image = "";
-        let htmlSource = "";
         let oEmbedCaption = "";
 
-        // Step 1: Try oEmbed for social media (auto-extract caption)
+        // Step 1: Google Maps URL — extract data programmatically first
+        let gmapsData: { placeName?: string; lat?: number; lng?: number } = {};
+        if (isGoogleMaps) {
+            gmapsData = parseGoogleMapsUrlData(resolvedUrl);
+
+            if (gmapsData.placeName) {
+                title = gmapsData.placeName;
+            }
+        }
+
+        // Step 2: oEmbed for social media
         if (isSocialMedia) {
             try {
-                const oEmbedData = await fetchOEmbed(url);
+                const oEmbedData = await fetchOEmbed(resolvedUrl);
                 if (oEmbedData) {
                     oEmbedCaption = oEmbedData.caption || "";
-                    title = oEmbedData.authorName || "";
+                    if (!title) title = oEmbedData.authorName || "";
                     image = oEmbedData.thumbnailUrl || "";
-                    console.log(`[Parser] oEmbed success:`, { caption: oEmbedCaption.substring(0, 80) + "...", author: title, image: !!image });
+
                 }
             } catch (e: any) {
                 console.error(`[Parser] oEmbed failed: ${e.message}`);
             }
         }
 
-        // Step 2: Standard HTML fetch (for non-social or as enrichment)
-        let resolvedUrl = url;
+        // Step 3: Standard HTML fetch (for OG metadata)
         try {
-            const response = await fetch(url, {
+            const response = await fetch(resolvedUrl, {
                 headers: {
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 },
-                redirect: 'follow',
-                next: { revalidate: 3600 }
+                redirect: "follow",
+                next: { revalidate: 3600 },
             });
 
-            resolvedUrl = response.url; // Capture final URL after redirects (e.g. goo.gl -> google.com/maps/place/...)
-            console.log(`[Parser] Standard fetch status: ${response.status}, Resolved URL: ${resolvedUrl}`);
+            if (response.url !== resolvedUrl) {
+                resolvedUrl = response.url;
+
+                // Re-check if it's Google Maps after redirect
+                if (!isGoogleMaps && GOOGLE_MAPS_SITES.some(site => resolvedUrl.toLowerCase().includes(site))) {
+                    gmapsData = parseGoogleMapsUrlData(resolvedUrl);
+                    if (gmapsData.placeName && !title) {
+                        title = gmapsData.placeName;
+                    }
+                }
+            }
 
             if (response.ok) {
-                htmlSource = await response.text();
+                const htmlSource = await response.text();
                 const $ = cheerio.load(htmlSource);
 
-                if (!title) {
-                    const metaTitle = $('meta[property="og:title"]').attr("content") ||
+                if (!title || title === "Google Maps") {
+                    const metaTitle =
+                        $('meta[property="og:title"]').attr("content") ||
                         $('meta[name="twitter:title"]').attr("content") ||
                         $("title").text() ||
                         "";
-
-                    // Don't use generic "Google Maps" title if we can avoid it
-                    if (metaTitle && !metaTitle.includes("Google Maps")) {
+                    if (metaTitle && !metaTitle.includes("Google Maps") && metaTitle !== "Google Maps") {
                         title = metaTitle;
                     }
                 }
@@ -165,97 +303,161 @@ export async function parseLink(
                         "";
                 }
 
-                console.log(`[Parser] HTML metadata:`, { title, description: description.substring(0, 50) + "...", image: !!image });
+                // Try to extract more from OG description for social media
+                if (isSocialMedia && !oEmbedCaption && description) {
+                    oEmbedCaption = description;
+                }
+
+
             }
         } catch (e: any) {
-            console.error(`[Parser] Standard fetch failed: ${e.message}`);
+            console.error(`[Parser] HTML fetch failed: ${e.message}`);
         }
 
-        // Step 3: AI-enhanced parsing
-        const hasApiKey = !!process.env.GEMINI_API_KEY;
-        // Combine all context we have
+        // Step 4: AI-enhanced parsing (always for social/maps, optional force)
+        const hasApiKey = isLlmConfigured();
         const combinedContext = [oEmbedCaption, userContext, description].filter(Boolean).join("\n");
-        console.log(`[Parser] AI Check: shouldUseAi=${shouldUseAi}, hasApiKey=${hasApiKey}, contextLength=${combinedContext.length}`);
+
 
         if (shouldUseAi && hasApiKey) {
-            console.log(`[Parser] Attempting AI enhancement with Gemini...`);
+
             try {
-                const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+                const coordsInfo = gmapsData.lat && gmapsData.lng
+                    ? `Coordinates found in URL: ${gmapsData.lat}, ${gmapsData.lng}`
+                    : "";
+                const placeNameInfo = gmapsData.placeName
+                    ? `Place name extracted from URL: "${gmapsData.placeName}"`
+                    : "";
 
-                const prompt = `You are an assistant that extracts travel place information from social media posts and map links.
+                const prompt = `You are a travel assistant that extracts PLACES (restaurants, cafes, bars, hotels, attractions, etc.) from links and social media posts.
 
-A user found an interesting place on social media or Google Maps and wants to save it for their trip.
+A user found interesting places and wants to save them for their trip planning.
 
-Original URL: ${url}
-Resolved URL (after redirects): ${resolvedUrl}
-Post caption / description:
-"${combinedContext}"
-${title ? `Page Title found: "${title}"` : ""}
+**Original URL:** ${url}
+**Resolved URL (after redirects):** ${resolvedUrl}
+${placeNameInfo ? `**${placeNameInfo}**` : ""}
+${coordsInfo ? `**${coordsInfo}**` : ""}
+**Post caption / description (if available):**
+"""
+${combinedContext || "(no caption available)"}
+"""
+${title ? `**Page title:** "${title}"` : ""}
 
-Your task: Find the NAME of the place (restaurant, cafe, bar, hotel, attraction, etc.), its LOCATION, and a short description.
+## YOUR TASK:
+Based on the URL, caption, page title, and any other context provided above, extract ALL places mentioned. Each place should be a separate item.
 
-CRITICAL INSTRUCTIONS:
-1. For Google Maps links: Look at the "Resolved URL". It often contains the place name (e.g. /maps/place/Eiffel+Tower/...). Extract it!
-2. If the Page Title is generic (like "Google Maps"), IGNORE IT and use the URL segments instead.
-3. For the ADDRESS field: Be as precise as possible! Include street name, building number, city, and country. If the post mentions a specific address, USE IT exactly. If a Google Maps URL contains coordinates, try to determine the nearest address.
-4. For social media posts: Carefully read the ENTIRE caption. Authors often mention exact addresses, neighborhoods, or cross-streets. Look for location tags, hashtags with city names, and any text after emoji like 📍.
+## CRITICAL RULES:
+1. **ALWAYS return an ARRAY of places**, even if there's only one place.
+2. For each place, provide the EXACT name (e.g. "Trattoria da Mario"). If it's a known fake/scam place doing marketing (like Ethos in Austin), still extract it but mention its nature in the description.
+3. If a post mentions multiple places (e.g. "5 best cafes in Tokyo"), extract EACH ONE as a separate entry.
+4. For the "address" field: include the full address (street, city, country) if available. If you only know the city, write at least "City, Country". Never leave it empty — at minimum guess the city from context.
+5. For Google Maps links: extract the place name from the URL segments.
+6. For the "description" field: write 1-2 short sentences about what makes this place special. Be concise and useful.
+7. For the "type" field: choose ONE of the following precise matches based on the place: "Food", "Nature", "Culture", "Must See", "Other".
 
-You MUST return a valid JSON object with these keys:
-{
-  "title": "Name of the place",
-  "description": "A short, helpful description (1-2 sentences). What is this place and what makes it special?",
-  "type": "One of: Restaurant, Cafe, Bar, Hotel, Hostel, Attraction, Museum, Park, Beach, Shopping, Nightlife, Other",
-  "address": "PRECISE address: street, number, city, country. Be as specific as possible!"
-}
+## RESPONSE FORMAT:
+Return ONLY a valid JSON array. No explanations, no markdown, no code fences.
 
-IMPORTANT: Return ONLY the JSON object. No explanations, no markdown, no code fences.`;
+[
+  {
+    "title": "Exact Place Name",
+    "description": "Short helpful description (1-2 sentences)",
+    "type": "Food",
+    "address": "Full address: street, city, country"
+  }
+]
 
-                const result = await model.generateContent(prompt);
-                const response = await result.response;
-                const text = response.text();
+If the content mentions ZERO specific places (e.g. generic travel tips with no named locations), return an empty array: []`;
 
-                console.log(`[Parser] Raw AI Response: ${text}`);
+                const text = await generateTextWithFallback(prompt, {
+                    systemPrompt: "Return only valid JSON.",
+                    temperature: 0.2,
+                });
 
-                const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();
-                const aiData = JSON.parse(jsonStr);
 
-                console.log(`[Parser] Parsed AI Data:`, aiData);
+
+                // Clean up response
+                const jsonStr = text
+                    .replace(/```json/g, "")
+                    .replace(/```/g, "")
+                    .trim();
+
+                const aiPlaces: Array<{
+                    title: string;
+                    description: string;
+                    type: string;
+                    address: string;
+                }> = JSON.parse(jsonStr);
+
+
+
+                if (aiPlaces.length === 0) {
+                    // AI found no places
+                    if (isSocialMedia && !combinedContext && !title) {
+                        return { success: true, isSocialMedia: true, places: undefined };
+                    }
+                    // Return what we have from HTML
+                    return {
+                        success: true,
+                        isAiUsed: true,
+                        places: title ? [{
+                            title: title || "Unknown Place",
+                            description: description || "",
+                            image,
+                            url,
+                            address: "",
+                            googleMapsUrl: buildGoogleMapsUrl(title),
+                            type: "Other",
+                        }] : undefined,
+                    };
+                }
+
+                // Build ParsedPlace[] from AI results
+                const places: ParsedPlace[] = aiPlaces.map(p => ({
+                    title: p.title || "Unknown Place",
+                    description: p.description || "",
+                    image, // use the same image for all (from the post)
+                    url, // original URL
+                    address: p.address || "",
+                    googleMapsUrl: buildGoogleMapsUrl(p.title, p.address),
+                    type: p.type || "Other",
+                }));
+
+                // If Google Maps with coords and only 1 place, use coord-based URL
+                if (gmapsData.lat && gmapsData.lng && places.length === 1) {
+                    places[0].googleMapsUrl = buildGoogleMapsUrlFromCoords(
+                        gmapsData.lat, gmapsData.lng, places[0].title
+                    );
+                }
 
                 return {
                     success: true,
                     isAiUsed: true,
-                    data: {
-                        title: aiData.title || title || "Found via AI",
-                        description: aiData.description || description,
-                        image: image,
-                        url: url,
-                        address: aiData.address || "",
-                    },
+                    places,
                 };
             } catch (aiError: any) {
-                console.error(`[Parser] Gemini AI parsing failed: ${aiError.message}`);
+                console.error(`[Parser] AI provider failed: ${aiError.message}`);
             }
         }
 
-        // If social media and AI failed but we still don't have meaningful data, ask user for help
+        // Fallback: If social media and we have nothing, ask user for context
         if (isSocialMedia && !combinedContext && !title) {
-            return {
-                success: true,
-                isSocialMedia: true,
-                data: undefined,
-            };
+            return { success: true, isSocialMedia: true, places: undefined };
         }
 
-        // Return whatever we found (standard)
+        // Final fallback: return whatever we have from HTML metadata
         return {
             success: true,
             isAiUsed: false,
-            data: {
+            places: [{
                 title: title || "New Link",
                 description,
                 image,
                 url,
-            },
+                address: "",
+                googleMapsUrl: title ? buildGoogleMapsUrl(title) : url,
+                type: "Other",
+            }],
         };
     } catch (error: any) {
         console.error("Link parsing error:", error);
@@ -263,7 +465,9 @@ IMPORTANT: Return ONLY the JSON object. No explanations, no markdown, no code fe
     }
 }
 
-export async function savePlace(data: ParsedLink) {
+// ---------- CRUD ----------
+
+export async function savePlace(data: ParsedPlace) {
     const supabase = await createClient();
     const { data: { user: authUser } } = await supabase.auth.getUser();
 
@@ -286,7 +490,8 @@ export async function savePlace(data: ParsedLink) {
                 description: data.description,
                 image: data.image,
                 url: data.url,
-                source: "LINK_PARSER",
+                location: data.address || null,
+                source: data.type || "LINK_PARSER",
                 userId: user.id,
             },
         });
@@ -296,6 +501,47 @@ export async function savePlace(data: ParsedLink) {
     } catch (error: any) {
         console.error("Failed to save place:", error);
         return { success: false, error: "Failed to save place" };
+    }
+}
+
+export async function savePlaces(places: ParsedPlace[]) {
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+
+    if (!authUser || !authUser.id) {
+        return { success: false, error: "Unauthorized" };
+    }
+
+    const user = await prisma.user.findUnique({
+        where: { authId: authUser.id },
+    });
+
+    if (!user) {
+        return { success: false, error: "User not found" };
+    }
+
+    try {
+        const createdPlaces = await Promise.all(
+            places.map(data =>
+                prisma.place.create({
+                    data: {
+                        name: data.title,
+                        description: data.description,
+                        image: data.image,
+                        url: data.url,
+                        location: data.address || null,
+                        source: data.type || "LINK_PARSER",
+                        userId: user.id,
+                    },
+                })
+            )
+        );
+
+        revalidatePath("/explore");
+        return { success: true, places: createdPlaces };
+    } catch (error: any) {
+        console.error("Failed to save places:", error);
+        return { success: false, error: "Failed to save places" };
     }
 }
 
@@ -340,11 +586,11 @@ export async function convertPlaceToEvent(tripId: string, place: { title?: strin
     const title = place.title || place.name || "Untitled Place";
 
     try {
-        // Map place types to EventType enum if possible, default to OTHER or ACTIVITY
+        // Map place types to EventType enum
         let eventType = "ACTIVITY";
         const lowerType = place.type?.toLowerCase() || "";
-        if (lowerType.includes("food") || lowerType.includes("restaurant")) eventType = "RESTAURANT";
-        if (lowerType.includes("hotel") || lowerType.includes("stay")) eventType = "HOTEL";
+        if (lowerType.includes("food") || lowerType.includes("restaurant") || lowerType.includes("cafe") || lowerType.includes("bar")) eventType = "RESTAURANT";
+        if (lowerType.includes("hotel") || lowerType.includes("hostel") || lowerType.includes("stay")) eventType = "HOTEL";
         if (lowerType.includes("flight") || lowerType.includes("transport")) eventType = "TRANSPORT";
 
         const event = await prisma.event.create({
@@ -353,7 +599,7 @@ export async function convertPlaceToEvent(tripId: string, place: { title?: strin
                 title: title,
                 description: place.description || "",
                 type: eventType as any,
-                startTime: new Date(), // User will need to adjust this
+                startTime: new Date(),
                 endTime: new Date(new Date().setHours(new Date().getHours() + 2)),
                 location: place.address || place.location || title,
                 lat: place.lat,

@@ -59,7 +59,7 @@ function MapUpdater({ center }: { center: [number, number] }) {
     return null;
 }
 
-export default function GlobalMap() {
+export function GlobalMap() {
     const [activeLocation, setActiveLocation] = useState(globalLocations[0]);
 
     return (

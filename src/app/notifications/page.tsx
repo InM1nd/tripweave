@@ -1,6 +1,6 @@
 "use client";
 
-import DashboardLayout from "@/components/layout/DashboardLayout";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Bell, Calendar, Check, UserPlus, Wallet } from "lucide-react";
@@ -48,9 +48,9 @@ const mockNotifications = [
 const getIcon = (type: string) => {
   switch (type) {
     case "invite":
-      return <UserPlus className="h-5 w-5 text-blue-500" />;
+      return <UserPlus className="h-5 w-5 text-teal" />;
     case "expense":
-      return <Wallet className="h-5 w-5 text-emerald-500" />;
+      return <Wallet className="h-5 w-5 text-success]" />;
     case "update":
       return <Calendar className="h-5 w-5 text-orange-500" />;
     default:
@@ -96,7 +96,7 @@ export default function NotificationsPage() {
 
                   {notification.action && (
                     <div className="flex gap-2 mt-3">
-                      <Button size="sm" className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
+                      <Button size="sm" className="bg-accent] hover:bg-accent]/90 text-white">
                         Accept
                       </Button>
                       <Button size="sm" variant="outline">

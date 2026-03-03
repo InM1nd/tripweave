@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { Loader2 } from "lucide-react";
 
-const TripMap = dynamic(() => import("@/components/trip/TripMap"), {
+const TripMap = dynamic(() => import("@/components/trip/TripMap").then(mod => mod.TripMap), {
   loading: () => (
     <div className="flex items-center justify-center h-[50vh] lg:h-[calc(100vh-200px)]">
       <Loader2 className="h-8 w-8 animate-spin text-primary" />

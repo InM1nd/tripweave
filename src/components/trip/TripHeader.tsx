@@ -97,7 +97,7 @@ export function TripHeader({ trip }: TripHeaderProps) {
                   {daysDuration} days
                 </Badge>
                 {isUpcoming && daysUntilTrip <= 30 && (
-                  <Badge className="bg-gradient-to-r from-emerald-500 to-teal-600 border-0 text-white text-[10px] md:text-xs">
+                  <Badge className="bg-accent] border-0 text-white text-[10px] md:text-xs">
                     In {daysUntilTrip} days
                   </Badge>
                 )}
@@ -129,7 +129,7 @@ export function TripHeader({ trip }: TripHeaderProps) {
                     style={{ zIndex: 4 - i }}
                   >
                     <AvatarImage src={member.user.avatar} alt={member.user.name} />
-                    <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-[10px] md:text-xs font-medium">
+                    <AvatarFallback className="bg-accent]/20 text-accent] text-[10px] md:text-xs font-medium">
                       {member.user.name[0]}
                     </AvatarFallback>
                   </Avatar>

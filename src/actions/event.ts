@@ -5,9 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { eventFormSchema, EventFormValues } from "@/lib/validations/event";
 import * as XLSX from "xlsx";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+import { generateTextWithFallback, isLlmConfigured } from "@/lib/ai/llm";
 
 export async function createEvent(tripId: string, data: EventFormValues) {
     const supabase = await createClient();
@@ -96,7 +94,7 @@ export async function getTripEvents(tripId: string) {
     if (!isMember) throw new Error("Unauthorized");
 
     const events = await prisma.event.findMany({
-        where: { tripId },
+        where: { tripId, isSuggested: false },
         orderBy: { startTime: 'asc' }
     });
 
@@ -227,15 +225,13 @@ export async function importPlanFromSpreadsheet(tripId: string, formData: FormDa
             return { success: false, error: "The file appears to be empty or could not be parsed" };
         }
 
-        console.log(`[Import] Parsed ${rawData.length} rows from sheet "${firstSheetName}"`);
-        console.log(`[Import] Column names:`, Object.keys(rawData[0] as any));
+
+
 
         // 3. Use AI to parse and map the spreadsheet data to events
-        if (!process.env.GEMINI_API_KEY) {
-            return { success: false, error: "AI service is not configured (missing API key)" };
+        if (!isLlmConfigured()) {
+            return { success: false, error: "AI service is not configured (missing Groq/OpenRouter API key)" };
         }
-
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
         // Send first 50 rows max to stay within token limits
         const sampleData = rawData.slice(0, 50);
@@ -279,11 +275,12 @@ IMPORTANT:
 - If dates are relative (Day 1, Day 2...), start from today's date: ${new Date().toISOString().split('T')[0]}
 - Be smart about type detection: "flight" → TRANSPORT, "hotel/airbnb" → HOTEL, "restaurant/cafe/dinner/lunch" → RESTAURANT, etc.`;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
+        const text = await generateTextWithFallback(prompt, {
+            systemPrompt: "Return only valid JSON array. No prose.",
+            temperature: 0.1,
+        });
 
-        console.log(`[Import] AI response (first 500 chars):`, text.substring(0, 500));
+
 
         // Parse AI response
         const jsonStr = text.replace(/```json/g, "").replace(/```/g, "").trim();
@@ -293,7 +290,7 @@ IMPORTANT:
             return { success: false, error: "AI could not extract any events from the file" };
         }
 
-        console.log(`[Import] AI parsed ${parsedEvents.length} events`);
+
 
         // 4. Create all events in DB
         let created = 0;
@@ -341,5 +338,105 @@ IMPORTANT:
     } catch (error: any) {
         console.error("[Import] Error:", error);
         return { success: false, error: "Failed to import: " + error.message };
+    }
+}
+
+export async function getSuggestedEvents(tripId: string) {
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+
+    if (!authUser) throw new Error("Unauthorized");
+
+    // Check access
+    const isMember = await prisma.tripMember.findFirst({
+        where: {
+            tripId,
+            user: { authId: authUser.id }
+        }
+    });
+
+    if (!isMember) throw new Error("Unauthorized");
+
+    const events = await prisma.event.findMany({
+        where: {
+            tripId,
+            isSuggested: true
+        },
+        include: {
+            votes: true,
+            trip: {
+                select: {
+                    members: {
+                        select: {
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    avatar: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        orderBy: { createdAt: 'desc' }
+    });
+
+    return events;
+}
+
+export async function toggleVote(eventId: string) {
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+
+    if (!authUser || !authUser.id) {
+        return { success: false, error: "Unauthorized" };
+    }
+
+    const user = await prisma.user.findUnique({
+        where: { authId: authUser.id },
+    });
+
+    if (!user) {
+        return { success: false, error: "User not found" };
+    }
+
+    try {
+        const existingVote = await prisma.vote.findUnique({
+            where: {
+                eventId_userId: {
+                    eventId,
+                    userId: user.id
+                }
+            }
+        });
+
+        if (existingVote) {
+            await prisma.vote.delete({
+                where: { id: existingVote.id }
+            });
+        } else {
+            await prisma.vote.create({
+                data: {
+                    eventId,
+                    userId: user.id
+                }
+            });
+        }
+
+        const event = await prisma.event.findUnique({
+            where: { id: eventId },
+            select: { tripId: true }
+        });
+
+        if (event) {
+            revalidatePath(`/trip/${event.tripId}/suggested`);
+        }
+
+        return { success: true };
+    } catch (error: any) {
+        console.error("Failed to toggle vote:", error);
+        return { success: false, error: "Failed to toggle vote" };
     }
 }

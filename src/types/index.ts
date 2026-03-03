@@ -19,6 +19,8 @@ export interface TripMember {
   user: User;
 }
 
+export type CoverColorKey = "electric" | "coral" | "lime" | "sky" | "amber" | "pink";
+
 export interface Trip {
   id: string;
   name: string;
@@ -26,6 +28,7 @@ export interface Trip {
   startDate: Date;
   endDate: Date;
   coverImage?: string;
+  coverColor?: CoverColorKey | string | null;
   currency: string;
   members: TripMember[];
   _count?: {

@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { createTripSchema, CreateTripValues, updateTripSchema, UpdateTripValues } from "@/lib/validations/trip";
 import { createClient } from "@/lib/supabase/server";
+import { getRandomCoverColor } from "@/lib/colors";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -20,7 +21,7 @@ export async function createTrip(data: CreateTripValues) {
         throw new Error("Invalid data");
     }
 
-    const { name, destination, dateRange, currency, coverImage } = validation.data;
+    const { name, destination, dateRange, currency, coverImage, coverColor } = validation.data;
 
     // Find user in DB
     const user = await prisma.user.findUnique({
@@ -39,6 +40,7 @@ export async function createTrip(data: CreateTripValues) {
             endDate: dateRange.to,
             currency,
             coverImage,
+            coverColor: coverColor ?? getRandomCoverColor(),
             createdBy: user.id,
             members: {
                 create: {

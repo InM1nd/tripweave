@@ -31,7 +31,7 @@ export function useUpload(): UseUploadReturn {
 
             const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);
             return data.publicUrl;
-        } catch (error: any) {
+        } catch (error) {
             console.error("Upload failed:", error);
             toast.error("Failed to upload image");
             return null;

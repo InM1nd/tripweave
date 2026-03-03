@@ -2,7 +2,8 @@
 
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { UploadCloud, X, Loader2, Image as ImageIcon } from "lucide-react";
+import { UploadCloud, X, Loader2 } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useUpload } from "@/hooks/use-upload";
 import { cn } from "@/lib/utils";
@@ -40,7 +41,7 @@ export function ImageUpload({
                     onChange(url);
                     toast.success("Image uploaded");
                 }
-            } catch (error) {
+            } catch {
                 toast.error("Upload failed");
             } finally {
                 setIsUploading(false);
@@ -67,10 +68,12 @@ export function ImageUpload({
         <div className={cn("w-full", className)}>
             {value ? (
                 <div className="relative h-32 w-full rounded-lg overflow-hidden border border-border bg-muted group">
-                    <img
+                    <Image
                         src={value}
                         alt="Upload"
-                        className="w-full h-full object-cover transition-opacity group-hover:opacity-90"
+                        fill
+                        unoptimized
+                        className="object-cover transition-opacity group-hover:opacity-90"
                     />
                     <div className="absolute top-2 right-2">
                         <Button
@@ -95,7 +98,7 @@ export function ImageUpload({
                         className
                     )}
                 >
-                    <Input {...getInputProps()} />
+                    <input {...getInputProps()} />
                     {isUploading ? (
                         <div className="flex flex-col items-center gap-2">
                             <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -121,6 +124,3 @@ export function ImageUpload({
         </div>
     );
 }
-
-// Helper input to keep typescript happy if needed, though react-dropzone handles it
-const Input = (props: any) => <input {...props} />;

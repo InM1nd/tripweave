@@ -11,9 +11,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider
-        attribute="class"
+        attribute="data-theme"
+        storageKey="theme"
         defaultTheme="dark"
-        enableSystem
+        enableSystem={false}
         disableTransitionOnChange
       >
         {children}

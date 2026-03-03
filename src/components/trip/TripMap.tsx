@@ -53,9 +53,9 @@ const mockLocations = [
 ];
 
 const eventTypeColors: Record<string, string> = {
-  transport: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  accommodation: "bg-purple-500/10 text-purple-500 border-purple-500/20",
-  activity: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+  transport: "bg-teal/10 text-teal border-teal/20",
+  accommodation: "bg-violet/10 text-violet border-violet/20",
+  activity: "bg-accent]/10 text-accent] border-accent]/20",
   food: "bg-orange-500/10 text-orange-500 border-orange-500/20",
 };
 
@@ -67,7 +67,7 @@ function MapUpdater({ center }: { center: [number, number] }) {
   return null;
 }
 
-export default function TripMap() {
+export function TripMap() {
   const [activeLocation, setActiveLocation] = useState(mockLocations[0]);
 
   return (
@@ -79,7 +79,7 @@ export default function TripMap() {
             {mockLocations.map((location) => (
               <Card
                 key={location.id}
-                className={`cursor-pointer transition-all hover:bg-muted/50 w-[200px] shrink-0 ${activeLocation.id === location.id ? "border-emerald-500 bg-emerald-500/5" : ""}`}
+                className={`cursor-pointer transition-all hover:bg-muted/50 w-[200px] shrink-0 ${activeLocation.id === location.id ? "border-accent] bg-accent]/5" : ""}`}
                 onClick={() => setActiveLocation(location)}
               >
                 <CardContent className="p-3">
@@ -111,7 +111,7 @@ export default function TripMap() {
           {mockLocations.map((location) => (
             <Card
               key={location.id}
-              className={`cursor-pointer transition-all hover:bg-muted/50 ${activeLocation.id === location.id ? "border-emerald-500 bg-emerald-500/5" : ""}`}
+              className={`cursor-pointer transition-all hover:bg-muted/50 ${activeLocation.id === location.id ? "border-accent] bg-accent]/5" : ""}`}
               onClick={() => setActiveLocation(location)}
             >
               <CardContent className="p-4">

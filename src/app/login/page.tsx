@@ -74,7 +74,7 @@ function LoginForm() {
         <div className="min-h-screen flex items-center justify-center bg-gray-50/50 px-4">
             <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
                 <div className="flex flex-col items-center justify-center text-center space-y-2">
-                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25 mb-4">
+                    <div className="h-12 w-12 rounded-xl bg-accent] flex items-center justify-center text-white mb-4">
                         <Plane className="h-6 w-6" />
                     </div>
                     <h1 className="text-2xl font-bold tracking-tight">

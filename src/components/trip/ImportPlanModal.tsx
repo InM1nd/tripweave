@@ -112,7 +112,7 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
-                        <FileSpreadsheet className="h-5 w-5 text-emerald-500" />
+                        <FileSpreadsheet className="h-5 w-5 text-accent]" />
                         Import Plan
                     </DialogTitle>
                     <DialogDescription>
@@ -134,7 +134,7 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
                                 ${isDragging
                                     ? "border-primary bg-primary/5 scale-[1.02]"
                                     : file
-                                        ? "border-emerald-500/50 bg-emerald-50/50 dark:bg-emerald-950/20"
+                                        ? "border-accent]/50 bg-accent]/10"
                                         : "border-border hover:border-primary/50 hover:bg-accent/30"
                                 }
                             `}
@@ -152,8 +152,8 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
 
                             {file ? (
                                 <div className="flex flex-col items-center gap-3">
-                                    <div className="h-12 w-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center">
-                                        <FileText className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                                    <div className="h-12 w-12 rounded-xl bg-accent]/15 flex items-center justify-center">
+                                        <FileText className="h-6 w-6 text-accent]" />
                                     </div>
                                     <div>
                                         <p className="font-medium text-sm">{file.name}</p>
@@ -196,12 +196,12 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
                     {/* Result */}
                     {result && (
                         <div className={`rounded-xl p-4 border ${result.success
-                            ? "bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800"
+                            ? "bg-success]/10 border-success]/30"
                             : "bg-destructive/5 border-destructive/20"
                             }`}>
                             <div className="flex items-start gap-3">
                                 {result.success ? (
-                                    <CheckCircle2 className="h-5 w-5 text-emerald-500 mt-0.5 shrink-0" />
+                                    <CheckCircle2 className="h-5 w-5 text-success] mt-0.5 shrink-0" />
                                 ) : (
                                     <AlertCircle className="h-5 w-5 text-destructive mt-0.5 shrink-0" />
                                 )}
@@ -252,7 +252,7 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
                                 <Button
                                     onClick={handleImport}
                                     disabled={!file || isLoading}
-                                    className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white"
+                                    className="gap-2 bg-accent] hover:bg-accent]/90 text-white"
                                 >
                                     {isLoading ? (
                                         <>

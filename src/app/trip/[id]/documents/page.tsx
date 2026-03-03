@@ -31,11 +31,11 @@ const FileIcon = ({ type }: { type: string }) => {
     case "VISA":
     case "INSURANCE":
     case "ITINERARY":
-      return <FileText className="h-6 w-6 md:h-8 md:w-8 text-blue-600" />;
+      return <FileText className="h-6 w-6 md:h-8 md:w-8 text-teal" />;
     case "IMAGE":
-      return <ImageIcon className="h-6 w-6 md:h-8 md:w-8 text-blue-500" />;
+      return <ImageIcon className="h-6 w-6 md:h-8 md:w-8 text-teal" />;
     case "PASSPORT":
-      return <FileText className="h-6 w-6 md:h-8 md:w-8 text-red-500" />;
+      return <FileText className="h-6 w-6 md:h-8 md:w-8 text-danger" />;
     default:
       return <File className="h-6 w-6 md:h-8 md:w-8 text-gray-500" />;
   }
@@ -69,7 +69,7 @@ export default async function DocumentsPage({ params }: { params: Promise<{ id: 
             <Input placeholder="Search files..." className="pl-9 border-border/40 bg-card/50" />
           </div>
           <AddDocumentModal tripId={id}>
-            <Button className="gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all shrink-0">
+            <Button className="gap-2 bg-accent] hover:bg-accent]/90 text-white transition-all shrink-0">
               <Upload className="h-4 w-4" />
               <span className="hidden sm:inline">Add Link</span>
             </Button>

@@ -9,14 +9,13 @@ import {
   FileText,
   Users,
   Settings,
-  LayoutGrid
+  Lightbulb
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const tabs = [
   { href: "timeline", icon: Calendar, label: "Timeline" },
-  { href: "itinerary", icon: LayoutGrid, label: "Itinerary" },
+  { href: "suggested", icon: Lightbulb, label: "Suggested Places" },
   { href: "map", icon: Map, label: "Map" },
   { href: "budget", icon: Wallet, label: "Budget" },
   { href: "documents", icon: FileText, label: "Docs" },

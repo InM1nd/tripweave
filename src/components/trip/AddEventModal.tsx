@@ -60,9 +60,10 @@ import { ImageUpload } from "@/components/ui/image-upload";
 interface AddEventModalProps {
   children?: React.ReactNode;
   tripId: string;
+  defaultDate?: Date;
 }
 
-export function AddEventModal({ children, tripId }: AddEventModalProps) {
+export function AddEventModal({ children, tripId, defaultDate }: AddEventModalProps) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -74,6 +75,7 @@ export function AddEventModal({ children, tripId }: AddEventModalProps) {
       title: "",
       type: "activity",
       location: "",
+      startDate: defaultDate,
       startTime: "12:00",
       description: "",
       coverImage: "",
@@ -276,7 +278,7 @@ export function AddEventModal({ children, tripId }: AddEventModalProps) {
               Cancel
             </Button>
           )}
-          <Button type="submit" disabled={isLoading} className={cn("bg-gradient-to-r from-emerald-500 to-teal-600 text-white", !isDesktop && "flex-1")}>
+          <Button type="submit" disabled={isLoading} className={cn("bg-accent] hover:bg-accent]/90 text-white", !isDesktop && "flex-1")}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create Event
           </Button>

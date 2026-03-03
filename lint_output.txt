@@ -1,0 +1,225 @@
+
+> tripweave@0.1.0 lint
+> eslint
+
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/scripts/setup-bucket.js
+   2:26  error    A `require()` style import is forbidden    @typescript-eslint/no-require-imports
+   3:16  error    A `require()` style import is forbidden    @typescript-eslint/no-require-imports
+   4:12  error    A `require()` style import is forbidden    @typescript-eslint/no-require-imports
+   5:14  error    A `require()` style import is forbidden    @typescript-eslint/no-require-imports
+  45:17  warning  'data' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/actions/budget.ts
+  68:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/actions/document.ts
+  39:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  48:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/actions/event.ts
+   74:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  137:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  160:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  189:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  324:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  338:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  438:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/actions/member.ts
+  9:7  warning  'updateRoleSchema' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/actions/place.ts
+  181:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  249:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  313:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  438:31  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  462:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  501:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  542:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  601:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  615:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  647:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/actions/recommendations.ts
+  60:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/actions/social-spot-importer.ts
+  123:34  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  215:70  warning  'platform' is defined but never used                 @typescript-eslint/no-unused-vars
+  433:27  warning  'screenshot_b64' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  610:23  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  671:21  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  712:21  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  746:36  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  759:21  error    Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/actions/trip.ts
+    8:10  warning  'redirect' is defined but never used      @typescript-eslint/no-unused-vars
+  202:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  244:21  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/api/import-spots/route.ts
+  20:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/invite/[token]/page.tsx
+    8:10  warning  'format' is defined but never used                               @typescript-eslint/no-unused-vars
+   11:10  warning  'Trip' is defined but never used                                 @typescript-eslint/no-unused-vars
+   22:38  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   25:42  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  120:32  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  160:36  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/login/page.tsx
+  11:8   warning  'Link' is defined but never used          @typescript-eslint/no-unused-vars
+  35:25  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  66:25  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/page.tsx
+   89:88   error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  137:128  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/profile/page.tsx
+  45:29  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  45:91  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/trip/[id]/budget/page.tsx
+    6:10   warning  'ArrowUpRight' is defined but never used   @typescript-eslint/no-unused-vars
+    6:24   warning  'ArrowDownLeft' is defined but never used  @typescript-eslint/no-unused-vars
+    6:39   warning  'DollarSign' is defined but never used     @typescript-eslint/no-unused-vars
+    6:51   warning  'PieChart' is defined but never used       @typescript-eslint/no-unused-vars
+    6:101  warning  'Download' is defined but never used       @typescript-eslint/no-unused-vars
+    6:111  warning  'Filter' is defined but never used         @typescript-eslint/no-unused-vars
+    9:10   warning  'format' is defined but never used         @typescript-eslint/no-unused-vars
+  128:39   error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/trip/[id]/documents/page.tsx
+  10:3  warning  'Download' is defined but never used             @typescript-eslint/no-unused-vars
+  11:3  warning  'MoreVertical' is defined but never used         @typescript-eslint/no-unused-vars
+  18:3  warning  'DropdownMenu' is defined but never used         @typescript-eslint/no-unused-vars
+  19:3  warning  'DropdownMenuContent' is defined but never used  @typescript-eslint/no-unused-vars
+  20:3  warning  'DropdownMenuItem' is defined but never used     @typescript-eslint/no-unused-vars
+  21:3  warning  'DropdownMenuTrigger' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/trip/[id]/layout.tsx
+   6:10   warning  'redirect' is defined but never used                             @typescript-eslint/no-unused-vars
+  29:112  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/trip/[id]/members/page.tsx
+    1:10  warning  'use' is defined but never used           @typescript-eslint/no-unused-vars
+   38:46  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   54:31  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  106:42  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/trip/[id]/page.tsx
+  7:11  warning  'id' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/trip/[id]/settings/page.tsx
+   6:13  warning  'z' is defined but never used                                                                                        @typescript-eslint/no-unused-vars
+  48:11  error    Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  59:16  warning  'error' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+  78:14  warning  'error' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/trip/[id]/suggested/page.tsx
+  40:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/app/trip/[id]/timeline/page.tsx
+  14:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  14:68  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  14:80  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/explore/AddToTripModal.tsx
+  22:12  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  23:12  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  41:18  warning  'error' is defined but never used                                @typescript-eslint/no-unused-vars
+  57:46  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  57:76  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/explore/ExploreContent.tsx
+    8:53  warning  'X' is defined but never used                                    @typescript-eslint/no-unused-vars
+   18:22  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   19:12  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   24:56  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+   79:92  error    Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  164:79  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/explore/ForYouRecommendations.tsx
+  12:20  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  13:25  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  24:42  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  41:54  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  57:18  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/explore/PlaceCard.tsx
+   3:16  warning  'CardContent' is defined but never used   @typescript-eslint/no-unused-vars
+   6:56  warning  'ExternalLink' is defined but never used  @typescript-eslint/no-unused-vars
+   6:70  warning  'Instagram' is defined but never used     @typescript-eslint/no-unused-vars
+  50:60  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  52:67  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  84:18  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/explore/SocialSpotImporter.tsx
+   29:5   warning  'Navigation' is defined but never used    @typescript-eslint/no-unused-vars
+  175:23  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/map/GlobalMap.tsx
+  54:10  warning  'MapUpdater' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/theme-toggle.tsx
+  24:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/trip/AddDocumentModal.tsx
+   6:13  warning  'z' is defined but never used         @typescript-eslint/no-unused-vars
+   7:37  warning  'FileText' is defined but never used  @typescript-eslint/no-unused-vars
+  96:18  warning  'error' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/trip/AddEventModal.tsx
+    6:13  warning  'z' is defined but never used            @typescript-eslint/no-unused-vars
+   58:10  warning  'ImageUpload' is defined but never used  @typescript-eslint/no-unused-vars
+  100:14  warning  'error' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/trip/AddExpenseModal.tsx
+    6:13   warning  'z' is defined but never used             @typescript-eslint/no-unused-vars
+   54:12   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   87:14   warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  171:162  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/trip/CreateTripModal.tsx
+  5:10  warning  'z' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/trip/EditEventSheet.tsx
+    6:13   warning  'z' is defined but never used                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+    8:124  warning  'Globe' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   14:5    warning  'SheetDescription' is defined but never used                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   15:5    warning  'SheetHeader' is defined but never used                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+   16:5    warning  'SheetTitle' is defined but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   36:5    warning  'Tabs' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   37:5    warning  'TabsContent' is defined but never used                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+   38:5    warning  'TabsList' is defined but never used                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+   39:5    warning  'TabsTrigger' is defined but never used                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+   57:12   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  102:18   warning  'error' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  122:18   warning  'e' is defined but never used                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  153:33   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  182:29   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/trip/InviteMemberModal.tsx
+  76:19  warning  'invite' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  84:25  error    Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  98:25  error    Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/trip/MemberRoleSelect.tsx
+  48:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/trip/SortableEventCard.tsx
+  68:25  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/trip/SortableTimelineEvent.tsx
+  6:32  warning  'Navigation' is defined but never used  @typescript-eslint/no-unused-vars
+  6:44  warning  'DollarSign' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/oleksandrzabolotnyi/Documents/Project/tripweave/src/components/ui/progress.tsx
+  16:24  warning  'accentColor' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 140 problems (76 errors, 64 warnings)
+

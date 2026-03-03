@@ -37,6 +37,7 @@ model Trip {
   startDate   DateTime
   endDate     DateTime
   coverImage  String?
+  coverColor  String?  @default("electric") // electric | coral | lime | sky | amber | pink
   currency    String   @default("EUR")
   timezone    String   @default("UTC")
   description String?  @db.Text
@@ -105,6 +106,9 @@ model Event {
   // Notifications
   reminderSent Boolean   @default(false)
   reminderTime DateTime? // When to send reminder
+
+  // Gamification & Suggestions
+  isSuggested  Boolean   @default(false)
 
   createdBy String
   trip      Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
