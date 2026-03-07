@@ -236,6 +236,18 @@
   preserve-aspect-ratio: xMidYMid slice;
 }
 
+/* Hero section main title — sticker-style shadow (solid offset, like cards) */
+.hero-title-shadow {
+  text-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.08),
+    0 6px 0 rgba(0, 0, 0, 0.05);
+}
+[data-theme="dark"] .hero-title-shadow {
+  text-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.2),
+    0 6px 0 rgba(0, 0, 0, 0.12);
+}
+
 /* ── Sticker / Magazine landing keyframes ─────────────────────── */
 
 @keyframes sticker-pop {
@@ -333,6 +345,57 @@
   background-size: 16px 16px;
   background-position: -8px center;
   background-repeat: repeat-y;
+}
+
+/* ── Hero sticker shapes (variety) ───────────────────────────── */
+.sticker-shape-pill { border-radius: 9999px; }
+.sticker-shape-card { border-radius: 1.5rem; }
+.sticker-shape-squircle { border-radius: 1.25rem; }
+.sticker-shape-tag {
+  border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+.sticker-shape-tag-alt {
+  border-radius: 0;
+  clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+}
+.sticker-shape-hex {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border-radius: 0;
+}
+.sticker-shape-blob {
+  border-radius: 60% 40% 50% 50% / 50% 60% 40% 50%;
+}
+.sticker-shape-rect { border-radius: 0.5rem; }
+.sticker-shape-stadium { border-radius: 2rem; }
+
+/* Visa-style sticker — document look */
+.visa-sticker {
+  border-radius: 0.5rem;
+  border: 2px solid hsl(var(--border));
+  box-shadow: 0 5px 0 rgba(0,0,0,0.1), 0 2px 12px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+.visa-sticker::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 4px,
+    currentColor 4px,
+    currentColor 6px
+  );
+  opacity: 0.25;
+}
+.visa-sticker .visa-accent-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, currentColor 20%, currentColor 80%, transparent);
+  opacity: 0.2;
 }
 
 /* ── Reduced motion ──────────────────────────────────────────── */

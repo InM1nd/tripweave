@@ -1,11 +1,12 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import {
   ComposableMap,
+  createCoordinates,
   Geographies,
   Geography,
-} from "react-simple-maps";
+} from "@vnedyalk0v/react19-simple-maps";
 
 const GEO_URL =
   "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
@@ -24,26 +25,48 @@ function pickFill(index: number) {
   return STICKER_FILLS[index % STICKER_FILLS.length];
 }
 
-export const WorldMapBg = memo(function WorldMapBg({
-  className,
-}: {
-  className?: string;
-}) {
+function WorldMapContent({ className }: { className?: string }) {
+  const [geography, setGeography] = useState<object | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(GEO_URL)
+      .then((res) => res.json())
+      .then((data: object) => {
+        if (!cancelled) setGeography(data);
+      })
+      .catch(() => {
+        if (!cancelled) setGeography(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (!geography) {
+    return (
+      <div
+        className={`absolute inset-0 w-full h-full bg-muted/10 ${className ?? ""}`}
+        aria-hidden
+      />
+    );
+  }
+
   return (
     <div className={`absolute inset-0 w-full h-full ${className ?? ""}`} aria-hidden>
       <ComposableMap
         projection="geoEqualEarth"
-        projectionConfig={{ scale: 160, center: [10, 10] }}
+        projectionConfig={{ scale: 160, center: createCoordinates(10, 10) }}
         width={960}
         height={500}
         style={{ width: "100%", height: "100%" }}
         className="hero-map-cover"
       >
-        <Geographies geography={GEO_URL}>
-          {({ geographies }: { geographies: { rsmKey: string }[] }) =>
-            geographies.map((geo: { rsmKey: string }, i: number) => (
+        <Geographies geography={geography as Parameters<typeof Geographies>[0]["geography"]}>
+          {({ geographies }) =>
+            geographies.map((geo, i) => (
               <Geography
-                key={geo.rsmKey}
+                key={i}
                 geography={geo}
                 fill={pickFill(i)}
                 fillOpacity={0.12}
@@ -72,4 +95,12 @@ export const WorldMapBg = memo(function WorldMapBg({
       />
     </div>
   );
+}
+
+export const WorldMapBg = memo(function WorldMapBg({
+  className,
+}: {
+  className?: string;
+}) {
+  return <WorldMapContent className={className} />;
 });

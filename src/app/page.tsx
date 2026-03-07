@@ -186,28 +186,15 @@ export default function Home() {
             <WorldMapBg className="opacity-60" />
           </div>
 
-          {/* ── Hero stickers — distributed around the headline ── */}
+          {/* ── Hero stickers — shuffled positions ── */}
 
-          {/* Top-left: weather badge */}
-          <ParallaxDecor speed={0.15} className="absolute top-[10%] left-4 sm:left-8 lg:left-[8%] pointer-events-none z-20">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, rotate: 6 }}
-              animate={{ opacity: 1, scale: 1, rotate: 6 }}
-              transition={{ delay: 0.3, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-sticker-yellow rounded-full px-4 py-3 flex items-center gap-2 text-foreground font-bold text-xl shadow-[0_5px_0_rgba(0,0,0,0.10)] border-2 border-border animate-float-y"
-            >
-              <Sun className="h-7 w-7" strokeWidth={2.5} />
-              34°C
-            </motion.div>
-          </ParallaxDecor>
-
-          {/* Top-right: gate ticket */}
-          <ParallaxDecor speed={0.06} className="absolute top-[10%] right-4 sm:right-8 lg:right-[8%] pointer-events-none z-20">
+          {/* Top-left: gate ticket (moved from top-right) */}
+          <ParallaxDecor speed={0.06} className="absolute top-[10%] left-4 sm:left-8 lg:left-[8%] pointer-events-none z-20">
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-sticker-coral text-white font-black text-xl sm:text-2xl px-4 py-2.5 rounded-full shadow-[0_5px_0_rgba(0,0,0,0.10)] border-2 border-border -rotate-2"
+              className="bg-sticker-coral text-white font-black text-lg sm:text-xl px-4 py-2.5 sticker-shape-stadium shadow-[0_5px_0_rgba(0,0,0,0.10)] border-2 border-border rotate-3"
             >
               <span className="flex items-center gap-2">
                 <Ticket className="h-5 w-5" strokeWidth={3} /> GATE B26
@@ -215,13 +202,54 @@ export default function Home() {
             </motion.div>
           </ParallaxDecor>
 
-          {/* Left middle: trip card */}
-          <ParallaxDecor speed={0.18} className="absolute top-[34%] left-4 sm:left-6 lg:left-[5%] pointer-events-none z-20 hidden md:block">
+          {/* Top-right: coffee (moved from bottom-center-left) */}
+          <ParallaxDecor speed={0.12} className="absolute top-[12%] right-4 sm:right-8 lg:right-[8%] pointer-events-none z-20">
             <motion.div
-              initial={{ opacity: 0, x: -30, rotate: -6 }}
-              animate={{ opacity: 1, x: 0, rotate: -6 }}
-              transition={{ delay: 0.6, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-sticker-lilac rounded-3xl p-4 text-foreground shadow-[0_6px_0_rgba(0,0,0,0.10)] border-2 border-border w-44 lg:w-52"
+              initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
+              animate={{ opacity: 1, scale: 1, rotate: 10 }}
+              transition={{ delay: 0.35, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-sticker-pink sticker-shape-rect h-14 w-14 flex items-center justify-center text-foreground shadow-[0_5px_0_rgba(0,0,0,0.10)] border-2 border-border animate-float-y"
+            >
+              <Coffee className="h-7 w-7" strokeWidth={2.5} />
+            </motion.div>
+          </ParallaxDecor>
+
+          {/* Left: BCN stamp rectangular (moved from bottom-center-right) */}
+          <ParallaxDecor speed={0.14} className="absolute top-[20%] left-4 sm:left-6 lg:left-[6%] pointer-events-none z-20 hidden sm:block">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-24 min-h-20 rounded-md border-2 border-dashed border-sticker-coral flex flex-col items-center justify-center py-2 px-2 text-sticker-coral font-black -rotate-8 bg-background/90 overflow-visible"
+            >
+              <span className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-8 border-t-sticker-coral" aria-hidden />
+              <span className="text-[8px] uppercase tracking-[0.2em]">Approved</span>
+              <span className="text-sm leading-none mt-0.5">BCN</span>
+              <span className="text-[8px] uppercase tracking-widest">2026</span>
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-8 border-b-sticker-coral" aria-hidden />
+            </motion.div>
+          </ParallaxDecor>
+
+          {/* Left middle: compass — tag shape */}
+          <ParallaxDecor speed={0.18} className="absolute top-[38%] left-4 sm:left-6 lg:left-[5%] pointer-events-none z-20 hidden md:block">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, rotate: -4 }}
+              animate={{ opacity: 1, scale: 1, rotate: -4 }}
+              transition={{ delay: 0.6, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-sticker-blue sticker-shape-tag p-4 text-foreground font-bold text-sm lg:text-base shadow-[0_5px_0_rgba(0,0,0,0.10)] max-w-[140px] text-center leading-tight border-2 border-border"
+            >
+              <Compass className="h-8 w-8 lg:h-9 lg:w-9 mx-auto mb-2" strokeWidth={2.5} />
+              Explore new<br />horizons
+            </motion.div>
+          </ParallaxDecor>
+
+          {/* Right middle: trip card Barcelona (moved from left) */}
+          <ParallaxDecor speed={0.08} className="absolute top-[32%] right-4 sm:right-6 lg:right-[5%] pointer-events-none z-20 hidden md:block">
+            <motion.div
+              initial={{ opacity: 0, x: 30, rotate: 6 }}
+              animate={{ opacity: 1, x: 0, rotate: 6 }}
+              transition={{ delay: 0.55, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-sticker-lilac sticker-shape-squircle p-4 text-foreground shadow-[0_6px_0_rgba(0,0,0,0.10)] border-2 border-border w-44 lg:w-52"
             >
               <Plane className="h-5 w-5 mb-2" strokeWidth={3} />
               <div className="font-black text-base lg:text-lg leading-tight">Barcelona Trip</div>
@@ -234,67 +262,75 @@ export default function Home() {
             </motion.div>
           </ParallaxDecor>
 
-          {/* Right middle: compass card */}
-          <ParallaxDecor speed={0.08} className="absolute top-[36%] right-4 sm:right-6 lg:right-[5%] pointer-events-none z-20 hidden md:block">
+          {/* Bottom-left: visa sticker (moved from bottom-right) */}
+          <ParallaxDecor speed={0.1} className="absolute bottom-[16%] left-4 sm:left-10 lg:left-[10%] pointer-events-none z-20">
             <motion.div
-              initial={{ opacity: 0, scale: 0.8, rotate: -4 }}
-              animate={{ opacity: 1, scale: 1, rotate: -4 }}
-              transition={{ delay: 0.5, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-sticker-blue rounded-3xl p-4 text-foreground font-bold text-sm lg:text-base shadow-[0_5px_0_rgba(0,0,0,0.10)] max-w-[140px] text-center leading-tight border-2 border-border"
+              initial={{ opacity: 0, scale: 0.8, rotate: -6 }}
+              animate={{ opacity: 1, scale: 1, rotate: -6 }}
+              transition={{ delay: 0.85, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="visa-sticker relative bg-linear-to-b from-sticker-green to-sticker-olive text-foreground w-40 sm:w-44 border-border"
             >
-              <Compass className="h-8 w-8 lg:h-9 lg:w-9 mx-auto mb-2" strokeWidth={2.5} />
-              Explore new<br />horizons
+              <div className="absolute top-0 left-0 right-0 h-2 bg-foreground/10" />
+              <div className="pt-3 pb-2.5 px-3">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <span className="font-black text-[10px] uppercase tracking-[0.25em] text-foreground/80">Travel Visa</span>
+                  <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-background/30 text-foreground">Valid</span>
+                </div>
+                <div className="visa-accent-line w-full my-1.5" />
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-md bg-background/40 flex items-center justify-center shrink-0">
+                    <Stamp className="h-4 w-4 text-sticker-olive" strokeWidth={2.5} />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-black text-sm leading-tight">Schengen</div>
+                    <div className="text-[10px] font-bold opacity-90 tracking-wide">EU · 90 days</div>
+                  </div>
+                </div>
+                <div className="mt-2 flex justify-between text-[9px] font-bold uppercase tracking-widest opacity-80">
+                  <span>2026</span>
+                  <span>BCN</span>
+                </div>
+              </div>
             </motion.div>
           </ParallaxDecor>
 
-          {/* Bottom-left: camera icon */}
-          <ParallaxDecor speed={0.2} className="absolute bottom-[14%] left-4 sm:left-10 lg:left-[12%] pointer-events-none z-20">
+          {/* Bottom-center-left: weather pill (moved from top-left) */}
+          <ParallaxDecor speed={0.15} className="absolute bottom-[10%] left-[28%] pointer-events-none z-20 hidden lg:block">
             <motion.div
-              initial={{ opacity: 0, scale: 0.8, rotate: -8 }}
-              animate={{ opacity: 1, scale: 1, rotate: -8 }}
-              transition={{ delay: 0.8, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-sticker-olive rounded-full h-14 w-14 sm:h-16 sm:w-16 flex items-center justify-center text-white shadow-[0_5px_0_rgba(0,0,0,0.10)] border-2 border-border"
+              initial={{ opacity: 0, scale: 0.8, rotate: 6 }}
+              animate={{ opacity: 1, scale: 1, rotate: 6 }}
+              transition={{ delay: 0.3, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="bg-sticker-yellow sticker-shape-pill px-4 py-3 flex items-center gap-2 text-foreground font-bold text-xl shadow-[0_5px_0_rgba(0,0,0,0.10)] border-2 border-border animate-float-y"
+              style={{ animationDelay: "0.5s" }}
             >
-              <Camera className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2.5} />
+              <Sun className="h-7 w-7" strokeWidth={2.5} />
+              34°C
             </motion.div>
           </ParallaxDecor>
 
-          {/* Bottom-center-left: coffee icon (hidden on small) */}
-          <ParallaxDecor speed={0.12} className="absolute bottom-[8%] left-[30%] pointer-events-none z-20 hidden lg:block">
+          {/* Bottom-center-right: round stamp PRG (moved from left) */}
+          <ParallaxDecor speed={0.12} className="absolute bottom-[10%] right-[30%] pointer-events-none z-20 hidden lg:block">
             <motion.div
-              initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
-              animate={{ opacity: 1, scale: 1, rotate: 10 }}
-              transition={{ delay: 1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-sticker-pink rounded-full h-14 w-14 flex items-center justify-center text-foreground shadow-[0_5px_0_rgba(0,0,0,0.10)] border-2 border-border animate-float-y"
-              style={{ animationDelay: "1s" }}
-            >
-              <Coffee className="h-7 w-7" strokeWidth={2.5} />
-            </motion.div>
-          </ParallaxDecor>
-
-          {/* Bottom-center-right: BCN stamp */}
-          <ParallaxDecor speed={0.14} className="absolute bottom-[8%] right-[28%] pointer-events-none z-20 hidden lg:block">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.85 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="w-24 h-24 rounded-full border-4 border-dashed border-sticker-coral flex flex-col items-center justify-center text-sticker-coral font-black rotate-12"
+              transition={{ delay: 0.7, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="w-20 h-20 rounded-full border-2 border-dashed border-sticker-blue flex flex-col items-center justify-center text-sticker-blue font-black rotate-12 bg-background/90"
             >
-              <span className="text-[9px] uppercase tracking-[0.2em]">Approved</span>
-              <span className="text-lg leading-none mt-0.5">BCN</span>
-              <span className="text-[9px] uppercase tracking-[0.15em]">2026</span>
+              <span className="text-[8px] uppercase tracking-[0.15em]">Entry</span>
+              <span className="text-sm leading-none mt-0.5">PRG</span>
+              <span className="text-[8px] uppercase tracking-widest">2026</span>
             </motion.div>
           </ParallaxDecor>
 
-          {/* Bottom-right: globe icon */}
-          <ParallaxDecor speed={0.1} className="absolute bottom-[14%] right-4 sm:right-10 lg:right-[12%] pointer-events-none z-20">
+          {/* Bottom-right: camera blob (moved from bottom-left) */}
+          <ParallaxDecor speed={0.2} className="absolute bottom-[14%] right-4 sm:right-10 lg:right-[12%] pointer-events-none z-20">
             <motion.div
               initial={{ opacity: 0, scale: 0.8, rotate: 8 }}
               animate={{ opacity: 1, scale: 1, rotate: 8 }}
               transition={{ delay: 0.9, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-sticker-green rounded-full h-14 w-14 sm:h-16 sm:w-16 flex items-center justify-center text-foreground shadow-[0_5px_0_rgba(0,0,0,0.10)] border-2 border-border"
+              className="bg-sticker-olive sticker-shape-blob h-14 w-14 sm:h-16 sm:w-16 flex items-center justify-center text-white shadow-[0_5px_0_rgba(0,0,0,0.10)] border-2 border-border"
             >
-              <Globe2 className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2.5} />
+              <Camera className="h-7 w-7 sm:h-8 sm:w-8" strokeWidth={2.5} />
             </motion.div>
           </ParallaxDecor>
 
@@ -311,7 +347,7 @@ export default function Home() {
               </span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[100px] font-black tracking-tighter leading-[0.92] mb-10 text-foreground">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[100px] font-black tracking-tighter leading-[0.92] mb-10 text-foreground hero-title-shadow">
               Plan<br />
               Together<br />
               Beautifully
@@ -345,6 +381,31 @@ export default function Home() {
           </ParallaxDecor>
           <div className="absolute bottom-10 left-10 w-20 h-20 rounded-full bg-landing-coral-blur blur-2xl pointer-events-none" />
           <div className="absolute top-1/3 left-6 w-12 h-12 rounded-full bg-landing-blue-blur blur-xl pointer-events-none" />
+
+          {/* Thematic stickers — How it works */}
+          <motion.div
+            initial={{ opacity: 0, x: -15 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="absolute top-16 left-6 md:left-12 pointer-events-none z-10 hidden sm:block"
+          >
+            <span className="bg-sticker-green text-foreground sticker-shape-pill px-3 py-1.5 text-xs font-black shadow-[0_3px_0_rgba(0,0,0,0.08)] border-2 border-border -rotate-3 flex items-center gap-1.5">
+              <Users className="h-3.5 w-3.5" /> Invite crew
+            </span>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 15 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="absolute top-24 right-6 md:right-12 pointer-events-none z-10 hidden sm:block"
+          >
+            <span className="w-14 h-14 rounded-full border-2 border-dashed border-sticker-lilac flex flex-col items-center justify-center text-sticker-lilac font-black text-[9px] bg-background/80 rotate-6">
+              <span>Sync</span>
+              <span className="leading-none">Live</span>
+            </span>
+          </motion.div>
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <RevealOnScroll>
@@ -406,6 +467,30 @@ export default function Home() {
           <div className="absolute top-12 left-8 w-16 h-16 rounded-full bg-landing-coral-blur blur-2xl pointer-events-none" />
           <div className="absolute bottom-16 right-12 w-24 h-24 rounded-full bg-landing-lilac-blur blur-2xl pointer-events-none" />
           <div className="absolute top-1/2 right-1/4 w-20 h-20 rounded-full bg-landing-olive-blur blur-2xl pointer-events-none" />
+
+          {/* Thematic stickers — Features */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.4 }}
+            className="absolute top-20 right-8 md:right-16 pointer-events-none z-10 hidden md:block"
+          >
+            <span className="bg-sticker-yellow sticker-shape-rect px-3 py-2 text-foreground text-xs font-black shadow-[0_3px_0_rgba(0,0,0,0.08)] border-2 border-border rotate-6 flex items-center gap-1.5">
+              <DollarSign className="h-3.5 w-3.5" /> Budget OK
+            </span>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.4 }}
+            className="absolute bottom-24 left-8 md:left-16 pointer-events-none z-10 hidden md:block"
+          >
+            <span className="bg-sticker-olive text-white sticker-shape-pill px-3 py-1.5 text-xs font-black shadow-[0_3px_0_rgba(0,0,0,0.08)] border-2 border-border -rotate-3 flex items-center gap-1.5">
+              <Shield className="h-3.5 w-3.5" /> Private
+            </span>
+          </motion.div>
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <RevealOnScroll>
@@ -539,6 +624,17 @@ export default function Home() {
                 >
                   <TrendingUp className="h-4 w-4 inline mr-1" /> 12 trips!
                 </motion.div>
+
+                {/* Dashboard thematic sticker — upcoming */}
+                <motion.div
+                  initial={{ opacity: 0, x: 15 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="absolute -top-5 -left-4 md:-left-12 bg-sticker-green sticker-shape-pill px-3 py-2 shadow-[0_4px_0_rgba(0,0,0,0.08)] border-2 border-border font-black text-xs -rotate-3 z-20 flex items-center gap-1.5"
+                >
+                  <CalendarDays className="h-3.5 w-3.5" /> 3 upcoming
+                </motion.div>
               </div>
             </RevealOnScroll>
           </div>
@@ -550,7 +646,17 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
               {/* Collab */}
               <RevealOnScroll direction="left">
-                <div className="bg-sticker-green rounded-3xl p-10 flex flex-col items-start min-h-[400px] border-2 border-border shadow-[0_8px_0_rgba(0,0,0,0.10),0_4px_24px_rgba(0,0,0,0.06)] -rotate-[1.5deg] transition-transform hover:rotate-0 hover:-translate-y-1">
+                <div className="bg-sticker-green rounded-3xl p-10 flex flex-col items-start min-h-[400px] border-2 border-border shadow-[0_8px_0_rgba(0,0,0,0.10),0_4px_24px_rgba(0,0,0,0.06)] -rotate-[1.5deg] transition-transform hover:rotate-0 hover:-translate-y-1 relative">
+                  {/* Thematic sticker — Collab section */}
+                  <motion.span
+                    initial={{ opacity: 0, y: 5 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 }}
+                    className="absolute -top-2 -right-2 md:right-4 bg-sticker-coral text-white sticker-shape-pill px-2.5 py-1 text-[10px] font-black shadow-[0_2px_0_rgba(0,0,0,0.1)] border-2 border-border rotate-12 z-20"
+                  >
+                    Live
+                  </motion.span>
                   <div className="bg-black/10 text-foreground px-6 py-2 rounded-full font-bold text-lg mb-8 uppercase tracking-widest inline-flex items-center gap-2 shadow-[0_2px_0_rgba(0,0,0,0.06)]">
                     <Globe2 className="w-5 h-5" /> Collab
                   </div>
@@ -570,7 +676,17 @@ export default function Home() {
 
               {/* Schedule */}
               <RevealOnScroll direction="right">
-                <div className="bg-sticker-blue rounded-3xl p-10 flex flex-col items-start min-h-[400px] border-2 border-border shadow-[0_8px_0_rgba(0,0,0,0.10),0_4px_24px_rgba(0,0,0,0.06)] rotate-[1.5deg] transition-transform hover:rotate-0 hover:-translate-y-1 mt-8 md:mt-0">
+                <div className="bg-sticker-blue rounded-3xl p-10 flex flex-col items-start min-h-[400px] border-2 border-border shadow-[0_8px_0_rgba(0,0,0,0.10),0_4px_24px_rgba(0,0,0,0.06)] rotate-[1.5deg] transition-transform hover:rotate-0 hover:-translate-y-1 mt-8 md:mt-0 relative">
+                  {/* Thematic sticker — Timeline section */}
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 }}
+                    className="absolute -bottom-2 -left-2 md:-left-6 bg-sticker-pink text-foreground sticker-shape-rect px-2.5 py-1 text-[10px] font-black shadow-[0_2px_0_rgba(0,0,0,0.08)] border-2 border-border -rotate-6 z-20"
+                  >
+                    Day 1 → Day N
+                  </motion.span>
                   <div className="bg-black/10 text-foreground px-6 py-2 rounded-full font-bold text-lg mb-8 uppercase tracking-widest inline-flex items-center gap-2 shadow-[0_2px_0_rgba(0,0,0,0.06)]">
                     <CalendarDays className="w-5 h-5" /> Timeline
                   </div>
@@ -685,6 +801,18 @@ export default function Home() {
                 >
                   <Clock className="h-4 w-4 inline mr-1" /> Auto schedule
                 </motion.div>
+
+                {/* Timeline section thematic — date stamp */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.6 }}
+                  className="absolute top-1/2 -right-4 md:-right-14 w-14 h-14 rounded-full border-2 border-dashed border-sticker-blue flex flex-col items-center justify-center text-sticker-blue font-black text-[9px] bg-background/90 rotate-12 z-20"
+                >
+                  <span>Jun</span>
+                  <span className="text-sm leading-none">12</span>
+                </motion.div>
               </div>
             </RevealOnScroll>
           </div>
@@ -773,6 +901,18 @@ export default function Home() {
                   <Sparkles className="h-4 w-4 inline mr-1" /> AI picks
                 </motion.div>
 
+                {/* Explore thematic — city stamp */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5 }}
+                  className="absolute -bottom-6 left-1/2 -translate-x-1/2 md:left-8 md:translate-x-0 w-16 h-16 rounded-full border-2 border-dashed border-sticker-lilac flex flex-col items-center justify-center text-sticker-lilac font-black text-[9px] bg-background/90 -rotate-6 z-20"
+                >
+                  <span>Saved</span>
+                  <span className="leading-none">TYO</span>
+                </motion.div>
+
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -793,6 +933,19 @@ export default function Home() {
           <ParallaxDecor speed={0.04} className="absolute bottom-8 left-8 opacity-15 pointer-events-none hidden md:block">
             <Stamp className="h-40 w-40 text-sticker-lilac rotate-12" strokeWidth={1} />
           </ParallaxDecor>
+
+          {/* Thematic sticker — Testimonials */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="absolute top-20 left-8 md:left-16 pointer-events-none z-10 hidden md:block"
+          >
+            <span className="bg-sticker-pink sticker-shape-pill px-3 py-1.5 text-foreground text-xs font-black shadow-[0_3px_0_rgba(0,0,0,0.08)] border-2 border-border rotate-6 flex items-center gap-1.5">
+              <Star className="h-3.5 w-3.5 fill-foreground" strokeWidth={0} /> Recommended
+            </span>
+          </motion.div>
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <RevealOnScroll>
@@ -849,6 +1002,18 @@ export default function Home() {
 
         {/* ── FAQ ────────────────────────────────────────────────── */}
         <section className="section-inset w-full bg-landing-olive py-24 md:py-32 border-t-2 border-border relative overflow-hidden">
+          {/* Thematic sticker — FAQ */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="absolute top-24 right-8 md:right-16 pointer-events-none z-10 hidden md:block"
+          >
+            <span className="bg-sticker-yellow text-foreground sticker-shape-rect w-12 h-12 flex items-center justify-center shadow-[0_3px_0_rgba(0,0,0,0.08)] border-2 border-border font-black text-lg -rotate-6">
+              ?
+            </span>
+          </motion.div>
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <RevealOnScroll>
               <div className="text-center mb-12">
@@ -887,6 +1052,19 @@ export default function Home() {
           <ParallaxDecor speed={0.08} className="absolute bottom-8 right-[12%] opacity-15 pointer-events-none hidden md:block">
             <Globe2 className="h-28 w-28 text-sticker-coral -rotate-6" strokeWidth={1.5} />
           </ParallaxDecor>
+
+          {/* Thematic sticker — CTA */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="absolute top-16 right-[15%] md:right-[20%] pointer-events-none z-10 hidden md:block"
+          >
+            <span className="bg-sticker-green text-foreground sticker-shape-pill px-3 py-1.5 text-xs font-black shadow-[0_3px_0_rgba(0,0,0,0.08)] border-2 border-border rotate-6">
+              Free
+            </span>
+          </motion.div>
 
           <RevealOnScroll className="relative z-10">
             <h2 className="text-5xl md:text-6xl font-black text-foreground mb-4">
