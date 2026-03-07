@@ -26,90 +26,90 @@ export default function ProfilePage() {
 
     return (
         <DashboardLayout>
-            <div className="max-w-4xl mx-auto space-y-6 p-4 md:p-0">
+            <div className="max-w-4xl mx-auto space-y-5 p-4 md:p-0">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
+                <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
                     <div className="relative group mx-auto md:mx-0">
-                        <Avatar className="h-24 w-24 md:h-32 md:w-32 border-4 border-background shadow-xl">
+                        <Avatar className="h-20 w-20 md:h-24 md:w-24 border-2 border-border shadow-[0_4px_0_rgba(0,0,0,0.08)]">
                             <AvatarImage src="https://github.com/shadcn.png" alt={user.name} />
-                            <AvatarFallback className="text-2xl bg-primary/20 text-primary">AZ</AvatarFallback>
+                            <AvatarFallback className="text-lg font-black bg-primary/20 text-primary">AZ</AvatarFallback>
                         </Avatar>
-                        <Button size="icon" variant="secondary" className="absolute bottom-0 right-0 rounded-full h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Camera className="h-4 w-4" />
+                        <Button size="icon" variant="secondary" className="absolute bottom-0 right-0 rounded-full h-7 w-7 border-2 border-border opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Camera className="h-3.5 w-3.5" />
                         </Button>
                     </div>
 
-                    <div className="space-y-2 text-center md:text-left flex-1">
-                        <h1 className="text-2xl md:text-3xl font-bold">{user.name}</h1>
-                        <p className="text-sm text-muted-foreground italic max-w-sm mx-auto md:mx-0 pt-1 pb-2">
-                            "Plan, explore, and share unforgettable journeys with friends."
+                    <div className="space-y-1 text-center md:text-left flex-1">
+                        <h1 className="text-xl md:text-2xl font-black">{user.name}</h1>
+                        <p className="text-xs text-muted-foreground italic max-w-sm mx-auto md:mx-0 pt-0.5 pb-1">
+                            &quot;Plan, explore, and share unforgettable journeys with friends.&quot;
                         </p>
-                        <p className="text-muted-foreground flex items-center justify-center md:justify-start gap-2">
-                            <MapPin className="h-4 w-4" /> Kyiv, Ukraine
+                        <p className="text-muted-foreground text-sm flex items-center justify-center md:justify-start gap-1.5">
+                            <MapPin className="h-3.5 w-3.5" /> Kyiv, Ukraine
                         </p>
-                        <div className="flex items-center justify-center md:justify-start gap-2 text-sm text-muted-foreground">
+                        <div className="text-xs text-muted-foreground flex items-center justify-center md:justify-start gap-2">
                             <span>Member since {user.joinDate}</span>
                         </div>
-                        <div className="flex gap-2 justify-center md:justify-start pt-2">
-                            <Badge variant="secondary" className="gap-1">
+                        <div className="flex gap-2 justify-center md:justify-start pt-1">
+                            <Badge variant="secondary" className="gap-1 text-xs">
                                 <Plane className="h-3 w-3" />
                                 {user.tripsCount} Trips
                             </Badge>
-                            <Badge variant="outline" className="gap-1">
+                            <Badge variant="outline" className="gap-1 text-xs">
                                 <MapPin className="h-3 w-3" />
                                 {user.placesCount} Places
                             </Badge>
                         </div>
                     </div>
 
-                    <Button variant="outline" className="w-full md:w-auto">Edit Profile</Button>
+                    <Button variant="outline" size="sm" className="w-full md:w-auto font-bold border-2 border-border rounded-xl">Edit Profile</Button>
                 </div>
 
                 {/* content */}
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-2">
                     {/* Stats/Bio */}
-                    <Card className="h-full">
-                        <CardHeader>
-                            <CardTitle>About</CardTitle>
+                    <Card className="h-full border-2 border-border rounded-2xl shadow-[0_4px_0_rgba(0,0,0,0.08)]">
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-lg font-black">About</CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4">
-                            <p className="text-sm text-muted-foreground leading-relaxed">
+                        <CardContent className="space-y-3 pt-0">
+                            <p className="text-xs text-muted-foreground leading-relaxed">
                                 Love traveling to Asia and Europe. Always looking for the best coffee spots and hidden gems.
                                 Currently planning a big trip to Japan in 2026!
                             </p>
 
-                            <div className="grid grid-cols-2 gap-4 pt-4">
-                                <div className="p-4 rounded-xl bg-muted/50 text-center">
-                                    <div className="text-2xl font-bold text-primary">12</div>
-                                    <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium">Countries</div>
+                            <div className="grid grid-cols-2 gap-3 pt-3">
+                                <div className="p-3 rounded-xl bg-muted/50 text-center border-2 border-border">
+                                    <div className="text-xl font-black text-primary">12</div>
+                                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">Countries</div>
                                 </div>
-                                <div className="p-4 rounded-xl bg-muted/50 text-center">
-                                    <div className="text-2xl font-bold text-primary">48</div>
-                                    <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium">Cities</div>
+                                <div className="p-3 rounded-xl bg-muted/50 text-center border-2 border-border">
+                                    <div className="text-xl font-black text-primary">48</div>
+                                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider font-bold">Cities</div>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
                     {/* Achievements */}
-                    <Card className="h-full">
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Trophy className="h-5 w-5 text-gold" />
+                    <Card className="h-full border-2 border-border rounded-2xl shadow-[0_4px_0_rgba(0,0,0,0.08)]">
+                        <CardHeader className="pb-2">
+                            <CardTitle className="flex items-center gap-2 text-lg font-black">
+                                <Trophy className="h-4 w-4 text-gold" />
                                 Achievements
                             </CardTitle>
-                            <CardDescription>Badges earned from your travels</CardDescription>
+                            <CardDescription className="text-xs">Badges earned from your travels</CardDescription>
                         </CardHeader>
-                        <CardContent>
-                            <div className="space-y-4">
+                        <CardContent className="pt-0">
+                            <div className="space-y-3">
                                 {user.achievements.map((badge) => (
-                                    <div key={badge.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors cursor-default">
-                                        <div className="h-10 w-10 md:h-12 md:w-12 rounded-full bg-primary/10 flex items-center justify-center text-xl md:text-2xl shrink-0">
+                                    <div key={badge.id} className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-muted/50 transition-colors cursor-default border border-transparent hover:border-border">
+                                        <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-lg shrink-0 border-2 border-border">
                                             {badge.icon}
                                         </div>
                                         <div>
-                                            <h4 className="font-semibold text-sm md:text-base">{badge.name}</h4>
-                                            <p className="text-xs text-muted-foreground">{badge.description}</p>
+                                            <h4 className="font-black text-sm">{badge.name}</h4>
+                                            <p className="text-[11px] text-muted-foreground">{badge.description}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -119,15 +119,15 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Your Adventures Section */}
-                <div className="space-y-6 pt-4">
+                <div className="space-y-4 pt-2">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-xl font-bold flex items-center gap-2">
-                            <Plane className="h-5 w-5 text-primary" />
+                        <h2 className="text-lg font-black flex items-center gap-1.5">
+                            <Plane className="h-4 w-4 text-primary" />
                             Your Adventures
                         </h2>
-                        <Button variant="outline" size="sm">View All</Button>
+                        <Button variant="outline" size="sm" className="font-bold border-2 border-border rounded-xl">View All</Button>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {mockTrips.map((trip) => (
                             <TripCard key={trip.id} trip={trip} />
                         ))}

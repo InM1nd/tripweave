@@ -72,7 +72,7 @@ export function FileUpload({
     return (
         <div className={cn("w-full", className)}>
             {value ? (
-                <div className="relative flex items-center p-4 rounded-lg border border-border bg-muted/50 group">
+                <div className="relative flex items-center p-4 rounded-xl border-2 border-border bg-muted/50 shadow-[0_2px_0_rgba(0,0,0,0.06)] group">
                     <FileText className="h-8 w-8 text-teal mr-3 shrink-0" />
                     <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium truncate pr-8">
@@ -102,7 +102,7 @@ export function FileUpload({
                 <div
                     {...getRootProps()}
                     className={cn(
-                        "border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors min-h-[120px] bg-muted/20 hover:bg-muted/40",
+                        "border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors min-h-[120px] bg-muted/20 hover:bg-muted/40",
                         isDragActive && "border-primary bg-primary/5",
                         (disabled || isUploading) && "opacity-50 cursor-not-allowed",
                         className

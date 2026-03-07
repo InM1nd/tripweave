@@ -32,9 +32,10 @@ export function TripTabs({ tripId }: TripTabsProps) {
   const currentTab = pathname.split("/").pop();
 
   return (
-    <div className="sticky top-14 md:top-0 z-30 bg-background/80 backdrop-blur-xl border-b border-border/40 transition-all">
-      <div className="w-full max-w-[100vw] overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <nav className="flex items-center gap-2 px-4 md:px-6 py-2 w-max min-w-full">
+    <div className="sticky top-14 md:top-0 z-30 bg-background/80 backdrop-blur-xl transition-all pt-0 pb-2 overflow-visible">
+      {/* Segmented bar: space for shadow below */}
+      <div className="rounded-2xl border-2 border-border bg-muted/30 shadow-[0_3px_0_rgba(0,0,0,0.08)] p-1.5">
+        <nav className="flex items-center gap-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full p-1">
           {tabs.map((tab) => {
             const isActive = currentTab === tab.href;
             return (
@@ -42,13 +43,13 @@ export function TripTabs({ tripId }: TripTabsProps) {
                 key={tab.href}
                 href={`/trip/${tripId}/${tab.href}`}
                 className={cn(
-                  "flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full text-sm font-medium transition-all whitespace-nowrap select-none shrink-0",
+                  "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap select-none shrink-0 min-w-0",
                   isActive
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                    ? "bg-primary text-primary-foreground shadow-[0_4px_0_rgba(0,0,0,0.15)] border-2 border-border"
+                    : "bg-transparent text-muted-foreground hover:bg-muted/70 hover:text-foreground border-2 border-transparent"
                 )}
               >
-                <tab.icon className="h-4 w-4" />
+                <tab.icon className="h-4 w-4 shrink-0" />
                 <span>{tab.label}</span>
               </Link>
             );

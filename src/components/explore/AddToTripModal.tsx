@@ -19,8 +19,8 @@ import { format } from "date-fns";
 interface AddToTripModalProps {
     isOpen: boolean;
     onClose: () => void;
-    place: any; // Place or Recommendation
-    trips: any[];
+    place: { title?: string; name?: string; id?: string | number };
+    trips: { id: string; name: string; startDate: string | Date; endDate: string | Date }[];
 }
 
 export function AddToTripModal({ isOpen, onClose, place, trips }: AddToTripModalProps) {
@@ -38,7 +38,7 @@ export function AddToTripModal({ isOpen, onClose, place, trips }: AddToTripModal
             } else {
                 toast.error(result.error || "Failed to add to trip");
             }
-        } catch (error) {
+        } catch {
             toast.error("Something went wrong");
         } finally {
             setIsSubmitting(false);
@@ -54,7 +54,7 @@ export function AddToTripModal({ isOpen, onClose, place, trips }: AddToTripModal
                 <DialogHeader>
                     <DialogTitle>Add to Trip</DialogTitle>
                     <DialogDescription>
-                        Select a trip to add "{place?.title || place?.name}" to.
+                        Select a trip to add &quot;{place?.title || place?.name}&quot; to.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -67,12 +67,12 @@ export function AddToTripModal({ isOpen, onClose, place, trips }: AddToTripModal
                                     <Button
                                         key={trip.id}
                                         variant="outline"
-                                        className="w-full justify-between h-auto py-3 px-4 group hover:border-violet-500 hover:bg-violet-50 dark:hover:bg-violet-950/20"
+                                        className="w-full justify-between h-auto py-3 px-4 group hover:border-primary hover:bg-accent/20 dark:hover:bg-muted/50"
                                         onClick={() => handleSelectTrip(trip.id)}
                                         disabled={isSubmitting}
                                     >
                                         <div className="flex flex-col items-start gap-1 text-left">
-                                            <span className="font-semibold group-hover:text-violet-600 dark:group-hover:text-violet-400">{trip.name}</span>
+                                            <span className="font-semibold group-hover:text-primary">{trip.name}</span>
                                             <span className="text-xs text-muted-foreground flex items-center gap-1">
                                                 <Calendar className="h-3 w-3" />
                                                 {format(new Date(trip.startDate), 'MMM d')} - {format(new Date(trip.endDate), 'MMM d, yyyy')}
@@ -81,7 +81,7 @@ export function AddToTripModal({ isOpen, onClose, place, trips }: AddToTripModal
                                         {isSubmitting ? (
                                             <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                                         ) : (
-                                            <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-violet-600" />
+                                            <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                                         )}
                                     </Button>
                                 ))}

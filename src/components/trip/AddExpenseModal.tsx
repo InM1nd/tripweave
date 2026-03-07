@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Loader2, Euro } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -51,7 +50,7 @@ import { useRouter } from "next/navigation";
 interface AddExpenseModalProps {
   children?: React.ReactNode;
   tripId: string;
-  members: any[]; // refined type would be better but any for now to match Prisma result structure
+  members: { id: string; user: { id: string; name?: string } }[];
 }
 
 export function AddExpenseModal({ children, tripId, members }: AddExpenseModalProps) {
@@ -84,7 +83,7 @@ export function AddExpenseModal({ children, tripId, members }: AddExpenseModalPr
       } else {
         toast.error(result.error || "Failed to add expense");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred");
     } finally {
       setIsLoading(false);
@@ -93,7 +92,7 @@ export function AddExpenseModal({ children, tripId, members }: AddExpenseModalPr
 
   const FormContent = (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-4 md:px-0">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 px-4 md:px-0">
         <FormField
           control={form.control}
           name="title"
@@ -168,7 +167,7 @@ export function AddExpenseModal({ children, tripId, members }: AddExpenseModalPr
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="me">Me</SelectItem>
-                    {members.filter(m => m.user.id /* Assuming we filter out current user if we want 'me' to be distinct, or just list everyone */).map((member: any) => (
+                    {members.filter(m => m.user.id).map((member) => (
                       <SelectItem key={member.user.id} value={member.user.id}>{member.user.name}</SelectItem>
                     ))}
                   </SelectContent>
@@ -213,7 +212,7 @@ export function AddExpenseModal({ children, tripId, members }: AddExpenseModalPr
               Cancel
             </Button>
           )}
-          <Button type="submit" disabled={isLoading} className={cn("bg-accent] hover:bg-accent]/90 text-white shadow-md", !isDesktop && "flex-1")}>
+          <Button type="submit" disabled={isLoading} className={cn("bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-xl", !isDesktop && "flex-1")}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Save Expense
           </Button>
@@ -228,10 +227,10 @@ export function AddExpenseModal({ children, tripId, members }: AddExpenseModalPr
         <DialogTrigger asChild>
           {children || <Button>Add Expense</Button>}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Add New Expense</DialogTitle>
-            <DialogDescription>
+        <DialogContent className="sm:max-w-[425px] border-2 border-border rounded-2xl shadow-[0_8px_0_rgba(0,0,0,0.1)]">
+          <DialogHeader className="border-b-2 border-border pb-3">
+            <DialogTitle className="text-lg font-black">Add New Expense</DialogTitle>
+            <DialogDescription className="text-xs">
               Track your spending and split costs with the group.
             </DialogDescription>
           </DialogHeader>

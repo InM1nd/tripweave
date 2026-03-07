@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { EventType } from "@prisma/client";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import * as cheerio from "cheerio";
@@ -120,10 +121,11 @@ type ParsedAiResponse = {
     reason?: string | null;
 };
 
-function isRateLimitError(error: any): boolean {
-    const status = Number(error?.status || error?.code || error?.cause?.status || 0);
+function isRateLimitError(error: unknown): boolean {
+    const err = error as { status?: number; code?: number; cause?: { status?: number }; message?: string } | null;
+    const status = Number(err?.status ?? err?.code ?? (err?.cause as { status?: number })?.status ?? 0);
     if (status === 429) return true;
-    const message = String(error?.message || "").toLowerCase();
+    const message = String(err?.message ?? "").toLowerCase();
     return message.includes("429") || message.includes("too many requests") || message.includes("rate limit");
 }
 
@@ -212,7 +214,7 @@ const VISION_PROMPT = `Analyze this image from a social media travel post. Descr
 Be specific. If you see Japanese/Korean/Chinese text on signs, transliterate it AND translate it.
 Format: a concise paragraph, max 200 words.`;
 
-async function analyzePostThumbnail(thumbnailUrl: string | string[], platform: string): Promise<string> {
+async function analyzePostThumbnail(thumbnailUrl: string | string[]): Promise<string> {
     if (!thumbnailUrl || (Array.isArray(thumbnailUrl) && thumbnailUrl.length === 0)) return "";
     try {
 
@@ -293,7 +295,7 @@ async function fetchTikTokContent(url: string, originalUrl: string): Promise<str
     if (images.length > 0) {
         // Limit to first 10 images to allow for larger photo carousels without exceeding payload limits
         const imagesToAnalyze = images.slice(0, 10);
-        const visionResult = await analyzePostThumbnail(imagesToAnalyze.length === 1 ? imagesToAnalyze[0] : imagesToAnalyze, "tiktok");
+        const visionResult = await analyzePostThumbnail(imagesToAnalyze.length === 1 ? imagesToAnalyze[0] : imagesToAnalyze);
         if (visionResult) parts.push(visionResult);
     }
 
@@ -386,7 +388,7 @@ async function fetchInstagramContent(url: string): Promise<string> {
 
     // 3. Always analyze the thumbnail image with vision AI to avoid losing content
     if (thumbnailUrl) {
-        const visionResult = await analyzePostThumbnail(thumbnailUrl, "instagram");
+        const visionResult = await analyzePostThumbnail(thumbnailUrl);
         if (visionResult) parts.push(visionResult);
     }
 
@@ -411,7 +413,7 @@ async function fetchYouTubeContent(url: string): Promise<string> {
     }
 
     if (thumbnailUrl) {
-        const visionResult = await analyzePostThumbnail(thumbnailUrl, "youtube");
+        const visionResult = await analyzePostThumbnail(thumbnailUrl);
         if (visionResult) parts.push(visionResult);
     }
 
@@ -430,7 +432,7 @@ async function fetchPostContent(url: string, platform: string, originalUrl: stri
 // ─── Main Import Logic ──────────────────────────────────────────────
 
 export async function importSocialSpots(input: SpotInput): Promise<ImporterResult> {
-    const { url, content, screenshot_b64, video_analysis } = input;
+    const { url, content, video_analysis } = input;
 
     if (!url) {
         return { success: false, platform: "unknown", spots: [], error: "URL is required" };
@@ -607,7 +609,7 @@ If truly no places found:
                 author: aiResult.author || undefined,
             },
         };
-    } catch (aiError: any) {
+    } catch (aiError: unknown) {
         console.error(`[SpotImporter] AI error:`, aiError);
         if (isRateLimitError(aiError)) {
             return {
@@ -617,7 +619,7 @@ If truly no places found:
                 error: "AI provider is rate-limited right now. Please retry in 10-20 seconds.",
             };
         }
-        const aiMessage = String(aiError?.message || "");
+        const aiMessage = String(aiError instanceof Error ? aiError.message : aiError);
         if (aiMessage.includes("not found for API version") || aiMessage.includes("is not found")) {
             return {
                 success: false,
@@ -630,7 +632,7 @@ If truly no places found:
             success: false,
             platform,
             spots: [],
-            error: `AI extraction failed: ${aiError.message}`,
+            error: `AI extraction failed: ${aiError instanceof Error ? aiError.message : String(aiError)}`,
         };
     }
 }
@@ -668,7 +670,7 @@ export async function saveSpotAsPlace(spot: ExtractedSpot, sourceUrl: string) {
 
         revalidatePath("/explore");
         return { success: true, place };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to save spot:", error);
         return { success: false, error: "Failed to save spot" };
     }
@@ -709,7 +711,7 @@ export async function saveAllSpotsAsPlaces(spots: ExtractedSpot[], sourceUrl: st
 
         revalidatePath("/explore");
         return { success: true, places: createdPlaces };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to save spots:", error);
         return { success: false, error: "Failed to save spots" };
     }
@@ -743,7 +745,7 @@ export async function addSpotToTrip(spot: ExtractedSpot, tripId: string) {
                 tripId,
                 title: spot.name,
                 description: [spot.description, spot.tips ? `💡 ${spot.tips}` : ""].filter(Boolean).join("\n"),
-                type: eventType as any,
+                type: eventType as EventType,
                 startTime: new Date(),
                 endTime: new Date(new Date().setHours(new Date().getHours() + 2)),
                 location: spot.address || spot.name,
@@ -756,7 +758,7 @@ export async function addSpotToTrip(spot: ExtractedSpot, tripId: string) {
 
         revalidatePath(`/trip/${tripId}`);
         return { success: true, event };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to add spot to trip:", error);
         return { success: false, error: "Failed to add to trip" };
     }

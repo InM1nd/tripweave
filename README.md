@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TripWeave
+
+Collaborative travel planning app — plan trips, share timelines, track budgets, and keep documents in one place. Built with a distinctive sticker/magazine aesthetic.
+
+## Features
+
+- **Trips** — Create trips, set dates and destinations, upload cover images
+- **Timeline** — Add events (flights, hotels, activities, restaurants), drag to reorder
+- **Map** — View events on an interactive map with pins
+- **Budget** — Set a budget, add expenses by category, track spending
+- **Documents** — Upload and organize tickets, bookings, and files
+- **Members** — Invite others, manage roles (Owner / Admin / Member)
+- **Notifications** — Stay updated on invites and trip changes
+- **Explore** — Discover and save places; suggested places per trip
+- **Appearance** — Light/dark theme and two color palettes (Papaya Mango, Cool Blue) in Settings
+- **PWA** — Installable, with offline support
+
+## Tech Stack
+
+- **Frontend**: Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, Shadcn/ui
+- **Backend**: Next.js API routes, Prisma, PostgreSQL (Supabase)
+- **Auth**: Clerk
+- **Storage**: UploadThing
+- **Maps**: React Leaflet (OpenStreetMap)
+- **Charts**: Recharts
+- **State**: TanStack React Query, React Hook Form, Zod
+
+## Screenshots
+
+| Landing | Dashboard | Trip timeline |
+|--------|-----------|----------------|
+| *Add `docs/screenshots/landing.png`* | *Add `docs/screenshots/dashboard.png`* | *Add `docs/screenshots/timeline.png`* |
+
+Place screenshots in `docs/screenshots/` and link them here to showcase the sticker-style UI.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- PostgreSQL (or Supabase)
+- [Clerk](https://clerk.com) and [UploadThing](https://uploadthing.com) accounts
+
+### Install and run
 
 ```bash
+npm install
+cp .env.example .env.local   # then fill in your keys
+npx prisma generate
+npx prisma migrate dev
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+See `.env.example` for required variables (e.g. `DATABASE_URL`, Clerk keys, UploadThing, Resend).
 
-## Learn More
+### Database
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npx prisma migrate dev   # run migrations
+npx prisma studio        # open DB GUI
+npx prisma db seed       # optional seed data
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [docs/plan.md](docs/plan.md) — MVP plan and phases
+- [docs/rules.md](docs/rules.md) — Cursor/project rules and conventions
+- [docs/ui-guidelines.md](docs/ui-guidelines.md) — Sticker/magazine design system
+- [docs/design-decisions.md](docs/design-decisions.md) — UI polish decisions
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The app is set up for [Vercel](https://vercel.com). Connect the repo, set environment variables, and deploy.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+TripWeave — plan adventures together.

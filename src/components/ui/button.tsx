@@ -5,22 +5,24 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-md)] text-sm font-medium transition-all duration-[180ms] ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sticker text-sm font-bold transition-all duration-[180ms] ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "bg-accent text-accent-text hover:bg-accent-hover hover:shadow-accent-sm hover:scale-[1.02]",
+          "bg-primary text-primary-foreground shadow-sticker hover:translate-y-[1px] hover:shadow-stickerSoft hover:bg-primary/95",
         destructive:
-          "bg-danger text-white shadow-sm hover:bg-danger/90",
+          "bg-destructive text-destructive-foreground shadow-sticker hover:translate-y-[1px] hover:shadow-stickerSoft hover:bg-destructive/90",
         outline:
-          "border border-border bg-transparent shadow-sm hover:bg-accent hover:text-accent-text",
+          "border-2 border-border bg-transparent shadow-sm hover:bg-secondary text-foreground",
         secondary:
-          "bg-bg-surface-2 text-text-primary border border-border hover:border-border-hover",
-        ghost: "bg-transparent text-text-secondary hover:bg-bg-hover hover:text-text-primary",
-        link: "text-accent underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground border-2 border-border shadow-sticker hover:translate-y-[1px] hover:shadow-stickerSoft",
+        ghost: "bg-transparent text-muted-foreground hover:bg-secondary hover:text-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
         danger:
-          "bg-danger text-white shadow-sm hover:bg-danger/90",
+          "bg-destructive text-destructive-foreground shadow-sticker hover:translate-y-[1px] hover:shadow-stickerSoft hover:bg-destructive/90",
+        sticker:
+          "bg-sticker-yellow text-foreground rounded-sticker shadow-sticker border-2 border-border",
       },
       size: {
         default: "h-9 px-4 py-2",

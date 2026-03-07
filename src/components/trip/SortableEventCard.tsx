@@ -17,9 +17,9 @@ interface SortableEventCardProps {
 const typeColors: Record<string, string> = {
     TRANSPORT: "bg-teal/10 text-teal",
     HOTEL: "bg-violet/10 text-violet",
-    ACTIVITY: "bg-accent]/10 text-accent]",
+    ACTIVITY: "bg-accent/10 text-accent",
     RESTAURANT: "bg-orange-500/10 text-orange-500",
-    OTHER: "bg-gray-500/10 text-gray-500",
+    OTHER: "bg-muted/50 text-muted-foreground",
 };
 
 export function SortableEventCard({ event, tripId }: SortableEventCardProps) {
@@ -65,7 +65,6 @@ export function SortableEventCard({ event, tripId }: SortableEventCardProps) {
                     </span>
                     <Badge
                         variant="secondary"
-                        // @ts-ignore - Handle potential case mismatch just in case, though TS should be fine if EventType matches
                         className={cn("text-[10px] px-1 py-0 h-5", typeColors[event.type] || typeColors.OTHER)}
                     >
                         {event.type}

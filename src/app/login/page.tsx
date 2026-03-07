@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Plane } from "lucide-react";
-import Link from "next/link";
 
 function LoginForm() {
     const router = useRouter();
@@ -32,8 +31,8 @@ function LoginForm() {
                 },
             });
             if (error) throw error;
-        } catch (error: any) {
-            toast.error(error.message || "Google auth failed");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Google auth failed");
             setIsLoading(false);
         }
     };
@@ -63,32 +62,32 @@ function LoginForm() {
                 router.push(next);
                 router.refresh();
             }
-        } catch (error: any) {
-            toast.error(error.message || "Authentication failed");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Authentication failed");
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50/50 px-4">
-            <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-                <div className="flex flex-col items-center justify-center text-center space-y-2">
-                    <div className="h-12 w-12 rounded-xl bg-accent] flex items-center justify-center text-white mb-4">
-                        <Plane className="h-6 w-6" />
+        <div className="min-h-screen flex items-center justify-center bg-background px-4">
+            <div className="w-full max-w-md space-y-6 bg-card p-6 md:p-5 rounded-2xl border-2 border-border shadow-[0_8px_0_rgba(0,0,0,0.08)]">
+                <div className="flex flex-col items-center justify-center text-center space-y-1.5">
+                    <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground mb-3 border-2 border-border shadow-[0_4px_0_rgba(0,0,0,0.08)]">
+                        <Plane className="h-5 w-5" strokeWidth={3} />
                     </div>
-                    <h1 className="text-2xl font-bold tracking-tight">
+                    <h1 className="text-xl md:text-2xl font-black tracking-tight">
                         {isSignUp ? "Create an account" : "Welcome back"}
                     </h1>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs text-muted-foreground">
                         {isSignUp
                             ? "Enter your email below to create your account"
                             : "Enter your email below to log in to your account"}
                     </p>
                 </div>
 
-                <div className="space-y-4">
-                    <Button type="button" variant="outline" className="w-full h-11 text-base relative" onClick={handleGoogleLogin} disabled={isLoading}>
+                <div className="space-y-3">
+                    <Button type="button" variant="outline" className="w-full h-10 text-sm font-bold border-2 border-border rounded-xl" onClick={handleGoogleLogin} disabled={isLoading}>
                         {isLoading ? (
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         ) : (
@@ -108,8 +107,8 @@ function LoginForm() {
                     </div>
                 </div>
 
-                <form onSubmit={handleAuth} className="space-y-4">
-                    <div className="space-y-2">
+                <form onSubmit={handleAuth} className="space-y-3">
+                    <div className="space-y-1.5">
                         <Label htmlFor="email">Email</Label>
                         <Input
                             id="email"
@@ -119,10 +118,10 @@ function LoginForm() {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             disabled={isLoading}
-                            className="h-11"
+                            className="h-10"
                         />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                         <Label htmlFor="password">Password</Label>
                         <Input
                             id="password"
@@ -131,24 +130,24 @@ function LoginForm() {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                             disabled={isLoading}
-                            className="h-11"
+                            className="h-10"
                         />
                     </div>
 
-                    <Button type="submit" className="w-full h-11 text-base" disabled={isLoading}>
+                    <Button type="submit" className="w-full h-10 text-sm font-bold rounded-xl" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isSignUp ? "Sign Up" : "Sign In"}
                     </Button>
                 </form>
 
-                <div className="text-center text-sm">
+                <div className="text-center text-xs">
                     <span className="text-muted-foreground">
                         {isSignUp ? "Already have an account? " : "Don't have an account? "}
                     </span>
                     <button
                         type="button"
                         onClick={() => setIsSignUp(!isSignUp)}
-                        className="text-primary hover:underline font-medium"
+                        className="text-primary hover:underline font-bold"
                         disabled={isLoading}
                     >
                         {isSignUp ? "Sign In" : "Sign Up"}

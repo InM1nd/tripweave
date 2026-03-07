@@ -4,13 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
-
-const updateRoleSchema = z.object({
-    tripId: z.string(),
-    memberId: z.string(),
-    role: z.nativeEnum(Role),
-});
 
 export async function updateMemberRole(tripId: string, memberId: string, role: Role) {
     try {

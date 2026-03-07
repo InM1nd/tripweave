@@ -17,7 +17,7 @@ export async function POST(request: Request) {
         return NextResponse.json(result, {
             status: result.success ? 200 : 500,
         });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("[API] Social spot import error:", error);
         return NextResponse.json(
             { success: false, error: "Internal server error" },

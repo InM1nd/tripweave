@@ -57,8 +57,8 @@ export async function getForYouRecommendations(offset = 0, filters: string[] = [
         const parsed = JSON.parse(jsonStr);
 
         return { success: true, places: parsed };
-    } catch (e: any) {
-        console.error("Failed to generate recommendations:", e.message);
+    } catch (e: unknown) {
+        console.error("Failed to generate recommendations:", e instanceof Error ? e.message : e);
         return { success: false, error: "Failed to generate recommendations" };
     }
 }

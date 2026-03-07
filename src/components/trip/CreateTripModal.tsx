@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { createTripSchema } from "@/lib/validations/trip";
 import { useState, useEffect } from "react";
 import { CalendarIcon, Loader2, MapPin, Globe } from "lucide-react";
@@ -57,7 +56,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 
 
 
-export function CreateTripModal() {
+export function CreateTripModal({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [ispending, setIspending] = useState(false);
   // Custom hook usage assumed, if not available I will implement a simple one or use window matchMedia
@@ -248,13 +247,15 @@ export function CreateTripModal() {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild id="create-trip-trigger">
-          <Button className="gap-2">
-            Create Trip
-          </Button>
+          {children || (
+            <Button className="gap-2">
+              Create Trip
+            </Button>
+          )}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Create New Trip</DialogTitle>
+        <DialogContent className="sm:max-w-[500px] border-2 border-border rounded-2xl shadow-[0_8px_0_rgba(0,0,0,0.1)]">
+          <DialogHeader className="border-b-2 border-border pb-4">
+            <DialogTitle className="font-black text-xl">Create New Trip</DialogTitle>
             <DialogDescription>
               Start planning your next adventure.
             </DialogDescription>
@@ -268,13 +269,15 @@ export function CreateTripModal() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button className="gap-2 rounded-full shadow-lg md:rounded-md">
-          Create Trip
-        </Button>
+        {children || (
+          <Button className="gap-2 rounded-full shadow-sticker">
+            Create Trip
+          </Button>
+        )}
       </DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Create New Trip</DrawerTitle>
+        <DrawerHeader className="text-left border-b-2 border-border pb-4">
+          <DrawerTitle className="font-black text-xl">Create New Trip</DrawerTitle>
           <DrawerDescription>
             Start planning your next adventure.
           </DrawerDescription>

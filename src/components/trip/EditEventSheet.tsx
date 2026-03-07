@@ -3,17 +3,13 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, MapPin, Loader2, Plane, Hotel, Utensils, Activity, MoreHorizontal, Settings, Trash2, X, Globe, DollarSign, Clock, Link as LinkIcon, Pencil, Check, AlertCircle } from "lucide-react";
+import { Calendar as CalendarIcon, MapPin, Loader2, Plane, Hotel, Utensils, Activity, MoreHorizontal, Settings, Trash2, X, DollarSign, Clock, Link as LinkIcon, Pencil, Check, AlertCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
 } from "@/components/ui/sheet";
 import {
     Form,
@@ -32,12 +28,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import {
     Popover,
@@ -54,7 +44,7 @@ import { ImageUpload } from "@/components/ui/image-upload";
 import { Badge } from "@/components/ui/badge";
 
 interface EditEventSheetProps {
-    event: any;
+    event: { id: string; title?: string; type?: string; location?: string | null; address?: string | null; startTime?: string | Date; startDate?: Date; description?: string | null; coverImage?: string | null; cost?: string | number | null; currency?: string | null; url?: string | null; lat?: number | null; lng?: number | null };
     open: boolean;
     onOpenChange: (open: boolean) => void;
     tripId: string;
@@ -68,6 +58,15 @@ const eventTypes = [
     { value: "other", label: "Other", icon: MoreHorizontal },
 ];
 
+function eventTypeToForm(t: string | undefined): EventFormValues["type"] {
+    const lower = (t ?? "").toLowerCase();
+    if (lower === "hotel") return "accommodation";
+    if (lower === "restaurant") return "food";
+    if (lower === "transport" || lower === "flight") return "transport";
+    if (lower === "activity") return "activity";
+    return "other";
+}
+
 export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventSheetProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false); // Toggle between View and Edit mode
@@ -77,10 +76,10 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
         resolver: zodResolver(eventFormSchema),
         defaultValues: {
             title: event.title,
-            type: event.type.toLowerCase(),
+            type: eventTypeToForm(event.type),
             location: event.location || "",
-            startDate: new Date(event.startTime),
-            startTime: format(new Date(event.startTime), "HH:mm"),
+            startDate: new Date(event.startTime ?? Date.now()),
+            startTime: format(new Date(event.startTime ?? Date.now()), "HH:mm"),
             description: event.description || "",
             coverImage: event.coverImage || "",
             cost: event.cost ? String(event.cost) : "",
@@ -99,7 +98,7 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
             } else {
                 toast.error(result.error || "Failed update event");
             }
-        } catch (error) {
+        } catch {
             toast.error("An error occurred");
         } finally {
             setIsLoading(false);
@@ -119,7 +118,7 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
             } else {
                 toast.error(result.error || "Failed to delete");
             }
-        } catch (e) {
+        } catch {
             toast.error("Failed to delete event");
         } finally {
             setIsLoading(false);
@@ -132,10 +131,10 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
         if (event.lat && event.lng) {
             return `https://www.google.com/maps?q=${event.lat},${event.lng}`;
         }
-        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayLocation)}`;
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayLocation ?? "")}`;
     };
 
-    const currentType = eventTypes.find(t => t.value === event.type.toLowerCase()) || eventTypes[4];
+    const currentType = eventTypes.find(t => t.value === (event.type?.toLowerCase() ?? "")) || eventTypes[4];
 
     return (
         <Sheet open={open} onOpenChange={(v) => {
@@ -150,6 +149,7 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
                         <div className="relative w-full h-full group bg-muted">
                             {/* In edit mode, we show the upload control overlaying the image or placeholder */}
                             {form.watch("coverImage") ? (
+                                // eslint-disable-next-line @next/next/no-img-element
                                 <img
                                     src={form.watch("coverImage")}
                                     alt="Event cover"
@@ -179,6 +179,7 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
                     ) : (
                         // View mode image
                         event.coverImage ? (
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                                 src={event.coverImage}
                                 alt={event.title}
@@ -230,7 +231,7 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
                             <div>
                                 <div className="flex items-start justify-between gap-4 mb-1">
                                     <h2 className="text-2xl font-bold leading-tight">{event.title}</h2>
-                                    {event.cost > 0 && (
+                                    {Number(event.cost ?? 0) > 0 && (
                                         <Badge variant="secondary" className="text-sm px-2 py-0.5 shrink-0 whitespace-nowrap">
                                             {event.currency} {event.cost}
                                         </Badge>
@@ -238,14 +239,14 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
                                 </div>
                                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2">
                                     <div className="flex items-center gap-1.5">
-                                        <Clock className="h-4 w-4 text-violet-500" />
+                                        <Clock className="h-4 w-4 text-muted-foreground" />
                                         <span>
-                                            {format(new Date(event.startTime), "EEEE, MMMM d")} at {format(new Date(event.startTime), "HH:mm")}
+                                            {format(new Date(event.startTime ?? Date.now()), "EEEE, MMMM d")} at {format(new Date(event.startTime ?? Date.now()), "HH:mm")}
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-1.5">
                                         <currentType.icon className="h-4 w-4 text-rose" />
-                                        <span className="capitalize">{event.type.toLowerCase()}</span>
+                                        <span className="capitalize">{event.type?.toLowerCase() ?? "other"}</span>
                                     </div>
                                 </div>
                             </div>
@@ -481,10 +482,10 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
 
                                 {/* Footer Actions for Edit Mode */}
                                 <div className="sticky bottom-0 left-0 right-0 -mx-6 -mb-6 p-4 bg-background border-t border-border flex items-center justify-end gap-3 z-10">
-                                    <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>
+                                    <Button type="button" variant="outline" onClick={() => setIsEditing(false)} className="rounded-2xl font-bold">
                                         Cancel
                                     </Button>
-                                    <Button type="submit" disabled={isLoading} className="gap-2 bg-primary">
+                                    <Button type="submit" disabled={isLoading} className="gap-2 font-bold rounded-2xl bg-sticker-green text-foreground hover:bg-sticker-green/90 border-2 border-border shadow-[0_3px_0_rgba(0,0,0,0.08)]">
                                         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
                                         Save Changes
                                     </Button>

@@ -67,7 +67,7 @@ export function ImageUpload({
     return (
         <div className={cn("w-full", className)}>
             {value ? (
-                <div className="relative h-32 w-full rounded-lg overflow-hidden border border-border bg-muted group">
+                <div className="relative h-32 w-full rounded-xl overflow-hidden border-2 border-border bg-muted shadow-[0_2px_0_rgba(0,0,0,0.06)] group">
                     <Image
                         src={value}
                         alt="Upload"
@@ -92,7 +92,7 @@ export function ImageUpload({
                 <div
                     {...getRootProps()}
                     className={cn(
-                        "border-2 border-dashed rounded-lg p-2 flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors h-32 bg-muted/20 hover:bg-muted/40",
+                        "border-2 border-dashed rounded-xl p-2 flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors h-32 bg-muted/20 hover:bg-muted/40",
                         isDragActive && "border-primary bg-primary/5",
                         (disabled || isUploading) && "opacity-50 cursor-not-allowed",
                         className

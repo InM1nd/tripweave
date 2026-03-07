@@ -1,4 +1,4 @@
-
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { createClient } = require('@supabase/supabase-js');
 const dotenv = require('dotenv');
 const fs = require('fs');
@@ -42,7 +42,7 @@ async function setupBucket() {
     } else {
         console.log(`Bucket '${bucketName}' not found. Creating...`);
         // Try to create public bucket
-        const { data, error } = await supabase.storage.createBucket(bucketName, {
+        const { error } = await supabase.storage.createBucket(bucketName, {
             public: true,
             fileSizeLimit: 10485760, // 10MB
             allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp']

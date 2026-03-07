@@ -16,28 +16,28 @@ const TAG_STYLES: Record<
   { bg: string; text: string }
 > = {
   flight: {
-    bg: "bg-teal]/15",
-    text: "text-teal]",
+    bg: "bg-teal/15",
+    text: "text-teal",
   },
   hotel: {
-    bg: "bg-accent]/15",
-    text: "text-accent]",
+    bg: "bg-accent/15",
+    text: "text-accent",
   },
   activity: {
-    bg: "bg-success]/15",
-    text: "text-success]",
+    bg: "bg-success/15",
+    text: "text-success",
   },
   food: {
-    bg: "bg-gold]/15",
-    text: "text-gold]",
+    bg: "bg-gold/15",
+    text: "text-gold",
   },
   transport: {
-    bg: "bg-mango]/15",
-    text: "text-mango]",
+    bg: "bg-mango/15",
+    text: "text-mango",
   },
   note: {
-    bg: "bg-rose]/15",
-    text: "text-rose]",
+    bg: "bg-rose/15",
+    text: "text-rose",
   },
 };
 

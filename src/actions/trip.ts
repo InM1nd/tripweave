@@ -5,7 +5,6 @@ import { createTripSchema, CreateTripValues, updateTripSchema, UpdateTripValues 
 import { createClient } from "@/lib/supabase/server";
 import { getRandomCoverColor } from "@/lib/colors";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function createTrip(data: CreateTripValues) {
     const supabase = await createClient();
@@ -199,7 +198,7 @@ export async function updateTrip(tripId: string, data: UpdateTripValues) {
         revalidatePath(`/trip/${tripId}`);
         revalidatePath(`/trip/${tripId}/settings`);
         return { success: true, trip };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to update trip:", error);
         return { success: false, error: "Failed to update trip" };
     }
@@ -241,7 +240,7 @@ export async function deleteTrip(tripId: string) {
 
         revalidatePath("/dashboard");
         return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to delete trip:", error);
         return { success: false, error: "Failed to delete trip" };
     }

@@ -3,7 +3,6 @@
 import { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Save, Trash2, Loader2 } from "lucide-react";
 
@@ -45,7 +44,6 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
       try {
         const data = await getTrip(id);
         if (data) {
-          // @ts-ignore - data format from server might include relations but we only save Trip parts to state
           setTrip(data);
           form.reset({
             name: data.name,
@@ -56,7 +54,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
             endDate: new Date(data.endDate),
           });
         }
-      } catch (error) {
+      } catch {
         toast.error("Failed to load trip settings");
       } finally {
         setLoading(false);
@@ -75,7 +73,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
       } else {
         toast.error(result.error || "Failed to update trip");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred");
     } finally {
       setSaving(false);
@@ -114,25 +112,30 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
   }
 
   return (
-    <div className="space-y-4 md:space-y-6 max-w-4xl mx-auto pb-10">
-      <div>
-        <h2 className="text-xl md:text-2xl font-bold">Trip Settings</h2>
-        <p className="text-sm md:text-base text-muted-foreground">Manage your trip details and preferences</p>
-        <p className="text-sm text-foreground/50 mt-2">
-          Tip: You can now drag and drop an image to update the trip cover!
-        </p>
+    <div className="space-y-5 md:space-y-6 max-w-4xl mx-auto pb-12">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b-2 border-border pb-4">
+        <div>
+          <div className="bg-sticker-blue text-foreground px-3 py-1 rounded-full font-black text-xs border-2 border-border shadow-[0_3px_0_rgba(0,0,0,0.08)] inline-block mb-2 rotate-1">
+            ⚙️ Configuration
+          </div>
+          <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-foreground leading-[0.9]">Trip Settings</h2>
+          <p className="text-muted-foreground font-bold text-sm mt-1">Manage your trip details and preferences</p>
+          <p className="text-sm font-bold text-foreground/60 mt-2 bg-secondary/50 inline-block px-3 py-1 rounded-md border border-border">
+            ✨ Tip: You can now drag and drop an image to update the trip cover!
+          </p>
+        </div>
       </div>
 
-      <div className="grid gap-4 md:gap-6">
+      <div className="grid gap-5 md:gap-6">
         {/* General Settings */}
-        <Card className="border-border/40 bg-card/50">
-          <CardHeader className="p-4 md:p-6 pb-2 md:pb-2">
-            <CardTitle className="text-base md:text-lg">General Information</CardTitle>
-            <CardDescription className="text-xs md:text-sm">Update the basic details of your trip.</CardDescription>
+        <Card className="border-2 border-border bg-card shadow-[0_4px_0_rgba(0,0,0,0.08)] rounded-3xl overflow-hidden">
+          <CardHeader className="p-5 md:p-6 pb-4 md:pb-4 border-b-2 border-border bg-secondary/30">
+            <CardTitle className="text-lg md:text-xl font-black">General Information</CardTitle>
+            <CardDescription className="text-sm font-bold text-muted-foreground">Update the basic details of your trip.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 p-4 md:p-6 pt-2 md:pt-4">
+          <CardContent className="space-y-5 p-5 md:p-6 pt-5 md:pt-6">
             <div className="grid gap-2">
-              <Label htmlFor="coverImage" className="text-sm">Trip Cover Image</Label>
+              <Label htmlFor="coverImage" className="font-bold text-sm">Trip Cover Image</Label>
               <ImageUpload
                 value={form.watch("coverImage")}
                 onChange={(url) => form.setValue("coverImage", url)}
@@ -142,34 +145,34 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="name" className="text-sm">Trip Name</Label>
-              <Input id="name" {...form.register("name")} />
-              {form.formState.errors.name && <p className="text-danger text-xs">{form.formState.errors.name.message}</p>}
+              <Label htmlFor="name" className="font-bold text-sm">Trip Name</Label>
+              <Input id="name" {...form.register("name")} className="border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.04)] font-bold rounded-xl h-11" />
+              {form.formState.errors.name && <p className="text-danger font-bold text-xs">{form.formState.errors.name.message}</p>}
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="destination" className="text-sm">Destination</Label>
-              <Input id="destination" {...form.register("destination")} />
-              {form.formState.errors.destination && <p className="text-danger text-xs">{form.formState.errors.destination.message}</p>}
+              <Label htmlFor="destination" className="font-bold text-sm">Destination</Label>
+              <Input id="destination" {...form.register("destination")} className="border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.04)] font-bold rounded-xl h-11" />
+              {form.formState.errors.destination && <p className="text-danger font-bold text-xs">{form.formState.errors.destination.message}</p>}
             </div>
 
             <div className="grid gap-2">
-              <Label className="text-sm">Dates</Label>
-              <div className="flex gap-2">
+              <Label className="font-bold text-sm">Dates</Label>
+              <div className="flex gap-3">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-full justify-start text-left font-normal",
+                        "w-full justify-start text-left font-bold border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.04)] rounded-xl h-11",
                         !form.watch("startDate") && "text-muted-foreground"
                       )}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      <CalendarIcon className="mr-2 h-4 w-4" strokeWidth={3} />
                       {form.watch("startDate") ? format(form.watch("startDate")!, "PPP") : <span>Start Date</span>}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
+                  <PopoverContent className="w-auto p-0 border-2 border-border shadow-[0_4px_0_rgba(0,0,0,0.08)] rounded-xl overflow-hidden">
                     <Calendar
                       mode="single"
                       selected={form.watch("startDate")}
@@ -183,15 +186,15 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-full justify-start text-left font-normal",
+                        "w-full justify-start text-left font-bold border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.04)] rounded-xl h-11",
                         !form.watch("endDate") && "text-muted-foreground"
                       )}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      <CalendarIcon className="mr-2 h-4 w-4" strokeWidth={3} />
                       {form.watch("endDate") ? format(form.watch("endDate")!, "PPP") : <span>End Date</span>}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
+                  <PopoverContent className="w-auto p-0 border-2 border-border shadow-[0_4px_0_rgba(0,0,0,0.08)] rounded-xl overflow-hidden">
                     <Calendar
                       mode="single"
                       selected={form.watch("endDate")}
@@ -204,44 +207,44 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="description" className="text-sm">Description</Label>
+              <Label htmlFor="description" className="font-bold text-sm">Description</Label>
               <Textarea
                 id="description"
                 {...form.register("description")}
-                className="resize-none min-h-[100px]"
+                className="resize-none min-h-[120px] border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.04)] font-bold rounded-xl"
               />
             </div>
           </CardContent>
-          <CardFooter className="border-t border-border/40 px-4 md:px-6 py-3 md:py-4">
+          <CardFooter className="border-t-2 border-border bg-secondary/10 px-5 md:px-6 py-4 md:py-5 flex justify-end">
             <Button
               onClick={form.handleSubmit(onSubmit)}
               disabled={saving}
-              className="w-full md:w-auto bg-accent] hover:bg-accent]/90 text-white"
+              className="w-full md:w-auto font-bold border-2 border-border shadow-[0_3px_0_rgba(0,0,0,0.1)] hover:-translate-y-px transition-all rounded-2xl bg-sticker-green text-foreground hover:bg-sticker-green/90 px-8 h-11"
             >
-              {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+              {saving ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Save className="h-5 w-5 mr-2" strokeWidth={3} />}
               Save Changes
             </Button>
           </CardFooter>
         </Card>
 
         {/* Danger Zone */}
-        <Card className="border-danger/20 bg-danger/5">
-          <CardHeader className="p-4 md:p-6 pb-2 md:pb-2">
-            <CardTitle className="text-base md:text-lg text-danger">Danger Zone</CardTitle>
-            <CardDescription className="text-xs md:text-sm">
+        <Card className="border-4 border-dashed border-danger bg-danger/5 rounded-3xl shadow-[0_4px_0_rgba(0,0,0,0.04)]">
+          <CardHeader className="p-5 md:p-6 pb-2 md:pb-3 border-b-4 border-dashed border-danger/20">
+            <CardTitle className="text-xl md:text-2xl font-black text-danger">Danger Zone</CardTitle>
+            <CardDescription className="text-sm font-bold text-danger/80">
               Irreversible actions for this trip.
             </CardDescription>
           </CardHeader>
-          <CardContent className="p-4 md:p-6 pt-2 md:pt-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="space-y-0.5 md:space-y-1">
-                <h4 className="font-medium text-sm md:text-base">Delete this trip</h4>
-                <p className="text-xs md:text-sm text-muted-foreground">
+          <CardContent className="p-5 md:p-6 pt-5 md:pt-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1 md:space-y-1.5">
+                <h4 className="font-black text-base md:text-lg text-danger">Delete this trip</h4>
+                <p className="text-sm font-bold text-danger/70">
                   Once you delete a trip, there is no going back.
                 </p>
               </div>
-              <Button variant="destructive" className="w-full sm:w-auto shrink-0" onClick={handleDelete} disabled={saving}>
-                <Trash2 className="h-4 w-4 mr-2" />
+              <Button variant="destructive" className="w-full sm:w-auto shrink-0 font-bold border-2 border-danger shadow-[0_3px_0_rgba(220,38,38,0.2)] hover:-translate-y-px transition-all rounded-2xl h-11 px-6" onClick={handleDelete} disabled={saving}>
+                <Trash2 className="h-5 w-5 mr-2" strokeWidth={3} />
                 Delete Trip
               </Button>
             </div>

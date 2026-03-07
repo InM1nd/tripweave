@@ -24,8 +24,7 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
     const [open, setOpen] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [result, setResult] = useState<any>(null);
+    const [result, setResult] = useState<Awaited<ReturnType<typeof importPlanFromSpreadsheet>> | null>(null);
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
@@ -112,7 +111,7 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
-                        <FileSpreadsheet className="h-5 w-5 text-accent]" />
+                        <FileSpreadsheet className="h-5 w-5 text-accent" />
                         Import Plan
                     </DialogTitle>
                     <DialogDescription>
@@ -134,7 +133,7 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
                                 ${isDragging
                                     ? "border-primary bg-primary/5 scale-[1.02]"
                                     : file
-                                        ? "border-accent]/50 bg-accent]/10"
+                                        ? "border-accent/50 bg-accent/10"
                                         : "border-border hover:border-primary/50 hover:bg-accent/30"
                                 }
                             `}
@@ -152,8 +151,8 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
 
                             {file ? (
                                 <div className="flex flex-col items-center gap-3">
-                                    <div className="h-12 w-12 rounded-xl bg-accent]/15 flex items-center justify-center">
-                                        <FileText className="h-6 w-6 text-accent]" />
+                                    <div className="h-12 w-12 rounded-xl bg-accent/15 flex items-center justify-center">
+                                        <FileText className="h-6 w-6 text-accent" />
                                     </div>
                                     <div>
                                         <p className="font-medium text-sm">{file.name}</p>
@@ -196,12 +195,12 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
                     {/* Result */}
                     {result && (
                         <div className={`rounded-xl p-4 border ${result.success
-                            ? "bg-success]/10 border-success]/30"
+                            ? "bg-success/10 border-success/30"
                             : "bg-destructive/5 border-destructive/20"
                             }`}>
                             <div className="flex items-start gap-3">
                                 {result.success ? (
-                                    <CheckCircle2 className="h-5 w-5 text-success] mt-0.5 shrink-0" />
+                                    <CheckCircle2 className="h-5 w-5 text-success mt-0.5 shrink-0" />
                                 ) : (
                                     <AlertCircle className="h-5 w-5 text-destructive mt-0.5 shrink-0" />
                                 )}
@@ -216,7 +215,7 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
                                         <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
                                             <span>📊 Parsed: {result.totalParsed}</span>
                                             <span>✅ Created: {result.created}</span>
-                                            {result.failed > 0 && <span>❌ Failed: {result.failed}</span>}
+                                            {(result.failed ?? 0) > 0 && <span>❌ Failed: {result.failed}</span>}
                                         </div>
                                     )}
                                 </div>
@@ -252,7 +251,7 @@ export function ImportPlanModal({ tripId, children }: ImportPlanModalProps) {
                                 <Button
                                     onClick={handleImport}
                                     disabled={!file || isLoading}
-                                    className="gap-2 bg-accent] hover:bg-accent]/90 text-white"
+                                    className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
                                 >
                                     {isLoading ? (
                                         <>

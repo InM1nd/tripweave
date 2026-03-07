@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { documentSchema, DocumentFormValues } from "@/lib/validations/document";
+import { DocType } from "@prisma/client";
 
 export async function createDocument(tripId: string, data: DocumentFormValues) {
     const supabase = await createClient();
@@ -36,7 +37,7 @@ export async function createDocument(tripId: string, data: DocumentFormValues) {
                 tripId,
                 name,
                 url,
-                type: type as any,
+                type: type as DocType,
                 fileSize: fileSize || 0,
                 mimeType: mimeType || "application/link",
                 uploadedBy: user.id
@@ -45,9 +46,9 @@ export async function createDocument(tripId: string, data: DocumentFormValues) {
 
         revalidatePath(`/trip/${tripId}/documents`);
         return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to create document:", error);
-        return { success: false, error: error.message };
+        return { success: false, error: error instanceof Error ? error.message : "Failed to create document" };
     }
 }
 

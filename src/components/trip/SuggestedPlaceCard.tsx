@@ -1,8 +1,5 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Heart, MapPin, ExternalLink, CalendarPlus, Navigation, Trash2 } from "lucide-react";
 import { Event, Vote } from "@prisma/client";
 import { toggleVote, deleteEvent } from "@/actions/event";
@@ -32,11 +29,11 @@ interface SuggestedPlaceCardProps {
 }
 
 const eventTypeColors: Record<string, string> = {
-    TRANSPORT: "bg-teal/10 text-teal border-teal/20",
-    HOTEL: "bg-violet/10 text-violet border-violet/20",
-    ACTIVITY: "bg-accent]/10 text-accent] border-accent]/20",
-    RESTAURANT: "bg-orange-500/10 text-orange-500 border-orange-500/20",
-    OTHER: "bg-gray-500/10 text-gray-500 border-gray-500/20",
+    TRANSPORT: "bg-sticker-blue text-foreground",
+    HOTEL: "bg-sticker-lilac text-foreground",
+    ACTIVITY: "bg-sticker-yellow text-foreground",
+    RESTAURANT: "bg-sticker-pink text-foreground",
+    OTHER: "bg-sticker-green text-foreground",
 };
 
 export function SuggestedPlaceCard({ event, currentUserId, tripId }: SuggestedPlaceCardProps) {
@@ -77,7 +74,6 @@ export function SuggestedPlaceCard({ event, currentUserId, tripId }: SuggestedPl
         }
     };
 
-    // Build Google Maps URL
     let mapsUrl = event.url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.title)}`;
     if (event.lat && event.lng) {
         mapsUrl = `https://www.google.com/maps?q=${event.lat},${event.lng}`;
@@ -86,128 +82,102 @@ export function SuggestedPlaceCard({ event, currentUserId, tripId }: SuggestedPl
     }
 
     const displayLocation = event.address || event.location || null;
+    const cardColorClass = eventTypeColors[event.type] || eventTypeColors.OTHER;
 
     return (
-        <Card className="overflow-hidden group flex flex-col hover:shadow-lg transition-all border-border/50 h-full relative">
-            <Button
-                variant="destructive"
-                size="icon"
-                className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+        <div className={cn("overflow-hidden group flex flex-col transition-transform duration-300 rounded-2xl p-5 md:p-4 border-2 border-border hover:-translate-y-2 relative min-h-[220px] md:min-h-[200px] cursor-pointer shadow-[0_6px_0_rgba(0,0,0,0.08)]", cardColorClass)}>
+
+            <MapPin className="absolute -bottom-6 -left-6 h-32 w-32 md:h-28 md:w-28 opacity-10 pointer-events-none" strokeWidth={3} />
+
+            <button
+                className="absolute top-4 right-4 h-10 w-10 flex items-center justify-center rounded-full bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 text-foreground hover:bg-black/20"
                 onClick={handleDelete}
                 disabled={isDeleting}
             >
-                <Trash2 className="h-4 w-4" />
-            </Button>
+                <Trash2 className="h-5 w-5" strokeWidth={2.5} />
+            </button>
 
-            {/* Image Area */}
-            <div className="aspect-video relative overflow-hidden bg-muted">
-                {event.coverImage ? (
-                    <Image
-                        src={event.coverImage}
-                        alt={event.title}
-                        fill
-                        unoptimized
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400">
-                        <MapPin className="h-12 w-12 opacity-20" />
-                    </div>
-                )}
-                <Badge className={cn("absolute top-3 left-3 backdrop-blur-md", eventTypeColors[event.type] || eventTypeColors.OTHER)}>
-                    {event.type}
-                </Badge>
-            </div>
-
-            <CardContent className="p-4 flex flex-col flex-1 gap-3">
-                {/* Title and votes */}
+            <div className="flex flex-col flex-1 gap-4 relative z-10">
                 <div className="flex justify-between items-start gap-2">
-                    <h3 className="font-bold text-lg leading-tight line-clamp-1 flex-1" title={event.title}>{event.title}</h3>
+                    <div className="uppercase tracking-widest font-black text-[10px] md:text-[9px] bg-black/10 inline-block px-2.5 py-0.5 rounded-full border border-black/5 w-fit">
+                        {event.type}
+                    </div>
 
-                    <Button
-                        variant={hasVoted ? "default" : "secondary"}
-                        size="sm"
+                    <button
                         onClick={handleToggleVote}
                         disabled={isVoting}
-                        className={cn("h-8 gap-1.5 shrink-0 transition-all", hasVoted && "bg-rose-500 hover:bg-rose-600 text-white")}
+                        className={cn("flex items-center gap-2 px-4 py-2 rounded-sticker font-black text-sm transition-all border-2 text-foreground shadow-none border-transparent", hasVoted ? "bg-foreground text-background" : "bg-black/10 hover:bg-black/20")}
                     >
-                        <Heart className={cn("h-3.5 w-3.5", hasVoted && "fill-current")} />
-                        <span>{voteCount}</span>
-                    </Button>
+                        <Heart className={cn("h-4 w-4", hasVoted && "fill-current")} strokeWidth={3} />
+                        {voteCount}
+                    </button>
                 </div>
 
-                {/* Description */}
-                <p className="text-sm text-muted-foreground line-clamp-2 flex-1">
+                <h3 className="font-black text-2xl md:text-xl leading-[1.05] line-clamp-2 mt-1" title={event.title}>{event.title}</h3>
+
+                <p className="text-sm md:text-xs font-bold opacity-80 line-clamp-2 flex-1 pt-1">
                     {event.description || "No description provided."}
                 </p>
 
-                {/* Location string */}
                 {displayLocation && (
-                    <div className="flex items-start gap-2 text-xs text-muted-foreground">
-                        <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-2 text-sm font-bold opacity-90 mt-2">
+                        <Navigation className="h-5 w-5 shrink-0" strokeWidth={3} />
                         <span className="line-clamp-1">{displayLocation}</span>
                     </div>
                 )}
 
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-2 pt-2">
-                    <Button variant="outline" size="sm" className="gap-1.5" asChild>
-                        <a href={mapsUrl} target="_blank" rel="noreferrer">
-                            <Navigation className="h-3 w-3" />
-                            Maps
-                        </a>
-                    </Button>
+                <div className="flex flex-wrap gap-2 pt-4 mt-auto border-t-2 border-black/10">
+                    <a href={mapsUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 font-bold bg-background text-foreground px-3 py-1.5 rounded-xl text-xs border-2 border-border hover:border-foreground transition-all">
+                        <MapPin className="h-3.5 w-3.5" strokeWidth={3} />
+                        Maps
+                    </a>
 
                     {event.url && (
-                        <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground" asChild>
-                            <a href={event.url} target="_blank" rel="noreferrer">
-                                <ExternalLink className="h-3 w-3" />
-                                Source
-                            </a>
-                        </Button>
+                        <a href={event.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 font-bold bg-black/10 text-foreground px-3 py-1.5 rounded-xl text-xs hover:bg-black/20 transition-all">
+                            <ExternalLink className="h-3.5 w-3.5" strokeWidth={3} />
+                            Source
+                        </a>
                     )}
 
                     <div className="flex-1" />
 
                     <AddEventModal tripId={tripId} defaultDate={undefined}>
-                        <Button size="sm" className="gap-1.5">
-                            <CalendarPlus className="h-3 w-3" />
+                        <button className="flex items-center gap-1.5 font-black bg-foreground text-background px-3.5 py-1.5 rounded-xl text-xs hover:translate-y-[1px] transition-transform shadow-stickerSoft">
+                            <CalendarPlus className="h-4 w-4" strokeWidth={3} />
                             Schedule
-                        </Button>
+                        </button>
                     </AddEventModal>
                 </div>
 
                 {/* Voters Avatars */}
                 {voteCount > 0 && (
-                    <div className="flex items-center gap-2 pt-2 border-t mt-1">
-                        <span className="text-[10px] text-muted-foreground uppercase font-semibold">Voted by:</span>
-                        <div className="flex -space-x-1.5 overflow-hidden">
+                    <div className="flex items-center gap-3 pt-4 border-t-2 border-black/10 mt-2">
+                        <span className="text-xs font-black uppercase tracking-widest bg-black/10 px-2 py-1 rounded-sm">Votes</span>
+                        <div className="flex -space-x-2 overflow-hidden">
                             {event.votes.slice(0, 5).map(vote => {
-                                // Find user details for this vote from the nested members structure. 
-                                // In a real app we'd load the full user object with the vote. We will just use placeholders if not loaded.
                                 let userAvatar = null;
                                 const member = event.trip.members.find(m => m.user.id === vote.userId);
                                 if (member && member.user.avatar) userAvatar = member.user.avatar;
 
                                 return (
-                                    <div key={vote.id} className="inline-block relative h-5 w-5 rounded-full ring-1 ring-background bg-muted overflow-hidden flex items-center justify-center shrink-0">
+                                    <div key={vote.id} className="relative h-8 w-8 rounded-full border-2 border-transparent bg-background flex items-center justify-center shrink-0 overflow-hidden shadow-none">
                                         {userAvatar ? (
                                             <Image src={userAvatar} alt="Voter" fill className="object-cover" unoptimized />
                                         ) : (
-                                            <span className="text-[8px] font-bold">😊</span>
+                                            <span className="text-xs font-black text-foreground">U</span>
                                         )}
                                     </div>
                                 )
                             })}
                             {voteCount > 5 && (
-                                <div className="inline-block h-5 w-5 rounded-full ring-1 ring-background bg-muted flex items-center justify-center text-[8px] font-bold">
+                                <div className="h-8 w-8 rounded-full border-2 border-foreground flex items-center justify-center text-xs font-black text-foreground bg-background">
                                     +{voteCount - 5}
                                 </div>
                             )}
                         </div>
                     </div>
                 )}
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 }

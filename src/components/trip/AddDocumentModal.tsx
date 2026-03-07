@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Loader2, Link as LinkIcon, FileText } from "lucide-react";
+import { Loader2, Link as LinkIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -93,7 +92,7 @@ export function AddDocumentModal({ children, tripId }: AddDocumentModalProps) {
             } else {
                 toast.error(result.error || "Failed to add document");
             }
-        } catch (error) {
+        } catch {
             toast.error("An error occurred");
         } finally {
             setIsLoading(false);
@@ -208,7 +207,7 @@ export function AddDocumentModal({ children, tripId }: AddDocumentModalProps) {
                             Cancel
                         </Button>
                     )}
-                    <Button type="submit" disabled={isLoading} className={cn("bg-accent] hover:bg-accent]/90 text-white shadow-md", !isDesktop && "flex-1")}>
+                    <Button type="submit" disabled={isLoading} className={cn("bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-xl", !isDesktop && "flex-1")}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {activeTab === "upload" ? "Upload Document" : "Add Link"}
                     </Button>
@@ -223,10 +222,10 @@ export function AddDocumentModal({ children, tripId }: AddDocumentModalProps) {
                 <DialogTrigger asChild>
                     {children || <Button>Add Document</Button>}
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Add New Document</DialogTitle>
-                        <DialogDescription>
+                <DialogContent className="sm:max-w-[425px] border-2 border-border rounded-2xl shadow-[0_8px_0_rgba(0,0,0,0.1)]">
+                    <DialogHeader className="border-b-2 border-border pb-3">
+                        <DialogTitle className="text-lg font-black">Add New Document</DialogTitle>
+                        <DialogDescription className="text-xs">
                             Upload a file or add a link to your important trip documents.
                         </DialogDescription>
                     </DialogHeader>

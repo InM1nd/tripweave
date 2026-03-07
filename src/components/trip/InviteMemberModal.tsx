@@ -73,16 +73,12 @@ export function InviteMemberModal({ tripId }: InviteMemberModalProps) {
     async function onSubmit(data: InviteValues) {
         setIsPending(true);
         try {
-            const invite = await inviteToTrip(tripId, data.email, data.role);
-            // Email invites are sent via email service (simulated here)
-            // But if we want to show a link for email invite too, we can
-            // const link = `${window.location.origin}/invite/${invite.token}`;
-            // setInviteLink(link);
+            await inviteToTrip(tripId, data.email, data.role);
             toast.success("Invite sent successfully!");
             form.reset();
             setOpen(false);
-        } catch (error: any) {
-            toast.error(error.message || "Failed to send invite");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Failed to send invite");
         } finally {
             setIsPending(false);
         }
@@ -95,8 +91,8 @@ export function InviteMemberModal({ tripId }: InviteMemberModalProps) {
             const link = `${window.location.origin}/invite/${invite.token}`;
             setInviteLink(link);
             toast.success("Public link generated!");
-        } catch (error: any) {
-            toast.error(error.message || "Failed to generate link");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Failed to generate link");
         } finally {
             setIsPending(false);
         }

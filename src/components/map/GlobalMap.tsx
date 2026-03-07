@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "leaflet/dist/leaflet.css";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -50,14 +50,6 @@ const globalLocations = [
         date: "Dec 2025",
     },
 ];
-
-function MapUpdater({ center }: { center: [number, number] }) {
-    const map = useMap();
-    useEffect(() => {
-        map.flyTo(center, 4); // Zoom level 4 for global view
-    }, [center, map]);
-    return null;
-}
 
 export function GlobalMap() {
     const [activeLocation, setActiveLocation] = useState(globalLocations[0]);

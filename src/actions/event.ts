@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { eventFormSchema, EventFormValues } from "@/lib/validations/event";
@@ -71,9 +72,9 @@ export async function createEvent(tripId: string, data: EventFormValues) {
 
         revalidatePath(`/trip/${tripId}/timeline`);
         return { success: true, event: newEvent };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to create event:", error);
-        return { success: false, error: error.message };
+        return { success: false, error: error instanceof Error ? error.message : "Failed to create event" };
     }
 }
 
@@ -134,7 +135,7 @@ export async function updateEvent(tripId: string, eventId: string, data: Partial
     };
 
     try {
-        const updateData: any = { ...data };
+        const updateData: Record<string, unknown> = { ...data };
         if (data.type) updateData.type = mapType(data.type);
         if (data.startTime && data.startDate) {
             const start = new Date(data.startDate);
@@ -152,14 +153,14 @@ export async function updateEvent(tripId: string, eventId: string, data: Partial
 
         const updatedEvent = await prisma.event.update({
             where: { id: eventId },
-            data: updateData,
+            data: updateData as Prisma.EventUpdateInput,
         });
 
         revalidatePath(`/trip/${tripId}/timeline`);
         return { success: true, event: updatedEvent };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to update event:", error);
-        return { success: false, error: error.message };
+        return { success: false, error: error instanceof Error ? error.message : "Failed to update event" };
     }
 }
 
@@ -186,9 +187,9 @@ export async function deleteEvent(tripId: string, eventId: string) {
         await prisma.event.delete({ where: { id: eventId } });
         revalidatePath(`/trip/${tripId}/timeline`);
         return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to delete event:", error);
-        return { success: false, error: error.message };
+        return { success: false, error: error instanceof Error ? error.message : "Failed to delete event" };
     }
 }
 
@@ -321,8 +322,8 @@ IMPORTANT:
                     }
                 });
                 created++;
-            } catch (e: any) {
-                console.error(`[Import] Failed to create event "${ev.title}":`, e.message);
+            } catch (e: unknown) {
+                console.error(`[Import] Failed to create event "${ev.title}":`, e instanceof Error ? e.message : e);
                 failed++;
             }
         }
@@ -335,9 +336,9 @@ IMPORTANT:
             created,
             failed,
         };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("[Import] Error:", error);
-        return { success: false, error: "Failed to import: " + error.message };
+        return { success: false, error: "Failed to import: " + (error instanceof Error ? error.message : String(error)) };
     }
 }
 
@@ -435,7 +436,7 @@ export async function toggleVote(eventId: string) {
         }
 
         return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to toggle vote:", error);
         return { success: false, error: "Failed to toggle vote" };
     }

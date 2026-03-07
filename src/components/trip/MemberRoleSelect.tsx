@@ -45,7 +45,7 @@ export function MemberRoleSelect({
             } else {
                 toast.success(`Role updated to ${newRole}`);
             }
-        } catch (error) {
+        } catch {
             setRole(currentRole);
             toast.error("An error occurred");
         } finally {
@@ -63,24 +63,24 @@ export function MemberRoleSelect({
             onValueChange={(val) => handleRoleChange(val as Role)}
             disabled={disabled || isLoading}
         >
-            <SelectTrigger className="h-7 text-xs w-[110px] bg-background/50 border-border/50">
+            <SelectTrigger className="h-9 w-[120px] text-sm font-bold rounded-xl border-2 border-border bg-card shadow-[0_2px_0_rgba(0,0,0,0.06)] text-foreground">
                 <SelectValue />
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="OWNER" disabled>
-                    <div className="flex items-center gap-2">
-                        <Crown className="w-3 h-3 text-amber-500" />
+                    <div className="flex items-center gap-2 font-semibold">
+                        <Crown className="w-3 h-3 text-primary" />
                         <span>Owner</span>
                     </div>
                 </SelectItem>
                 <SelectItem value="ADMIN">
-                    <div className="flex items-center gap-2">
-                        <Shield className="w-3 h-3 text-teal" />
+                    <div className="flex items-center gap-2 font-semibold">
+                        <Shield className="w-3 h-3 text-primary" />
                         <span>Admin</span>
                     </div>
                 </SelectItem>
                 <SelectItem value="MEMBER">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 font-semibold">
                         <User className="w-3 h-3 text-muted-foreground" />
                         <span>Member</span>
                     </div>

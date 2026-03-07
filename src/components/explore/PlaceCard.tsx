@@ -1,9 +1,6 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Star, Link as LinkIcon, Plus, Trash2, MapPin, ExternalLink, Instagram, Youtube, TreePine, Utensils, Landmark, Camera, Sparkles, Navigation, Film } from "lucide-react";
+import { Star, Link as LinkIcon, Plus, Trash2, MapPin, Youtube, TreePine, Utensils, Landmark, Camera, Sparkles, Navigation, Film } from "lucide-react";
 import { Place } from "@prisma/client";
 import { deletePlace } from "@/actions/place";
 import { toast } from "sonner";
@@ -16,29 +13,31 @@ function buildGoogleMapsUrl(name: string, location?: string | null): string {
 
 function getCategoryInfo(type: string) {
     const t = type?.toLowerCase() || "";
-    if (t.includes("instagram")) return { icon: Camera, color: "text-pink-600 dark:text-pink-400 border-pink-200 dark:border-pink-900 bg-pink-50 dark:bg-pink-900/20" };
-    if (t.includes("tiktok")) return { icon: Film, color: "text-cyan-600 dark:text-cyan-400 border-cyan-200 dark:border-cyan-900 bg-cyan-50 dark:bg-cyan-900/20" };
-    if (t.includes("youtube")) return { icon: Youtube, color: "text-red-500 dark:text-red-400 border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-900/20" };
-    if (t.includes("nature") || t.includes("park") || t.includes("unusual")) return { icon: TreePine, color: "text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-900/20" };
-    if (t.includes("food") || t.includes("restaurant") || t.includes("cafe")) return { icon: Utensils, color: "text-orange-600 dark:text-orange-400 border-orange-200 dark:border-orange-900 bg-orange-50 dark:bg-orange-900/20" };
-    if (t.includes("must see") || t.includes("attraction")) return { icon: Star, color: "text-amber-500 dark:text-amber-400 border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-900/20" };
-    if (t.includes("culture") || t.includes("history") || t.includes("museum")) return { icon: Landmark, color: "text-rose-500 dark:text-rose-400 border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-900/20" };
-    if (t.includes("ai rec") || t.includes("ai_recommendation")) return { icon: Sparkles, color: "text-violet-600 dark:text-violet-400 border-violet-200 dark:border-violet-900 bg-violet-50 dark:bg-violet-900/20" };
-    if (t.includes("imported")) return { icon: LinkIcon, color: "text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-900/20" };
+    if (t.includes("instagram") || t.includes("media") || t.includes("camera")) return { icon: Camera, color: "bg-sticker-lilac text-foreground" };
+    if (t.includes("tiktok")) return { icon: Film, color: "bg-sticker-lilac text-foreground" };
+    if (t.includes("youtube")) return { icon: Youtube, color: "bg-sticker-lilac text-foreground" };
+    if (t.includes("nature") || t.includes("park") || t.includes("unusual")) return { icon: TreePine, color: "bg-sticker-green text-foreground" };
+    if (t.includes("food") || t.includes("restaurant") || t.includes("cafe")) return { icon: Utensils, color: "bg-sticker-yellow text-foreground" };
+    if (t.includes("must see") || t.includes("attraction")) return { icon: Star, color: "bg-primary text-primary-foreground" };
+    if (t.includes("culture") || t.includes("history") || t.includes("museum")) return { icon: Landmark, color: "bg-sticker-blue text-foreground" };
+    if (t.includes("ai rec") || t.includes("ai_recommendation")) return { icon: Sparkles, color: "bg-sticker-pink text-foreground" };
+    if (t.includes("imported")) return { icon: LinkIcon, color: "bg-sticker-pink text-foreground" };
 
-    return { icon: Navigation, color: "text-muted-foreground border-border bg-muted/50" };
+    return { icon: Navigation, color: "bg-sticker-pink text-foreground" };
 }
 
 interface PlaceCardProps {
     place: Place | {
-        id: string | number;
-        title: string;
+        id?: string | number;
+        title?: string;
+        name?: string;
         type?: string;
-        rating?: number;
-        image: string;
-        description: string | null;
-        url?: string;
+        rating?: number | null;
+        image?: string | null;
+        description?: string | null;
+        url?: string | null;
         location?: string | null;
+        source?: string;
     };
     isRecommendation?: boolean;
     onAddToTrip?: (id: string) => void;
@@ -47,11 +46,9 @@ interface PlaceCardProps {
 export function PlaceCard({ place, isRecommendation = false, onAddToTrip }: PlaceCardProps) {
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const title = 'name' in place ? place.name : (place as any).title;
-    // For My List, display the category if available, otherwise fallback
-    let sourceType = 'source' in place ? place.source : (place as any).type;
+    const title = 'name' in place ? place.name : (place as { title?: string }).title;
+    let sourceType = 'source' in place ? place.source : (place as { type?: string }).type;
 
-    // If it lacks a proper category (legacy data), try to derive platform from URL
     if (!sourceType || sourceType === 'LINK_PARSER' || sourceType === 'SOCIAL_IMPORT' || sourceType === 'AI_RECOMMENDATION') {
         if (place.url) {
             if (place.url.includes("instagram.com")) sourceType = "Instagram";
@@ -65,7 +62,9 @@ export function PlaceCard({ place, isRecommendation = false, onAddToTrip }: Plac
 
     const rating = place.rating;
     const location = 'location' in place ? place.location : null;
-    const googleMapsUrl = buildGoogleMapsUrl(title, location);
+    const googleMapsUrl = buildGoogleMapsUrl(title ?? "", location);
+    const categoryInfo = getCategoryInfo(sourceType ?? "");
+    const Icon = categoryInfo.icon;
 
     const handleDelete = async (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -81,7 +80,7 @@ export function PlaceCard({ place, isRecommendation = false, onAddToTrip }: Plac
             } else {
                 toast.error(result.error || "Failed to delete");
             }
-        } catch (error) {
+        } catch {
             toast.error("Something went wrong");
         } finally {
             setIsDeleting(false);
@@ -89,73 +88,67 @@ export function PlaceCard({ place, isRecommendation = false, onAddToTrip }: Plac
     }
 
     return (
-        <Card className="overflow-hidden group hover:shadow-md transition-all border-border/50 h-full flex flex-col relative p-4 bg-card/60 backdrop-blur-sm">
+        <div className={`overflow-hidden group transition-transform duration-300 hover:-translate-y-2 p-5 md:p-4 flex flex-col relative rounded-2xl border-2 border-border min-h-[220px] md:min-h-[200px] cursor-pointer shadow-[0_6px_0_rgba(0,0,0,0.08)] ${categoryInfo.color}`}>
+            {/* Background decorative Icon */}
+            <Icon className="absolute -bottom-6 -right-6 h-36 w-36 md:h-28 md:w-28 opacity-[0.12] pointer-events-none" strokeWidth={3} />
+
             {!isRecommendation && 'id' in place && (
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity z-10 text-muted-foreground hover:text-destructive"
+                <button
+                    className="absolute top-4 right-4 h-10 w-10 flex items-center justify-center rounded-full bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 text-foreground hover:bg-black/20"
                     onClick={handleDelete}
                     disabled={isDeleting}
                 >
-                    <Trash2 className="h-3.5 w-3.5" />
-                </Button>
+                    <Trash2 className="h-5 w-5" strokeWidth={2.5} />
+                </button>
             )}
 
-            <div className="flex flex-col h-full gap-2">
-                <div className="flex items-start justify-between gap-2 pr-6">
+            <div className="flex flex-col h-full gap-4 relative z-10">
+                <div className="flex items-start justify-between gap-2 pr-12">
                     <div>
-                        <Badge variant="outline" className={`mb-2 text-[10px] uppercase font-semibold h-5 px-2 flex items-center w-fit gap-1.5 ${getCategoryInfo(sourceType).color}`}>
-                            {(() => {
-                                const Icon = getCategoryInfo(sourceType).icon;
-                                return <Icon className="h-3 w-3" />;
-                            })()}
+                        <div className="uppercase tracking-widest font-black text-[10px] md:text-[9px] mb-2 bg-black/10 px-2.5 py-0.5 rounded-full border border-black/5 flex items-center gap-1.5 w-fit">
+                            <Icon className="h-3.5 w-3.5 md:h-3 md:w-3" strokeWidth={3} />
                             {sourceType}
-                        </Badge>
-                        <h3 className="font-bold text-base leading-tight line-clamp-1">{title}</h3>
+                        </div>
+                        <h3 className="font-black text-2xl md:text-xl leading-[1.05] line-clamp-3 mb-1">{title}</h3>
                     </div>
                 </div>
 
-                <p className="text-sm text-muted-foreground line-clamp-2 mt-1 flex-1">
+                <p className="text-sm md:text-xs font-bold opacity-80 line-clamp-2 mt-1 flex-1">
                     {place.description || "No description available."}
                 </p>
 
                 {location && (
-                    <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1">
-                        <MapPin className="h-3.5 w-3.5 shrink-0 text-violet-500" />
+                    <p className="text-xs font-bold opacity-90 flex items-center gap-1.5 mt-1">
+                        <MapPin className="h-4 w-4 md:h-3.5 md:w-3.5 shrink-0" strokeWidth={2.5} />
                         <span className="line-clamp-1">{location}</span>
                     </p>
                 )}
 
                 {rating && (
-                    <div className="flex items-center text-amber-500 text-xs font-bold gap-1 mt-1">
-                        <Star className="h-3.5 w-3.5 fill-current" />
+                    <div className="flex items-center text-foreground text-xs font-black gap-1 mt-1">
+                        <Star className="h-3.5 w-3.5 fill-current" strokeWidth={2.5} />
                         {rating}
                     </div>
                 )}
 
-                <div className="pt-3 flex flex-wrap gap-2 mt-auto border-t">
-                    <Button variant="outline" size="sm" className="gap-1.5 h-8 text-xs" asChild>
-                        <a href={googleMapsUrl} target="_blank" rel="noreferrer">
-                            <MapPin className="h-3 w-3" />
-                            Maps
-                        </a>
-                    </Button>
+                <div className="pt-3 flex flex-wrap gap-2 mt-auto border-t-2 border-black/10">
+                    <a href={googleMapsUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 font-bold bg-background text-foreground px-3 py-1.5 rounded-xl text-xs border-2 border-border hover:border-foreground transition-all">
+                        <MapPin className="h-3.5 w-3.5" strokeWidth={3} />
+                        Maps
+                    </a>
                     {place.url && (
-                        <Button variant="ghost" size="sm" className="gap-1.5 h-8 text-xs text-muted-foreground" asChild>
-                            <a href={place.url} target="_blank" rel="noreferrer">
-                                <LinkIcon className="h-3 w-3" />
-                                Source
-                            </a>
-                        </Button>
+                        <a href={place.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 font-bold bg-black/10 text-foreground px-3 py-1.5 rounded-xl text-xs hover:bg-black/20 transition-all">
+                            <LinkIcon className="h-3.5 w-3.5" strokeWidth={3} />
+                            Source
+                        </a>
                     )}
                     <div className="flex-1" />
-                    <Button size="sm" onClick={() => onAddToTrip?.(String(place.id))} className="h-8 gap-1.5 text-xs">
-                        <Plus className="h-3 w-3" />
+                    <button onClick={() => onAddToTrip?.(String(place.id))} className="flex items-center gap-1.5 font-black bg-foreground text-background px-3.5 py-1.5 rounded-xl text-xs hover:scale-105 transition-transform shadow-stickerSoft">
+                        <Plus className="h-4 w-4" strokeWidth={3} />
                         Add to Trip
-                    </Button>
+                    </button>
                 </div>
             </div>
-        </Card>
+        </div>
     );
 }

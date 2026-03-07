@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, MapPin, Loader2, Plane, Hotel, Utensils, Activity, MoreHorizontal } from "lucide-react";
 
@@ -55,7 +54,6 @@ import { createEvent } from "@/actions/event";
 import { eventFormSchema, EventFormValues } from "@/lib/validations/event";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { ImageUpload } from "@/components/ui/image-upload";
 
 interface AddEventModalProps {
   children?: React.ReactNode;
@@ -97,7 +95,7 @@ export function AddEventModal({ children, tripId, defaultDate }: AddEventModalPr
       } else {
         toast.error(result.error || "Failed to add event");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred");
     } finally {
       setIsLoading(false);
@@ -106,7 +104,7 @@ export function AddEventModal({ children, tripId, defaultDate }: AddEventModalPr
 
   const FormContent = (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-4 md:px-0">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 px-4 md:px-0">
         <FormField
           control={form.control}
           name="title"
@@ -278,7 +276,7 @@ export function AddEventModal({ children, tripId, defaultDate }: AddEventModalPr
               Cancel
             </Button>
           )}
-          <Button type="submit" disabled={isLoading} className={cn("bg-accent] hover:bg-accent]/90 text-white", !isDesktop && "flex-1")}>
+          <Button type="submit" disabled={isLoading} className={cn("bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-xl", !isDesktop && "flex-1")}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create Event
           </Button>
@@ -293,10 +291,10 @@ export function AddEventModal({ children, tripId, defaultDate }: AddEventModalPr
         <DialogTrigger asChild>
           {children || <Button>Add Event</Button>}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Add New Event</DialogTitle>
-            <DialogDescription>
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto border-2 border-border rounded-2xl shadow-[0_8px_0_rgba(0,0,0,0.1)]">
+          <DialogHeader className="border-b-2 border-border pb-3">
+            <DialogTitle className="text-lg font-black">Add New Event</DialogTitle>
+            <DialogDescription className="text-xs">
               Add an activity, flight, or stay to your itinerary.
             </DialogDescription>
           </DialogHeader>

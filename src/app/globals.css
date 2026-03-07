@@ -2,7 +2,6 @@
 
 @plugin "tailwindcss-animate";
 
-/* Theme: data-theme="dark" | "light" on <html>. No .dark. */
 @custom-variant dark (&:is([data-theme="dark"] *));
 
 @theme inline {
@@ -14,6 +13,7 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -26,166 +26,151 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: 8px;
-  --radius-md: 10px;
-  --radius-lg: 12px;
-  --radius-xl: 14px;
-  --radius-2xl: 16px;
-  --radius-3xl: 20px;
-  --radius-4xl: 24px;
+
+  /* Sticker palette — so bg-sticker-*, text-sticker-*, etc. work */
+  --color-sticker-pink: var(--sticker-pink);
+  --color-sticker-blue: var(--sticker-blue);
+  --color-sticker-green: var(--sticker-green);
+  --color-sticker-lilac: var(--sticker-lilac);
+  --color-sticker-yellow: var(--sticker-yellow);
+  --color-sticker-coral: var(--sticker-coral);
+  --color-sticker-olive: var(--sticker-olive);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-pill: var(--radius-pill);
+  --radius-blob: 40% 60% 70% 30% / 50% 60% 40% 50%;
 }
 
-/* ========== MIDNIGHT MANGO THEME ========== */
 :root {
-  /* === DARK THEME (default) === */
-  --bg-base:          #0E0E0E;
-  --bg-surface:       #1A1A1A;
-  --bg-surface-2:     #222222;
-  --bg-surface-3:     #2A2A2A;
-  --bg-hover:         #2F2F2F;
+  /* Default Papaya/Sticker Palette (Light) */
+  --background: #F7F3EC;
+  --foreground: #16151A;
+  --card: #FFFDF8;
+  --card-foreground: #16151A;
+  --popover: #FFFDF8;
+  --popover-foreground: #16151A;
+  --muted: #E5DED3;
+  --muted-foreground: #6C6460;
+  --secondary: #E5DED3;
+  --secondary-foreground: #16151A;
 
-  /* Акцент — Манго */
-  --accent:           #FF6B2C;
-  --accent-hover:     #FF7D42;
-  --accent-muted:     #CC5522;
-  --accent-subtle:    rgba(255, 107, 44, 0.12);
-  --accent-glow:      rgba(255, 107, 44, 0.25);
-  --accent-text:      #FFFFFF;
+  --primary: #F4975F;
+  --primary-foreground: #231815;
+  --border: #E0D4C4;
+  --input: #E0D4C4;
+  --ring: #F4975F;
 
-  /* Вторичный акцент — Золотой (ачивки, прогресс, highlights) */
-  --accent-2:         #FFB800;
-  --accent-2-subtle:  rgba(255, 184, 0, 0.12);
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
 
-  /* Текст */
-  --text-primary:     #F5F0EB;
-  --text-secondary:   #B0A898;
-  --text-muted:       #7A7570;
-  --text-disabled:    #4A4540;
+  --sticker-pink: #F0A0AE;
+  --sticker-blue: #85B8EA;
+  --sticker-green: #7EC89A;
+  --sticker-lilac: #B89CF7;
+  --sticker-yellow: #FFCF5C;
+  --sticker-coral: #FF6F61;
+  --sticker-olive: #8CA06A;
 
-  /* Borders */
-  --border:           rgba(255, 255, 255, 0.07);
-  --border-hover:     rgba(255, 107, 44, 0.30);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
 
-  /* Статусы */
-  --success:          #2ECC71;
-  --success-subtle:   rgba(46, 204, 113, 0.12);
-  --warning:          #FFB800;
-  --warning-subtle:   rgba(255, 184, 0, 0.12);
-  --danger:           #FF4444;
-  --danger-subtle:    rgba(255, 68, 68, 0.12);
-
-  /* Cover-цвета для карточек поездок */
-  --cover-mango:      #FF6B2C;
-  --cover-gold:       #FFB800;
-  --cover-teal:       #00B4A6;
-  --cover-violet:     #7C6FF7;
-  --cover-rose:       #F43F5E;
-  --cover-lime:       #84CC16;
-
-  /* Shadows */
-  --shadow-sm:        0 1px 4px rgba(0,0,0,0.40);
-  --shadow-md:        0 4px 16px rgba(0,0,0,0.50);
-  --shadow-lg:        0 8px 32px rgba(0,0,0,0.60);
-  --shadow-accent:    0 8px 32px rgba(255, 107, 44, 0.25);
-  --shadow-accent-sm: 0 4px 16px rgba(255, 107, 44, 0.20);
-
-  /* Radius */
-  --radius-sm:        6px;
-  --radius-md:        12px;
-  --radius-lg:        18px;
-  --radius-xl:        24px;
-  --radius-pill:      999px;
-
-  /* Legacy mapping to keep shadcn working, mapped to new colors */
-  --background: var(--bg-base);
-  --foreground: var(--text-primary);
-  --card: var(--bg-surface);
-  --card-foreground: var(--text-primary);
-  --popover: var(--bg-surface);
-  --popover-foreground: var(--text-primary);
-  --primary: var(--accent);
-  --primary-foreground: var(--accent-text);
-  --secondary: var(--bg-surface-3);
-  --secondary-foreground: var(--text-primary);
-  --muted: var(--bg-surface-2);
-  --muted-foreground: var(--text-muted);
-  --accent-foreground: var(--text-primary);
-  --destructive: var(--danger);
-  --input: var(--bg-surface-3);
-  --ring: var(--accent);
-  --sidebar: var(--bg-surface-2);
-  --sidebar-foreground: var(--text-primary);
-  --sidebar-primary: var(--accent);
-  --sidebar-primary-foreground: var(--accent-text);
-  --sidebar-accent: var(--bg-surface-3);
-  --sidebar-accent-foreground: var(--text-primary);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--accent);
+  /* Legacy App variables used in custom styles */
+  --cover-mango: var(--sticker-yellow);
+  --cover-gold: var(--primary);
+  --cover-teal: var(--sticker-blue);
+  --cover-violet: var(--sticker-lilac);
+  --cover-rose: var(--sticker-pink);
+  --cover-lime: var(--sticker-green);
 }
 
-[data-theme="light"] {
-  --bg-base:          #F7F4F0;
-  --bg-surface:       #FFFFFF;
-  --bg-surface-2:     #F0EDE8;
-  --bg-surface-3:     #E8E4DE;
-  --bg-hover:         #EDE9E3;
+/* Landing page specific utilities */
 
-  --accent:           #E85A1A;
-  --accent-hover:     #D44D10;
-  --accent-muted:     #F0734A;
-  --accent-subtle:    rgba(232, 90, 26, 0.10);
-  --accent-glow:      rgba(232, 90, 26, 0.20);
-  --accent-text:      #FFFFFF;
+[data-theme="dark"] {
+  /* Default Papaya/Sticker Palette (Dark) */
+  --background: #1C1A18;
+  --foreground: #F7F3EC;
+  --card: #282422;
+  --card-foreground: #F7F3EC;
+  --popover: #282422;
+  --popover-foreground: #F7F3EC;
+  --muted: #3D3531;
+  --muted-foreground: #A69E99;
+  --secondary: #3D3531;
+  --secondary-foreground: #F7F3EC;
 
-  --accent-2:         #D4960A;
-  --accent-2-subtle:  rgba(212, 150, 10, 0.10);
+  --primary: #F4975F;
+  --primary-foreground: #231815;
+  --border: #3D3531;
+  --input: #3D3531;
+  --ring: #F4975F;
 
-  --text-primary:     #1C1917;
-  --text-secondary:   #57534E;
-  --text-muted:       #A8A29E;
-  --text-disabled:    #D6D3D1;
+  --sticker-pink: #D4818F;
+  --sticker-blue: #6B9ACE;
+  --sticker-green: #65A87F;
+  --sticker-lilac: #9B7FDB;
+  --sticker-yellow: #E6B040;
+  --sticker-coral: #E05A4D;
+  --sticker-olive: #728A55;
+}
 
-  --border:           rgba(0, 0, 0, 0.08);
-  --border-hover:     rgba(232, 90, 26, 0.30);
+[data-palette="alternate"] {
+  /* Cool Blue — soft pastel sticker-style (Light) */
+  --background: #EEF4F8;
+  --foreground: #1A2530;
+  --card: #F8FBFD;
+  --card-foreground: #1A2530;
+  --muted: #DCE6EE;
+  --muted-foreground: #5C6B7A;
+  --secondary: #DCE6EE;
+  --secondary-foreground: #1A2530;
 
-  --success:          #16A34A;
-  --success-subtle:   rgba(22, 163, 74, 0.10);
-  --warning:          #D97706;
-  --warning-subtle:   rgba(217, 119, 6, 0.10);
-  --danger:           #DC2626;
-  --danger-subtle:    rgba(220, 38, 38, 0.10);
+  --primary: #6B9BD1;
+  --primary-foreground: #FFFFFF;
+  --border: #C2D4E2;
+  --input: #C2D4E2;
+  --ring: #6B9BD1;
 
-  --shadow-sm:        0 1px 4px rgba(0,0,0,0.08);
-  --shadow-md:        0 4px 16px rgba(0,0,0,0.10);
-  --shadow-lg:        0 8px 32px rgba(0,0,0,0.12);
-  --shadow-accent:    0 8px 32px rgba(232, 90, 26, 0.20);
-  --shadow-accent-sm: 0 4px 16px rgba(232, 90, 26, 0.15);
+  --sticker-pink: #D4A8B8;
+  --sticker-blue: #8FC4E8;
+  --sticker-green: #7EC4A8;
+  --sticker-lilac: #B8A8D4;
+  --sticker-yellow: #E6D48A;
+  --sticker-coral: #D98A82;
+  --sticker-olive: #9BAF7E;
+}
 
-  /* Legacy mapping to keep shadcn working, mapped to new colors */
-  --background: var(--bg-base);
-  --foreground: var(--text-primary);
-  --card: var(--bg-surface);
-  --card-foreground: var(--text-primary);
-  --popover: var(--bg-surface);
-  --popover-foreground: var(--text-primary);
-  --primary: var(--accent);
-  --primary-foreground: var(--accent-text);
-  --secondary: var(--bg-surface-3);
-  --secondary-foreground: var(--text-primary);
-  --muted: var(--bg-surface-2);
-  --muted-foreground: var(--text-muted);
-  --accent-foreground: var(--text-primary);
-  --destructive: var(--danger);
-  --input: var(--bg-surface-3);
-  --ring: var(--accent);
-  --sidebar: var(--bg-surface-2);
-  --sidebar-foreground: var(--text-primary);
-  --sidebar-primary: var(--accent);
-  --sidebar-primary-foreground: var(--accent-text);
-  --sidebar-accent: var(--bg-surface-3);
-  --sidebar-accent-foreground: var(--text-primary);
-  --sidebar-border: var(--border);
-  --sidebar-ring: var(--accent);
+[data-palette="alternate"][data-theme="dark"] {
+  /* Cool Blue — soft pastel sticker-style (Dark) */
+  --background: #141C24;
+  --foreground: #E8EEF2;
+  --card: #1C2630;
+  --card-foreground: #E8EEF2;
+  --popover: #1C2630;
+  --popover-foreground: #E8EEF2;
+  --muted: #2A3642;
+  --muted-foreground: #8A9AAA;
+  --secondary: #2A3642;
+  --secondary-foreground: #E8EEF2;
+
+  --primary: #5A8BC4;
+  --primary-foreground: #FFFFFF;
+  --border: #354556;
+  --input: #354556;
+  --ring: #5A8BC4;
+
+  --sticker-pink: #B88898;
+  --sticker-blue: #6B9BC8;
+  --sticker-green: #5A9E82;
+  --sticker-lilac: #9A8AB8;
+  --sticker-yellow: #C4B46A;
+  --sticker-coral: #B8726A;
+  --sticker-olive: #7A8E5E;
 }
 
 @layer base {
@@ -198,10 +183,219 @@
   }
 }
 
-/* TripCard hover shadow by coverColor (trip identity only) */
-[data-cover-color="electric"]:hover { box-shadow: var(--shadow-lg); }
-[data-cover-color="coral"]:hover { box-shadow: var(--shadow-lg); }
-[data-cover-color="lime"]:hover { box-shadow: var(--shadow-lg); }
-[data-cover-color="sky"]:hover { box-shadow: var(--shadow-lg); }
-[data-cover-color="amber"]:hover { box-shadow: var(--shadow-lg); }
-[data-cover-color="pink"]:hover { box-shadow: var(--shadow-lg); }
+/* ── Landing section tints (opacity-safe, work without Tailwind opacity) ── */
+.bg-landing-yellow { background-color: color-mix(in srgb, var(--sticker-yellow) 14%, var(--background)); }
+.bg-landing-blue { background-color: color-mix(in srgb, var(--sticker-blue) 12%, var(--background)); }
+.bg-landing-pink { background-color: color-mix(in srgb, var(--sticker-pink) 10%, var(--background)); }
+.bg-landing-lilac { background-color: color-mix(in srgb, var(--sticker-lilac) 12%, var(--background)); }
+.bg-landing-olive { background-color: color-mix(in srgb, var(--sticker-olive) 10%, var(--background)); }
+.bg-landing-green { background-color: color-mix(in srgb, var(--sticker-green) 12%, var(--background)); }
+.bg-landing-coral-blur { background-color: color-mix(in srgb, var(--sticker-coral) 12%, transparent); }
+.bg-landing-lilac-blur { background-color: color-mix(in srgb, var(--sticker-lilac) 15%, transparent); }
+.bg-landing-olive-blur { background-color: color-mix(in srgb, var(--sticker-olive) 10%, transparent); }
+.bg-landing-blue-blur { background-color: color-mix(in srgb, var(--sticker-blue) 15%, transparent); }
+
+/* Neutral section (Features) — very subtle muted tint for depth */
+.bg-landing-surface { background-color: color-mix(in srgb, var(--muted) 25%, var(--background)); }
+
+/* ── Landing section depth — inset (pressed) vs raised (popping) ── */
+.section-inset {
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,0.06),
+    inset 0 1px 2px rgba(0,0,0,0.04);
+}
+.section-raised {
+  box-shadow:
+    0 -1px 0 rgba(255,255,255,0.5),
+    0 4px 12px -2px rgba(0,0,0,0.06),
+    0 1px 3px rgba(0,0,0,0.04);
+}
+[data-theme="dark"] .section-inset {
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,0.2),
+    inset 0 1px 3px rgba(0,0,0,0.15);
+}
+[data-theme="dark"] .section-raised {
+  box-shadow:
+    0 -1px 0 rgba(255,255,255,0.04),
+    0 4px 16px -2px rgba(0,0,0,0.2),
+    0 1px 4px rgba(0,0,0,0.12);
+}
+
+/* Hero map — fill entire section, cover behavior */
+.hero-map-cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hero-map-cover svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  preserve-aspect-ratio: xMidYMid slice;
+}
+
+/* ── Sticker / Magazine landing keyframes ─────────────────────── */
+
+@keyframes sticker-pop {
+  0% { opacity: 0; transform: translateY(16px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes stamp-hit {
+  0% { opacity: 0; transform: scale(0.9); }
+  60% { opacity: 1; transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes wiggle-cta {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes spin-stamp {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes tape-peel {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes icon-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ── Utility animation classes ───────────────────────────────── */
+
+.animate-sticker-pop {
+  animation: sticker-pop 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.animate-stamp-hit {
+  animation: stamp-hit 0.4s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.animate-wiggle-cta {
+  animation: wiggle-cta 3s ease-in-out infinite;
+}
+
+.animate-float-y {
+  animation: float-y 4s ease-in-out infinite;
+}
+
+.animate-spin-stamp {
+  animation: spin-stamp 1.2s linear infinite;
+}
+
+.sticker-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sticker-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 rgba(0,0,0,0.08);
+}
+
+.icon-bounce:hover svg {
+  animation: icon-bounce 0.4s ease;
+}
+
+/* ── Pseudo-tape decorative strip ────────────────────────────── */
+
+.tape-strip {
+  position: relative;
+}
+.tape-strip::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 12px;
+  background: var(--primary);
+  opacity: 0.35;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Perforated edge for ticket-style elements */
+.ticket-edge {
+  background-image: radial-gradient(circle, var(--background) 5px, transparent 5px);
+  background-size: 16px 16px;
+  background-position: -8px center;
+  background-repeat: repeat-y;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-sticker-pop,
+  .animate-stamp-hit,
+  .animate-wiggle-cta,
+  .animate-float-y,
+  .animate-spin-stamp {
+    animation: none !important;
+  }
+
+  .sticker-hover:hover {
+    transform: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Page transition base ────────────────────────────────────── */
+
+.page-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ── Form focus animations ───────────────────────────────────── */
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 25%, transparent);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ── Stamp loader ────────────────────────────────────────────── */
+
+.loader-stamp {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin-stamp 1.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-stamp {
+    animation: none;
+    border-top-color: var(--primary);
+  }
+}

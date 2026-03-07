@@ -65,9 +65,9 @@ export async function createExpense(tripId: string, data: ExpenseFormValues) {
 
         revalidatePath(`/trip/${tripId}/budget`);
         return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to create expense:", error);
-        return { success: false, error: error.message };
+        return { success: false, error: error instanceof Error ? error.message : "Failed to create expense" };
     }
 }
 

@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { EventType } from "@prisma/client";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import * as cheerio from "cheerio";
@@ -178,8 +179,8 @@ async function fetchOEmbed(url: string): Promise<{ caption: string; authorName: 
                 };
             }
         }
-    } catch (e: any) {
-        console.error(`[oEmbed] Error: ${e.message}`);
+    } catch (e: unknown) {
+        console.error(`[oEmbed] Error: ${e instanceof Error ? e.message : String(e)}`);
     }
 
     return null;
@@ -246,8 +247,8 @@ export async function parseLink(
                     image = oEmbedData.thumbnailUrl || "";
 
                 }
-            } catch (e: any) {
-                console.error(`[Parser] oEmbed failed: ${e.message}`);
+            } catch (e: unknown) {
+                console.error(`[Parser] oEmbed failed: ${e instanceof Error ? e.message : String(e)}`);
             }
         }
 
@@ -310,8 +311,8 @@ export async function parseLink(
 
 
             }
-        } catch (e: any) {
-            console.error(`[Parser] HTML fetch failed: ${e.message}`);
+        } catch (e: unknown) {
+            console.error(`[Parser] HTML fetch failed: ${e instanceof Error ? e.message : String(e)}`);
         }
 
         // Step 4: AI-enhanced parsing (always for social/maps, optional force)
@@ -435,8 +436,8 @@ If the content mentions ZERO specific places (e.g. generic travel tips with no n
                     isAiUsed: true,
                     places,
                 };
-            } catch (aiError: any) {
-                console.error(`[Parser] AI provider failed: ${aiError.message}`);
+            } catch (aiError: unknown) {
+                console.error(`[Parser] AI provider failed: ${aiError instanceof Error ? aiError.message : String(aiError)}`);
             }
         }
 
@@ -459,9 +460,9 @@ If the content mentions ZERO specific places (e.g. generic travel tips with no n
                 type: "Other",
             }],
         };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Link parsing error:", error);
-        return { success: false, error: "Failed to parse link: " + error.message };
+        return { success: false, error: "Failed to parse link: " + (error instanceof Error ? error.message : String(error)) };
     }
 }
 
@@ -498,7 +499,7 @@ export async function savePlace(data: ParsedPlace) {
 
         revalidatePath("/explore");
         return { success: true, place };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to save place:", error);
         return { success: false, error: "Failed to save place" };
     }
@@ -539,7 +540,7 @@ export async function savePlaces(places: ParsedPlace[]) {
 
         revalidatePath("/explore");
         return { success: true, places: createdPlaces };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to save places:", error);
         return { success: false, error: "Failed to save places" };
     }
@@ -598,7 +599,7 @@ export async function convertPlaceToEvent(tripId: string, place: { title?: strin
                 tripId,
                 title: title,
                 description: place.description || "",
-                type: eventType as any,
+                type: eventType as EventType,
                 startTime: new Date(),
                 endTime: new Date(new Date().setHours(new Date().getHours() + 2)),
                 location: place.address || place.location || title,
@@ -612,7 +613,7 @@ export async function convertPlaceToEvent(tripId: string, place: { title?: strin
 
         revalidatePath(`/trip/${tripId}`);
         return { success: true, event };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to convert place to event:", error);
         return { success: false, error: "Failed to add to trip" };
     }
@@ -644,7 +645,7 @@ export async function deletePlace(id: string) {
 
         revalidatePath("/explore");
         return { success: true };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Failed to delete place:", error);
         return { success: false, error: "Failed to delete place" };
     }

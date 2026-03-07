@@ -549,8 +549,31 @@ enum NotificationType {
 
 ---
 
-### **Phase 13: Polish & Testing** (Day 19-21)
+### **Phase 13: UI Redesign & Sticker/Magazine Approach** (Day 19-21)
+**Goal**: Convert flat UI to an engaging travel journal aesthetic
+
+**Design system reference**: [docs/ui-guidelines.md](docs/ui-guidelines.md) — borders, rounding, shadows, motion rules.
+
+**Tasks**:
+- [x] Create centralized `ui-guidelines.md` config (in `docs/`)
+- [x] Redesign Landing Page (Bento grid, Mango theme, animations)
+- [x] Redesign Dashboard (Thick borders, pastel badges)
+- [x] Redesign Trip Overview Pages (Timeline, Budget, Members, Elements)
+- [x] Standardize medium screens (reduced padding/font sizes)
+- [x] Normalize smooth scrolling (Landing page only)
+- [ ] Remove excessive `rotate-*` classes from internal structural cards to improve readability.
+- [ ] Move color palette picker to Settings only (no header/sidebar).
+- [ ] Soften Cool Blue (alternate) palette to pastel sticker-style tones.
+- [ ] Unified rounding (rounded-2xl/3xl) and md typography/padding audit.
+
+**Deliverable**: Unique, playful, ticket/sticker design language applied globally.
+
+---
+
+### **Phase 14: Polish & Testing** (Day 21-23)
 **Goal**: Refine UI and fix bugs
+
+**Reference**: [docs/ui-guidelines.md](docs/ui-guidelines.md) for consistency.
 
 **Tasks**:
 - [ ] Responsive design (mobile/tablet/desktop)

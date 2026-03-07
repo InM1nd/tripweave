@@ -40,8 +40,9 @@ export function TripHeader({ trip }: TripHeaderProps) {
 
   return (
     <div className="relative">
-      {/* Cover Image */}
-      <div className="relative h-40 md:h-64 lg:h-80 w-full overflow-hidden md:rounded-3xl">
+      {/* Cover Image - sticker style container */}
+      <div className="rounded-2xl md:rounded-3xl shadow-[0_6px_0_rgba(0,0,0,0.1)] overflow-hidden">
+        <div className="relative h-40 md:h-64 lg:h-80 w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 z-10" />
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -97,15 +98,15 @@ export function TripHeader({ trip }: TripHeaderProps) {
                   {daysDuration} days
                 </Badge>
                 {isUpcoming && daysUntilTrip <= 30 && (
-                  <Badge className="bg-accent] border-0 text-white text-[10px] md:text-xs">
+                  <Badge className="bg-primary border-0 text-primary-foreground text-[10px] md:text-xs">
                     In {daysUntilTrip} days
                   </Badge>
                 )}
               </div>
-              <h1 className="text-xl md:text-4xl font-bold text-white drop-shadow-lg leading-tight">
+              <h1 className="text-lg md:text-2xl font-black text-white drop-shadow-lg leading-tight">
                 {trip.name}
               </h1>
-              <div className="flex items-center gap-3 md:gap-4 text-white/80 text-xs md:text-base">
+              <div className="flex items-center gap-3 md:gap-4 text-white/80 text-[11px] md:text-sm">
                 <div className="flex items-center gap-1.5">
                   <MapPin className="h-3.5 w-3.5 md:h-4 md:w-4" />
                   <span>{trip.destination}</span>
@@ -129,7 +130,7 @@ export function TripHeader({ trip }: TripHeaderProps) {
                     style={{ zIndex: 4 - i }}
                   >
                     <AvatarImage src={member.user.avatar} alt={member.user.name} />
-                    <AvatarFallback className="bg-accent]/20 text-accent] text-[10px] md:text-xs font-medium">
+                    <AvatarFallback className="bg-primary/20 text-primary text-[10px] md:text-xs font-bold">
                       {member.user.name[0]}
                     </AvatarFallback>
                   </Avatar>
@@ -146,6 +147,7 @@ export function TripHeader({ trip }: TripHeaderProps) {
               </Button>
             </div>
           </div>
+        </div>
         </div>
       </div>
 

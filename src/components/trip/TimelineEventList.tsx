@@ -42,7 +42,7 @@ function DayContainer({ dateKey, count, children, tripId }: { dateKey: string, c
 
     return (
         <div ref={setNodeRef} className={cn("relative transition-colors rounded-xl p-2 -m-2", isOver && "bg-primary/5")}>
-            {/* Date Header - Sticky */}
+            {/* Date Header - Sticky: just below tab bar */}
             <div className="flex items-center justify-between mb-4 sticky top-28 z-20 bg-background/95 backdrop-blur-sm py-3 border-b border-border/40">
                 <div className="flex items-center gap-3 md:gap-4">
                     <div className="h-12 w-12 rounded-2xl bg-primary/10 flex flex-col items-center justify-center shrink-0 shadow-sm">
@@ -54,10 +54,10 @@ function DayContainer({ dateKey, count, children, tripId }: { dateKey: string, c
                         </span>
                     </div>
                     <div>
-                        <h3 className="font-semibold text-lg text-foreground">
+                        <h3 className="font-bold text-lg text-foreground">
                             {date.toLocaleDateString("en-US", { weekday: "long" })}
                         </h3>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm font-medium text-muted-foreground">
                             {count} {count === 1 ? "activity" : "activities"} planned
                         </p>
                     </div>

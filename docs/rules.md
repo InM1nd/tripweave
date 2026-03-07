@@ -102,6 +102,8 @@ export function TripCard({ trip, onEdit }: TripCardProps) {
 
 Tailwind first: Use Tailwind CSS utility classes for styling.
 
+**Design system**: See [docs/ui-guidelines.md](docs/ui-guidelines.md) for the sticker/magazine style: borders, rounding, shadows, smooth scroll only on `/`, and rotation rules. Key rules: use `border-2` / `border-4`, `rounded-2xl` / `rounded-3xl` / `rounded-full`, hard offset shadows; do not use `rotate-*` on structural cards inside the app (dashboard, trips, notifications, etc.).
+
 Shadcn components: Use Shadcn/ui components as base. Customize with Tailwind.
 
 Responsive design: Always add responsive classes (sm:, md:, lg:).

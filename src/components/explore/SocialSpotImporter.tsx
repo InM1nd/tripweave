@@ -26,7 +26,6 @@ import {
     Youtube,
     Globe,
     Lightbulb,
-    Navigation,
     ArrowRight,
     Zap,
     TrendingUp,
@@ -59,10 +58,10 @@ const CATEGORY_CONFIG: Record<string, { color: string; emoji: string }> = {
     shopping: { color: "bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400", emoji: "🛍️" },
     nightlife: { color: "bg-accent-subtle text-accent", emoji: "🌃" },
     temple: { color: "bg-danger-subtle text-danger dark:bg-danger/30 dark:text-danger", emoji: "⛩️" },
-    hotel: { color: "bg-teal]/15 text-teal]", emoji: "🏨" },
-    transport: { color: "bg-slate-100 text-slate-700 dark:bg-slate-900/30 dark:text-slate-400", emoji: "🚄" },
-    attraction: { color: "bg-accent]/15 text-accent]", emoji: "⭐" },
-    other: { color: "bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400", emoji: "📍" },
+    hotel: { color: "bg-teal/15 text-teal", emoji: "🏨" },
+    transport: { color: "bg-muted text-foreground", emoji: "🚄" },
+    attraction: { color: "bg-accent/15 text-accent", emoji: "⭐" },
+    other: { color: "bg-muted text-muted-foreground", emoji: "📍" },
 };
 
 function getCategoryConfig(category: string) {
@@ -99,7 +98,7 @@ function getPlatformGradient(platform: ImporterResult["platform"]) {
 function ConfidenceMeter({ confidence }: { confidence: number }) {
     const percentage = Math.round(confidence * 100);
     const color =
-        confidence >= 0.8 ? "bg-success]" :
+        confidence >= 0.8 ? "bg-success" :
             confidence >= 0.5 ? "bg-amber-500" :
                 "bg-danger";
     return (
@@ -172,10 +171,10 @@ export function SocialSpotImporter() {
                 setErrorMsg("No travel spots found in this post.");
                 toast.info("No travel spots found in this post.");
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             clearInterval(phaseInterval);
             setAnalyzePhase("");
-            const msg = err?.message || "Something went wrong";
+            const msg = err instanceof Error ? err.message : "Something went wrong";
             setErrorMsg(msg);
             toast.error(msg);
         } finally {
@@ -304,7 +303,7 @@ export function SocialSpotImporter() {
                                 <div className="h-10 w-10 rounded-full bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center animate-pulse">
                                     <Sparkles className="h-5 w-5 text-white" />
                                 </div>
-                                <div className="absolute -top-1 -right-1 h-3 w-3 bg-success] rounded-full animate-ping" />
+                                <div className="absolute -top-1 -right-1 h-3 w-3 bg-success rounded-full animate-ping" />
                             </div>
                             <div className="space-y-1">
                                 <p className="text-sm font-semibold">AI Agent Working...</p>
@@ -468,7 +467,7 @@ export function SocialSpotImporter() {
                                                 disabled={isSaving || isSaved}
                                                 size="sm"
                                                 variant={isSaved ? "outline" : "default"}
-                                                className={`gap-1.5 ${isSaved ? "text-success] border-success]/50" : ""}`}
+                                                className={`gap-1.5 ${isSaved ? "text-success border-success/50" : ""}`}
                                             >
                                                 {isSaved ? (<><Check className="h-3.5 w-3.5" /> Saved</>) :
                                                     isSaving ? (<Loader2 className="h-3.5 w-3.5 animate-spin" />) :

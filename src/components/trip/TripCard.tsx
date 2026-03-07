@@ -3,12 +3,11 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import { MapPin, Plane } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage, AvatarGroup } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Trip } from "@/types";
-import { getGradient, getAccentBgRgba, getCoverColor, type CoverColorKey } from "@/lib/colors";
+import { type CoverColorKey } from "@/lib/colors";
+import { motion } from "framer-motion";
 
 const COVER_COLORS: CoverColorKey[] = [
   "electric",
@@ -28,9 +27,6 @@ function getTripCoverColor(trip: Trip): CoverColorKey {
 }
 
 export function TripCard({ trip }: { trip: Trip }) {
-  const daysDuration = Math.ceil(
-    (trip.endDate.getTime() - trip.startDate.getTime()) / (1000 * 60 * 60 * 24)
-  );
   const daysUntilTrip = Math.ceil(
     (trip.startDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
   );
@@ -39,13 +35,6 @@ export function TripCard({ trip }: { trip: Trip }) {
   const isOngoing = !isPast && !isUpcoming;
 
   const coverColor = getTripCoverColor(trip);
-  const gradient = getGradient(coverColor);
-
-  const eventsCount = trip._count?.events ?? 0;
-  const progressPercent = Math.min(
-    100,
-    Math.round((eventsCount / Math.max(1, daysDuration)) * 25)
-  );
 
   const statusBadge =
     isPast ? "completed" : isOngoing ? "ongoing" : daysUntilTrip <= 30 ? "upcoming" : "draft";
@@ -53,86 +42,62 @@ export function TripCard({ trip }: { trip: Trip }) {
   return (
     <Link
       href={`/trip/${trip.id}/timeline`}
-      className="block group min-w-[280px]"
+      className="block w-full min-w-0 group"
     >
-      <Card
-        data-cover-color={coverColor}
-        className="overflow-hidden h-[200px] flex flex-col transition-all duration-200 shadow-sm hover:-translate-y-[3px] active:scale-[0.99] border border-border hover:border-border-hover hover:shadow-lg"
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        whileHover={{ y: -6, scale: 1.02 }}
+        className={cn(
+          "overflow-hidden h-[180px] flex flex-col rounded-2xl p-5 md:p-4 border-2 border-border relative shadow-[0_4px_0_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_0_rgba(0,0,0,0.12)] transition-shadow",
+          {
+            'bg-sticker-yellow text-foreground': coverColor === 'electric' || coverColor === 'amber',
+            'bg-sticker-coral text-white': coverColor === 'coral',
+            'bg-sticker-blue text-foreground': coverColor === 'sky',
+            'bg-sticker-pink text-foreground': coverColor === 'pink',
+            'bg-sticker-green text-foreground': coverColor === 'lime',
+          }
+        )}
       >
-        {/* Top 40% - gradient header */}
-        <div
-          className="relative h-[40%] min-h-[72px] flex items-center justify-center overflow-hidden"
-          style={{ background: gradient }}
-        >
-          {trip.coverImage ? (
-            <>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={trip.coverImage}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover opacity-60"
-              />
-              <div
-                className="absolute inset-0"
-                style={{ background: gradient }}
-              />
-            </>
-          ) : null}
-          <div
-            className="relative z-10 flex items-center justify-center w-10 h-10 rounded-xl"
-            style={{ backgroundColor: getAccentBgRgba(coverColor, 0.15), color: getCoverColor(coverColor) }}
-          >
-            <Plane className="h-6 w-6" />
+        {/* Top prominent icon */}
+        <div className="flex justify-between items-start z-10 relative">
+          <div className="bg-black/15 p-2 md:p-1.5 rounded-full border-2 border-transparent group-hover:border-black/10 transition-colors">
+            <Plane className="h-5 w-5 md:h-4 md:w-4" strokeWidth={3} />
           </div>
+          <Badge
+            variant="outline"
+            className="shrink-0 text-[10px] font-black uppercase tracking-widest border-2 border-current/20 px-3 py-1.5 bg-black/5 shadow-none rounded-full"
+          >
+            {statusBadge === "upcoming"
+              ? `In ${daysUntilTrip}d`
+              : statusBadge === "ongoing"
+                ? "Ongoing"
+                : statusBadge === "completed"
+                  ? "Done"
+                  : "Upcoming"}
+          </Badge>
         </div>
 
-        {/* Main content - 60% */}
-        <div className="flex-1 p-4 flex flex-col bg-bg-surface">
-          <h3 className="font-bold text-base text-foreground line-clamp-1">
+        {/* Main content */}
+        <div className="mt-auto flex flex-col z-10 relative">
+          <h3 className="font-bold text-2xl md:text-xl line-clamp-1 leading-none mb-1.5">
             {trip.name}
           </h3>
-          <div className="flex items-center gap-1.5 mt-0.5 text-text-muted text-xs">
-            <MapPin className="h-3 w-3 shrink-0" />
+          <div className="flex items-center gap-1.5 font-semibold opacity-80 text-xs">
+            <MapPin className="h-3.5 w-3.5 shrink-0" strokeWidth={3} />
             <span className="line-clamp-1">{trip.destination}</span>
           </div>
-          <div className="text-[10px] text-text-muted mt-0.5">
-            {format(trip.startDate, "MMM d, yyyy")}
-          </div>
-
-          {/* Bottom: Progress + Avatars + Badge */}
-          <div className="mt-auto pt-3 flex items-center justify-between gap-2">
-            <div className="flex-1 min-w-0">
-              <Progress
-                value={progressPercent}
-                accentColor={coverColor}
-                className="h-1.5"
-              />
-            </div>
-            <AvatarGroup max={3} className="shrink-0">
-              {trip.members.slice(0, 3).map((member) => (
-                <Avatar key={member.id} className="h-6 w-6">
-                  <AvatarImage src={member.user.avatar} alt={member.user.name} />
-                  <AvatarFallback className="bg-accent/20 text-accent text-[8px] font-medium">
-                    {member.user.name[0]}
-                  </AvatarFallback>
-                </Avatar>
-              ))}
-            </AvatarGroup>
-            <Badge
-              variant={statusBadge as "upcoming" | "ongoing" | "completed" | "draft"}
-              className="shrink-0 text-[10px]"
-            >
-              {statusBadge === "upcoming"
-                ? `In ${daysUntilTrip}d`
-                : statusBadge === "ongoing"
-                  ? "Ongoing"
-                  : statusBadge === "completed"
-                    ? "Done"
-                    : "Upcoming"}
-            </Badge>
+          <div className="text-[10px] font-medium opacity-70 mt-1.5 uppercase tracking-wider flex items-center gap-1">
+            {format(trip.startDate, "MMM d")} <span className="mx-0.5 opacity-50">—</span> {format(trip.endDate, "MMM d, yyyy")}
           </div>
         </div>
-      </Card>
+
+        {/* Decorative elements - simple flat shapes */}
+        <div className="absolute -bottom-6 -right-6 opacity-[0.08] pointer-events-none transition-transform group-hover:scale-110 duration-300">
+          <Plane className="h-32 w-32 md:h-28 md:w-28" strokeWidth={3} />
+        </div>
+      </motion.div>
     </Link>
   );
 }
