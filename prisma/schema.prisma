@@ -109,6 +109,7 @@ model Event {
 
   // Gamification & Suggestions
   isSuggested  Boolean   @default(false)
+  placeType    String?   // Original Explore type: "Food", "Nature", "Culture", "Must See", "Other"
 
   createdBy String
   trip      Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)

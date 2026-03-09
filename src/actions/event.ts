@@ -387,6 +387,47 @@ export async function getSuggestedEvents(tripId: string) {
     return events;
 }
 
+export async function promoteSuggestedToTimeline(tripId: string, eventId: string, date: Date, time: string = "12:00") {
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+
+    if (!authUser) throw new Error("Unauthorized");
+
+    const membership = await prisma.tripMember.findFirst({
+        where: { tripId, user: { authId: authUser.id } }
+    });
+
+    if (!membership) throw new Error("Unauthorized");
+
+    const event = await prisma.event.findFirst({
+        where: { id: eventId, tripId, isSuggested: true }
+    });
+
+    if (!event) throw new Error("Event not found or not a suggestion");
+
+    try {
+        const [hours, minutes] = time.split(":").map(Number);
+        const startTime = new Date(date);
+        startTime.setHours(hours, minutes, 0, 0);
+
+        const updatedEvent = await prisma.event.update({
+            where: { id: eventId },
+            data: {
+                isSuggested: false,
+                startTime,
+                endTime: new Date(startTime.getTime() + 2 * 60 * 60 * 1000),
+            },
+        });
+
+        revalidatePath(`/trip/${tripId}/timeline`);
+        revalidatePath(`/trip/${tripId}/suggested`);
+        return { success: true, event: updatedEvent };
+    } catch (error: unknown) {
+        console.error("Failed to promote suggested event:", error);
+        return { success: false, error: error instanceof Error ? error.message : "Failed to add to schedule" };
+    }
+}
+
 export async function toggleVote(eventId: string) {
     const supabase = await createClient();
     const { data: { user: authUser } } = await supabase.auth.getUser();

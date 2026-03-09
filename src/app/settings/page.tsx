@@ -18,7 +18,7 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="grid gap-6">
-                    <Card className="border-2 border-border rounded-2xl shadow-[0_4px_0_rgba(0,0,0,0.08)]">
+                    <Card className="border-2 border-border rounded-2xl shadow-sticker-card">
                         <CardHeader>
                             <CardTitle>Appearance</CardTitle>
                             <CardDescription>Customize how TripWeave looks on your device.</CardDescription>

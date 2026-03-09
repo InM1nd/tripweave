@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { StickerAnimator } from "@/components/ui/StickerAnimator";
 import { Badge } from "@/components/ui/badge";
 import {
     Loader2,
@@ -242,7 +243,7 @@ export function SocialSpotImporter() {
                     <Button
                         onClick={handleAnalyze}
                         disabled={isLoading || !url}
-                        className="gap-2 bg-accent hover:bg-accent-hover text-accent-text border-0 min-w-[130px]"
+                        className="gap-2 bg-accent hover:bg-accent-hover text-accent-text border-2 border-border shadow-sticker-sm hover:-translate-y-0.5 hover:shadow-sticker-card transition-all min-w-[130px] rounded-full font-black"
                     >
                         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4" />}
                         {isLoading ? "Analyzing..." : "Import Spots"}
@@ -254,13 +255,13 @@ export function SocialSpotImporter() {
                     <div className="flex items-center gap-2">
                         <span className="text-[11px] text-muted-foreground">Supports:</span>
                         <div className="flex items-center gap-1.5">
-                            <Badge variant="outline" className="text-[10px] gap-1 py-0 h-5 border-pink-200 dark:border-pink-800">
+                            <Badge className="text-[10px] gap-1 py-0 h-5 bg-sticker-pink text-foreground border-2 border-border shadow-sticker-badge rounded-full">
                                 <Instagram className="h-2.5 w-2.5" /> Instagram
                             </Badge>
-                            <Badge variant="outline" className="text-[10px] gap-1 py-0 h-5 border-gray-300 dark:border-gray-700">
+                            <Badge className="text-[10px] gap-1 py-0 h-5 bg-sticker-blue text-foreground border-2 border-border shadow-sticker-badge rounded-full">
                                 <TikTokIcon className="h-2.5 w-2.5" /> TikTok
                             </Badge>
-                            <Badge variant="outline" className="text-[10px] gap-1 py-0 h-5 border-danger/30 dark:border-danger">
+                            <Badge className="text-[10px] gap-1 py-0 h-5 bg-sticker-coral text-white border-2 border-border shadow-sticker-badge rounded-full">
                                 <Youtube className="h-2.5 w-2.5" /> Shorts
                             </Badge>
                         </div>
@@ -296,7 +297,7 @@ export function SocialSpotImporter() {
             {/* Loading animation */}
             {isLoading && analyzePhase && (
                 <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-                    <Card className="border-accent/20 overflow-hidden">
+                    <Card className="border-accent/20 overflow-hidden shadow-sticker-sm-soft">
                         <div className="h-1 bg-gradient-to-r from-accent to-accent-hover animate-pulse" />
                         <CardContent className="p-5 flex items-center gap-4">
                             <div className="relative">
@@ -317,7 +318,7 @@ export function SocialSpotImporter() {
             {/* Error message */}
             {errorMsg && !isLoading && (
                 <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-                    <Card className="border-danger/30 dark:border-danger bg-danger-subtle dark:bg-danger-subtle">
+                    <Card className="border-danger/30 dark:border-danger bg-danger-subtle dark:bg-danger-subtle shadow-sticker-sm-soft">
                         <CardContent className="p-4 flex items-start gap-3">
                             <AlertCircle className="h-5 w-5 text-danger shrink-0 mt-0.5" />
                             <div className="space-y-2">
@@ -331,7 +332,7 @@ export function SocialSpotImporter() {
             {/* No spots reason */}
             {result && result.spots.length === 0 && result.reason && (
                 <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-                    <Card className="border-muted">
+                    <Card className="border-muted shadow-sticker-sm-soft">
                         <CardContent className="p-6 text-center space-y-3">
                             <AlertCircle className="h-8 w-8 text-muted-foreground mx-auto" />
                             <p className="text-sm text-muted-foreground">{result.reason}</p>
@@ -389,13 +390,13 @@ export function SocialSpotImporter() {
                             const catConfig = getCategoryConfig(spot.category);
 
                             return (
-                                <Card
-                                    key={spot.spot_id}
-                                    className={`overflow-hidden transition-all duration-300 ${isSaved
-                                        ? "border-success/50 bg-success/10"
-                                        : "border-accent/20 hover:border-accent/40 hover:shadow-md hover:shadow-accent-sm"
-                                        }`}
-                                >
+                                <StickerAnimator key={spot.spot_id} delay={index * 0.06}>
+                                    <Card
+                                        className={`overflow-hidden transition-all duration-300 ${isSaved
+                                            ? "border-success/50 bg-success/10 shadow-sticker-sm-soft"
+                                            : "border-accent/20 shadow-sticker-card hover:border-accent/40 hover:shadow-sticker-card-hover"
+                                            }`}
+                                    >
                                     <CardContent className="p-4 md:p-5 space-y-3">
                                         {/* Top row */}
                                         <div className="flex items-start gap-3">
@@ -476,6 +477,7 @@ export function SocialSpotImporter() {
                                         </div>
                                     </CardContent>
                                 </Card>
+                                </StickerAnimator>
                             );
                         })}
                     </div>

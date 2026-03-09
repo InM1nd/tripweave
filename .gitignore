@@ -1,4 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Всё перечисленное ниже не должно попадать в GitHub (секреты, сборки, кэш, логи, локальные настройки).
 
 # dependencies
 /node_modules
@@ -12,6 +13,7 @@
 
 # testing
 /coverage
+*.lcov
 
 # next.js
 /.next/
@@ -19,10 +21,26 @@
 
 # production
 /build
+/dist
 
-# misc
+# cache & turbo
+.cache
+.turbo
+.eslintcache
+.prettiercache
+.parcel-cache
+
+# misc — OS, бэкапы, временные
 .DS_Store
+Thumbs.db
+Desktop.ini
 *.pem
+*.key
+*.log
+*~
+*.bak
+*.swp
+*.tmp
 
 # debug
 npm-debug.log*
@@ -31,8 +49,10 @@ yarn-error.log*
 .pnpm-debug.log*
 lint_output.txt
 
-# env files (can opt-in for committing if needed)
-.env*
+# env — не коммитить (шаблон .env.example можно коммитить)
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -43,3 +63,21 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+# Cursor / Claude — локальные настройки, не пушить на GitHub
+.claude/
+.claudeignore
+.cursor/
+.cursorignore
+.cursorrules
+
+# IDE — локальные настройки
+.idea/
+.vscode/
+*.sublime-*
+
+# секреты и локальные данные
+.sentryclirc
+*.sqlite
+*.sqlite3
+*.db

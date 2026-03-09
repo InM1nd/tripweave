@@ -2,9 +2,9 @@ import { getMyPlaces } from "@/actions/place";
 import { getTrips } from "@/actions/trip";
 import { ExploreContent } from "@/components/explore/ExploreContent";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { mockTrips } from "@/lib/mock-data";
 import { Compass, Sparkles } from "lucide-react";
-import { StampBadge } from "@/components/landing/StickerCard";
 
 export default async function ExplorePage() {
     // Generate recommendations based on "upcoming" trips
@@ -47,22 +47,17 @@ export default async function ExplorePage() {
         <DashboardLayout>
             <div className="relative min-h-[80vh]">
                 <div className="relative z-10 space-y-6 md:space-y-8 max-w-7xl p-4 md:p-0">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between border-b-2 border-border pb-4 mb-1">
-                        <div className="flex flex-col items-start">
-                            <div className="mb-4 inline-block">
-                                <StampBadge color="green">
-                                    <Compass className="h-4 w-4" /> Discover places
-                                </StampBadge>
-                            </div>
-                            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black tracking-tighter text-foreground leading-[0.9]">
-                                Explore & Discover
-                            </h1>
-                            <p className="text-muted-foreground font-bold mt-3 flex items-center gap-1.5 text-sm md:text-base">
+                    <PageHeader
+                        badge={{ label: "Discover places", icon: <Compass className="h-4 w-4" />, color: "green" }}
+                        title="Explore & Discover"
+                        description={
+                            <span className="flex items-center gap-1.5">
                                 <Sparkles className="w-5 h-5 text-sticker-yellow fill-current" />
                                 Curated for your upcoming trip to <span className="font-black text-foreground bg-sticker-yellow/30 px-2 py-0.5 rounded-md border-2 border-sticker-yellow/40">{upcomingTrip.destination}</span>
-                            </p>
-                        </div>
-                    </div>
+                            </span>
+                        }
+                        className="border-b-2 border-border pb-4 mb-1"
+                    />
 
                     <ExploreContent
                         myPlaces={myPlaces}

@@ -5,6 +5,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/lib/**/*.ts",
   ],
   theme: {
     extend: {
@@ -104,6 +105,17 @@ const config: Config = {
         paper: "0 2px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)",
         paperHover: "0 6px 20px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04)",
         stamp: "inset 0 0 0 3px var(--primary), 0 4px 0 rgba(0,0,0,0.08)",
+        /* Hard offset only (no blur) — design system tokens */
+        stickerCard: "0 4px 0 rgba(0,0,0,0.08)",
+        stickerCardHover: "0 6px 0 rgba(0,0,0,0.10)",
+        stickerCardHoverStrong: "0 8px 0 rgba(0,0,0,0.12)",
+        stickerSm: "0 3px 0 rgba(0,0,0,0.08)",
+        stickerSmSoft: "0 2px 0 rgba(0,0,0,0.06)",
+        stickerElevated: "0 6px 0 rgba(0,0,0,0.10)",
+        stickerModal: "0 8px 0 rgba(0,0,0,0.10)",
+        stickerTop: "0 -4px 0 rgba(0,0,0,0.10)",
+        stickerDashed: "0 4px 0 rgba(0,0,0,0.04)",
+        stickerBadge: "0 2px 0 rgba(0,0,0,0.04)",
       },
       rotate: {
         sticker: "1.5deg",

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Trip } from "@/types";
 import { type CoverColorKey } from "@/lib/colors";
+import { getCoverStickerClass } from "@/lib/colors";
 import { motion } from "framer-motion";
 
 const COVER_COLORS: CoverColorKey[] = [
@@ -35,6 +36,7 @@ export function TripCard({ trip }: { trip: Trip }) {
   const isOngoing = !isPast && !isUpcoming;
 
   const coverColor = getTripCoverColor(trip);
+  const stickerClass = getCoverStickerClass(coverColor);
 
   const statusBadge =
     isPast ? "completed" : isOngoing ? "ongoing" : daysUntilTrip <= 30 ? "upcoming" : "draft";
@@ -50,14 +52,9 @@ export function TripCard({ trip }: { trip: Trip }) {
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         whileHover={{ y: -6, scale: 1.02 }}
         className={cn(
-          "overflow-hidden h-[180px] flex flex-col rounded-2xl p-5 md:p-4 border-2 border-border relative shadow-[0_4px_0_rgba(0,0,0,0.08)] group-hover:shadow-[0_8px_0_rgba(0,0,0,0.12)] transition-shadow",
-          {
-            'bg-sticker-yellow text-foreground': coverColor === 'electric' || coverColor === 'amber',
-            'bg-sticker-coral text-white': coverColor === 'coral',
-            'bg-sticker-blue text-foreground': coverColor === 'sky',
-            'bg-sticker-pink text-foreground': coverColor === 'pink',
-            'bg-sticker-green text-foreground': coverColor === 'lime',
-          }
+          "overflow-hidden h-[180px] flex flex-col rounded-2xl p-5 md:p-4 border-2 border-border relative transition-shadow group-hover:shadow-sticker-card-hover-strong",
+          "shadow-sticker-card",
+          stickerClass
         )}
       >
         {/* Top prominent icon */}

@@ -253,7 +253,7 @@ export function CreateTripModal({ children }: { children?: React.ReactNode }) {
             </Button>
           )}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[500px] border-2 border-border rounded-2xl shadow-[0_8px_0_rgba(0,0,0,0.1)]">
+        <DialogContent className="sm:max-w-[500px] border-2 border-border rounded-2xl shadow-sticker-modal">
           <DialogHeader className="border-b-2 border-border pb-4">
             <DialogTitle className="font-black text-xl">Create New Trip</DialogTitle>
             <DialogDescription>
@@ -270,7 +270,7 @@ export function CreateTripModal({ children }: { children?: React.ReactNode }) {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         {children || (
-          <Button className="gap-2 rounded-full shadow-sticker">
+          <Button className="gap-2 rounded-full shadow-sticker-sm">
             Create Trip
           </Button>
         )}

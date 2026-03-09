@@ -3,8 +3,9 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { getEventTypeStickerColor } from "@/lib/design-tokens";
+import { StickerBadge } from "@/components/ui/StickerBadge";
 import { Event } from "@prisma/client";
 import { useState } from "react";
 import { EditEventSheet } from "@/components/trip/EditEventSheet";
@@ -13,14 +14,6 @@ interface SortableEventCardProps {
     event: Event;
     tripId: string;
 }
-
-const typeColors: Record<string, string> = {
-    TRANSPORT: "bg-teal/10 text-teal",
-    HOTEL: "bg-violet/10 text-violet",
-    ACTIVITY: "bg-accent/10 text-accent",
-    RESTAURANT: "bg-orange-500/10 text-orange-500",
-    OTHER: "bg-muted/50 text-muted-foreground",
-};
 
 export function SortableEventCard({ event, tripId }: SortableEventCardProps) {
     const [showEditSheet, setShowEditSheet] = useState(false);
@@ -63,12 +56,9 @@ export function SortableEventCard({ event, tripId }: SortableEventCardProps) {
                     <span className="text-xs font-mono text-muted-foreground">
                         {format(new Date(event.startTime), "HH:mm")}
                     </span>
-                    <Badge
-                        variant="secondary"
-                        className={cn("text-[10px] px-1 py-0 h-5", typeColors[event.type] || typeColors.OTHER)}
-                    >
+                    <StickerBadge color={getEventTypeStickerColor(event.type)} className="text-[10px] px-1 py-0 h-5">
                         {event.type}
-                    </Badge>
+                    </StickerBadge>
                 </div>
                 <p className="font-medium text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">
                     {event.title}

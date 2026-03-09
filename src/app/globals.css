@@ -42,6 +42,18 @@
   --radius-xl: var(--radius-xl);
   --radius-pill: var(--radius-pill);
   --radius-blob: 40% 60% 70% 30% / 50% 60% 40% 50%;
+
+  /* Sticker shadows (hard offset, no blur) — Tailwind v4 uses kebab-case for utility names */
+  --shadow-sticker-card: 0 4px 0 rgba(0,0,0,0.08);
+  --shadow-sticker-card-hover: 0 6px 0 rgba(0,0,0,0.10);
+  --shadow-sticker-card-hover-strong: 0 8px 0 rgba(0,0,0,0.12);
+  --shadow-sticker-sm: 0 3px 0 rgba(0,0,0,0.08);
+  --shadow-sticker-sm-soft: 0 2px 0 rgba(0,0,0,0.06);
+  --shadow-sticker-elevated: 0 6px 0 rgba(0,0,0,0.10);
+  --shadow-sticker-modal: 0 8px 0 rgba(0,0,0,0.10);
+  --shadow-sticker-top: 0 -4px 0 rgba(0,0,0,0.10);
+  --shadow-sticker-dashed: 0 4px 0 rgba(0,0,0,0.04);
+  --shadow-sticker-badge: 0 2px 0 rgba(0,0,0,0.04);
 }
 
 :root {
@@ -198,6 +210,46 @@
 /* Neutral section (Features) — very subtle muted tint for depth */
 .bg-landing-surface { background-color: color-mix(in srgb, var(--muted) 25%, var(--background)); }
 
+/* ── Section noise texture — grain overlay ─────────── */
+.section-texture {
+  position: relative;
+}
+/* Real-DOM texture layer (use in addition to section-texture); behind content so it doesn't overlap text/cards */
+.section-texture-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-repeat: repeat;
+  background-size: 4px 4px;
+  background-image: radial-gradient(circle at center, rgba(0,0,0,0.18) 1px, transparent 1px);
+  opacity: 0.2;
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] .section-texture-layer {
+  background-image: radial-gradient(circle at center, rgba(255,255,255,0.12) 1px, transparent 1px);
+  opacity: 0.25;
+  mix-blend-mode: overlay;
+}
+/* Legacy ::after fallback — behind content, same as section-texture-layer */
+.section-texture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-repeat: repeat;
+  background-size: 4px 4px;
+  background-image: radial-gradient(circle at center, rgba(0,0,0,0.18) 1px, transparent 1px);
+  opacity: 0.2;
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] .section-texture::after {
+  background-image: radial-gradient(circle at center, rgba(255,255,255,0.12) 1px, transparent 1px);
+  opacity: 0.25;
+  mix-blend-mode: overlay;
+}
+
 /* ── Landing section depth — inset (pressed) vs raised (popping) ── */
 .section-inset {
   box-shadow:
@@ -320,6 +372,35 @@
   animation: icon-bounce 0.4s ease;
 }
 
+/* ── Section perforation strip — ticket-edge divider between landing sections ── */
+.section-perforation {
+  position: relative;
+  height: 16px;
+  width: 100%;
+  background-color: var(--border);
+  background-image: radial-gradient(circle, var(--background) 5px, transparent 5px);
+  background-size: 20px 16px;
+  background-repeat: repeat-x;
+  background-position: 10px center;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .section-perforation {
+  background-color: color-mix(in srgb, var(--border) 90%, var(--foreground) 10%);
+}
+
+/* ── Section tape — standalone decorative adhesive tape strip ── */
+
+.section-tape {
+  /* Subtle diagonal grain to mimic tape texture */
+  background-image: repeating-linear-gradient(
+    -55deg,
+    transparent,
+    transparent 3px,
+    rgba(255,255,255,0.10) 3px,
+    rgba(255,255,255,0.10) 4px
+  );
+}
+
 /* ── Pseudo-tape decorative strip ────────────────────────────── */
 
 .tape-strip {
@@ -345,6 +426,36 @@
   background-size: 16px 16px;
   background-position: -8px center;
   background-repeat: repeat-y;
+}
+
+/* ── Landing header CTA tear-off stub edge ───────────────────── */
+/* Uses card bg so the holes punch through against the header surface */
+.landing-header-cta-edge {
+  background-color: color-mix(in srgb, var(--muted) 60%, transparent);
+  background-image: radial-gradient(circle at center, var(--card) 4px, transparent 4px);
+  background-size: 100% 12px;
+  background-repeat: repeat-y;
+  background-position: center 6px;
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  border-left: 2px solid var(--border);
+}
+[data-theme="dark"] .landing-header-cta-edge {
+  background-color: color-mix(in srgb, var(--muted) 80%, transparent);
+  background-image: radial-gradient(circle at center, var(--card) 4px, transparent 4px);
+}
+
+/* Vertical perforation strip — ticket left-edge decoration */
+.ticket-perforation-v {
+  background-color: color-mix(in srgb, var(--muted) 70%, transparent);
+  background-image: radial-gradient(circle at center, var(--card) 4px, transparent 4px);
+  background-size: 100% 18px;
+  background-repeat: repeat-y;
+  background-position: center 9px;
+  border: 1px solid var(--border);
+}
+[data-theme="dark"] .ticket-perforation-v {
+  background-color: color-mix(in srgb, var(--muted) 90%, transparent);
 }
 
 /* ── Hero sticker shapes (variety) ───────────────────────────── */
@@ -461,4 +572,85 @@ select:focus {
     animation: none;
     border-top-color: var(--primary);
   }
+}
+
+/* ── Footer boarding pass ────────────────────────────────────── */
+
+/* Vertical dashed divider (desktop) with ticket notch circles */
+.footer-ticket-divider-v {
+  position: relative;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 2px;
+  border-left: 2px dashed var(--border);
+}
+.footer-ticket-divider-v::before,
+.footer-ticket-divider-v::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--background);
+  border: 2px solid var(--border);
+}
+/* Top circle: show only bottom half (top half clipped) */
+.footer-ticket-divider-v::before {
+  top: 0;
+  transform: translate(-50%, -50%);
+  clip-path: inset(50% 0 0 0);
+}
+/* Bottom circle: show only top half (bottom half clipped) */
+.footer-ticket-divider-v::after {
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  clip-path: inset(0 0 50% 0);
+}
+
+/* Horizontal dashed divider (mobile) with ticket notch circles */
+.footer-ticket-divider-h {
+  position: relative;
+  height: 2px;
+  flex-shrink: 0;
+  border-top: 2px dashed var(--border);
+}
+.footer-ticket-divider-h::before,
+.footer-ticket-divider-h::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--background);
+  border: 2px solid var(--border);
+}
+.footer-ticket-divider-h::before { left:  0; transform: translate(-50%, -50%); }
+.footer-ticket-divider-h::after  { right: 0; transform: translate(50%,  -50%); }
+
+/* Barcode decoration — alternating-width vertical bars */
+.footer-barcode {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--foreground) 0px,  var(--foreground) 2px,
+    transparent      2px,  transparent      4px,
+    var(--foreground) 4px,  var(--foreground) 7px,
+    transparent      7px,  transparent      8px,
+    var(--foreground) 8px,  var(--foreground) 9px,
+    transparent      9px,  transparent      12px,
+    var(--foreground) 12px, var(--foreground) 14px,
+    transparent      14px, transparent      16px,
+    var(--foreground) 16px, var(--foreground) 19px,
+    transparent      19px, transparent      20px,
+    var(--foreground) 20px, var(--foreground) 21px,
+    transparent      21px, transparent      24px,
+    var(--foreground) 24px, var(--foreground) 27px,
+    transparent      27px, transparent      28px
+  );
+  background-size: 28px 100%;
+  opacity: 0.10;
+}
+[data-theme="dark"] .footer-barcode {
+  opacity: 0.18;
 }

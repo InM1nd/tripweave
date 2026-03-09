@@ -92,14 +92,14 @@ export function DashboardLayout({
                     className={cn(
                       "flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold transition-all group border-2 relative",
                       isActive
-                        ? "bg-primary text-primary-foreground shadow-sticker border-border"
+                        ? "bg-primary text-primary-foreground shadow-sticker-sm border-border"
                         : "text-text-secondary hover:text-text-primary hover:bg-bg-surface-3 hover:border-border border-transparent"
                     )}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="nav-sticker"
-                        className="absolute inset-0 bg-primary rounded-xl shadow-sticker border-2 border-border -z-10"
+                        className="absolute inset-0 bg-primary rounded-xl shadow-sticker-sm border-2 border-border -z-10"
                         transition={{ type: "spring", stiffness: 350, damping: 30 }}
                       />
                     )}
@@ -145,7 +145,7 @@ export function DashboardLayout({
                         className={cn(
                           "flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold transition-all group border-2 border-transparent",
                           isActive
-                            ? "bg-accent/20 text-accent border-accent/20"
+                            ? "bg-accent/20 text-accent border-accent/20 shadow-sticker-sm-soft"
                             : "text-text-secondary hover:text-foreground hover:bg-bg-surface-3 hover:border-border"
                         )}
                       >
@@ -173,7 +173,7 @@ export function DashboardLayout({
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-bold transition-all border-2 border-transparent",
                 pathname === "/settings"
-                  ? "bg-accent text-accent-text"
+                  ? "bg-accent text-accent-text shadow-sticker-sm-soft"
                   : "text-text-secondary hover:text-foreground hover:bg-bg-surface-3 hover:border-border"
               )}
             >
@@ -181,7 +181,7 @@ export function DashboardLayout({
               <span className="text-sm">Settings</span>
             </Link>
 
-            <div className="flex items-center gap-2 px-2.5 py-2 rounded-xl bg-bg-hover mt-1.5">
+            <div className="flex items-center gap-2 px-2.5 py-2 rounded-xl bg-bg-hover mt-1.5 shadow-sticker-sm-soft">
               <div className="flex-1 flex justify-center">
                 <UserButton afterSignOutUrl="/" />
               </div>
@@ -269,7 +269,7 @@ function MobileNavLink({
       <div
         className={cn(
           "p-2 rounded-sticker transition-all duration-200",
-          active && "bg-primary/15 shadow-stickerSoft scale-110"
+          active && "bg-primary/15 shadow-sticker-sm-soft scale-110"
         )}
       >
         <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 2} />

@@ -13,7 +13,7 @@ export function NewTripCard() {
         document.getElementById("create-trip-trigger")?.click();
       }}
     >
-      <div className="h-14 w-14 rounded-full bg-background border-2 border-border shadow-[0_3px_0_rgba(0,0,0,0.06)] group-hover:shadow-[0_5px_0_rgba(0,0,0,0.08)] group-hover:-translate-y-1 flex items-center justify-center mb-4 transition-all">
+      <div className="h-14 w-14 rounded-full bg-background border-2 border-border shadow-sticker-sm group-hover:shadow-sticker-card group-hover:-translate-y-1 flex items-center justify-center mb-4 transition-all">
         <Plus className="h-6 w-6 text-foreground" strokeWidth={3} />
       </div>
       <h3 className="font-bold text-xl text-foreground mb-1">

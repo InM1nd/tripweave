@@ -72,7 +72,7 @@ export function FileUpload({
     return (
         <div className={cn("w-full", className)}>
             {value ? (
-                <div className="relative flex items-center p-4 rounded-xl border-2 border-border bg-muted/50 shadow-[0_2px_0_rgba(0,0,0,0.06)] group">
+                <div className="relative flex items-center p-4 rounded-xl border-2 border-border bg-muted/50 shadow-sticker-sm-soft group">
                     <FileText className="h-8 w-8 text-teal mr-3 shrink-0" />
                     <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium truncate pr-8">

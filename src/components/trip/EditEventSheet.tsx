@@ -11,6 +11,7 @@ import {
     Sheet,
     SheetContent,
 } from "@/components/ui/sheet";
+import { DestructiveAlertDialog } from "@/components/ui/alert-dialog";
 import {
     Form,
     FormControl,
@@ -106,8 +107,6 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
     }
 
     async function handleDelete() {
-        if (!confirm("Are you sure you want to delete this event?")) return;
-
         setIsLoading(true);
         try {
             const result = await deleteEvent(tripId, event.id);
@@ -196,13 +195,20 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
                     <div className="absolute top-4 right-4 flex gap-2 z-20">
                         {isEditing ? (
                             <>
-                                <Button
-                                    variant="outline" size="sm"
-                                    className="h-8 bg-background/80 backdrop-blur-md border-transparent hover:bg-destructive hover:text-destructive-foreground transition-colors"
-                                    onClick={() => handleDelete()}
-                                >
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
+                                <DestructiveAlertDialog
+                                    trigger={
+                                        <Button
+                                            variant="outline" size="sm"
+                                            className="h-8 bg-background/80 backdrop-blur-md border-transparent hover:bg-destructive hover:text-destructive-foreground transition-colors"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    }
+                                    title="Delete event?"
+                                    description="This event will be permanently deleted from your itinerary. This action cannot be undone."
+                                    confirmLabel="Delete"
+                                    onConfirm={handleDelete}
+                                />
                                 <Button
                                     variant="outline" size="sm"
                                     className="h-8 bg-background/80 backdrop-blur-md"
@@ -485,7 +491,7 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
                                     <Button type="button" variant="outline" onClick={() => setIsEditing(false)} className="rounded-2xl font-bold">
                                         Cancel
                                     </Button>
-                                    <Button type="submit" disabled={isLoading} className="gap-2 font-bold rounded-2xl bg-sticker-green text-foreground hover:bg-sticker-green/90 border-2 border-border shadow-[0_3px_0_rgba(0,0,0,0.08)]">
+                                    <Button type="submit" disabled={isLoading} variant="stickerGreen" className="gap-2 rounded-2xl">
                                         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
                                         Save Changes
                                     </Button>

@@ -17,7 +17,7 @@ Collaborative travel planning app — plan trips, share timelines, track budgets
 
 ## Tech Stack
 
-- **Frontend**: Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, Shadcn/ui
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, Shadcn/ui
 - **Backend**: Next.js API routes, Prisma, PostgreSQL (Supabase)
 - **Auth**: Clerk
 - **Storage**: UploadThing
@@ -70,6 +70,7 @@ npx prisma db seed       # optional seed data
 - [docs/plan.md](docs/plan.md) — MVP plan and phases
 - [docs/rules.md](docs/rules.md) — Cursor/project rules and conventions
 - [docs/ui-guidelines.md](docs/ui-guidelines.md) — Sticker/magazine design system
+- [docs/design-tokens.md](docs/design-tokens.md) — Design tokens (shadows, colors)
 - [docs/design-decisions.md](docs/design-decisions.md) — UI polish decisions
 
 ## Deploy

@@ -4,6 +4,7 @@ import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { getInviteDetails, acceptInvite } from "@/actions/invite";
 import { Button } from "@/components/ui/button";
+import { AuthCard } from "@/components/ui/AuthCard";
 import { Loader2, Calendar, MapPin, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
@@ -107,7 +108,7 @@ export default function InvitePage({ params }: InvitePageProps) {
 
     return (
         <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-            <div className="w-full max-w-md bg-card rounded-2xl border-2 border-border shadow-[0_8px_0_rgba(0,0,0,0.08)] overflow-hidden">
+            <AuthCard>
                 {/* Cover Image */}
                 <div className="relative h-40 bg-muted">
                     {trip.coverImage ? (
@@ -172,7 +173,7 @@ export default function InvitePage({ params }: InvitePageProps) {
                         )}
                     </div>
                 </div>
-            </div>
+            </AuthCard>
         </div>
     );
 }

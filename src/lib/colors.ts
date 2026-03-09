@@ -2,6 +2,9 @@
  * Playful Colorful Design System - color helpers for TripCard, StatCard, Badge, etc.
  */
 
+import type { StickerColorKey } from "@/lib/design-tokens";
+import { STICKER_BG_CLASSES } from "@/lib/design-tokens";
+
 export type CoverColorKey =
   | "electric"
   | "coral"
@@ -10,17 +13,33 @@ export type CoverColorKey =
   | "amber"
   | "pink";
 
-/**
- * Cover colors for trip cards only (identity). Mapped to Midnight Mango colors.
- */
-const COVER_COLORS: Record<CoverColorKey, string> = {
-  electric: "#FF6B2C",  /* mango */
-  coral: "#FFB800",     /* gold */
-  lime: "#84CC16",      /* lime */
-  sky: "#00B4A6",       /* teal */
-  amber: "#7C6FF7",     /* violet */
-  pink: "#F43F5E",      /* rose */
+/** Maps trip cover color key to sticker Tailwind background class (for cards, badges). */
+export const COVER_COLOR_TO_STICKER: Record<CoverColorKey, string> = {
+  electric: STICKER_BG_CLASSES.yellow,
+  coral: "bg-sticker-coral text-white",
+  lime: STICKER_BG_CLASSES.green,
+  sky: STICKER_BG_CLASSES.blue,
+  amber: STICKER_BG_CLASSES.yellow,
+  pink: STICKER_BG_CLASSES.pink,
 };
+
+/** Get Tailwind class for a trip card/surface by cover color (e.g. TripCard, StatCard). */
+export function getCoverStickerClass(key: CoverColorKey): string {
+  return COVER_COLOR_TO_STICKER[key];
+}
+
+/** Sticker color key for use in StickerBadge / Card variant (when you need StickerColorKey from CoverColorKey). */
+export function coverColorToStickerKey(cover: CoverColorKey): StickerColorKey {
+  const map: Record<CoverColorKey, StickerColorKey> = {
+    electric: "yellow",
+    coral: "coral",
+    lime: "green",
+    sky: "blue",
+    amber: "yellow",
+    pink: "pink",
+  };
+  return map[cover];
+}
 
 const GRADIENTS: Record<CoverColorKey, string> = {
   electric: "linear-gradient(135deg, rgba(255, 107, 44, 0.22) 0%, rgba(255, 107, 44, 0.05) 100%)",
@@ -48,6 +67,16 @@ const COVER_COLOR_KEYS: CoverColorKey[] = [
   "amber",
   "pink",
 ];
+
+/** Legacy: hex values for cover identity (e.g. non-Tailwind / image overlays). */
+const COVER_COLORS: Record<CoverColorKey, string> = {
+  electric: "#FF6B2C",
+  coral: "#FFB800",
+  lime: "#84CC16",
+  sky: "#00B4A6",
+  amber: "#7C6FF7",
+  pink: "#F43F5E",
+};
 
 export function getCoverColor(key: CoverColorKey): string {
   return COVER_COLORS[key];

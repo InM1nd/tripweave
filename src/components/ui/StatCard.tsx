@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { getCoverStickerClass } from "@/lib/colors";
 import { TrendingUp, Sparkles, Globe2, Bookmark, Plane, CalendarDays } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -34,19 +35,7 @@ export function StatCard({
   rotation = 0,
 }: StatCardProps) {
   const Icon = ICON_MAP[iconName] ?? TrendingUp;
-
-  // Map the legacy coverColor prop to our new sticker colors
-  const colorMap: Record<string, string> = {
-    electric: "bg-sticker-yellow",
-    coral: "bg-sticker-coral",
-    sky: "bg-sticker-blue",
-    amber: "bg-sticker-pink",
-    lime: "bg-sticker-green",
-    pink: "bg-sticker-pink",
-  };
-
-  const bgColor = colorMap[coverColor] || colorMap.electric;
-  // const isDarkBg = coverColor === "coral" || coverColor === "lime";
+  const bgColor = getCoverStickerClass(coverColor);
 
   return (
     <motion.div
@@ -54,7 +43,7 @@ export function StatCard({
       transition={{ duration: 0.2 }}
       style={{ rotate: rotation }}
       className={cn(
-        "rounded-2xl border-2 border-border p-5 md:p-3 shadow-[0_4px_0_rgba(0,0,0,0.08)] flex gap-4 items-center",
+        "rounded-2xl border-2 border-border p-5 md:p-3 flex gap-4 items-center shadow-sticker-card",
         bgColor,
         className
       )}

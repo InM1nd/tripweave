@@ -222,7 +222,7 @@ export function AddDocumentModal({ children, tripId }: AddDocumentModalProps) {
                 <DialogTrigger asChild>
                     {children || <Button>Add Document</Button>}
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] border-2 border-border rounded-2xl shadow-[0_8px_0_rgba(0,0,0,0.1)]">
+                <DialogContent className="sm:max-w-[425px] border-2 border-border rounded-2xl shadow-sticker-modal">
                     <DialogHeader className="border-b-2 border-border pb-3">
                         <DialogTitle className="text-lg font-black">Add New Document</DialogTitle>
                         <DialogDescription className="text-xs">

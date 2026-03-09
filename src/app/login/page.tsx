@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { AuthCard } from "@/components/ui/AuthCard";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
@@ -71,9 +72,9 @@ function LoginForm() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-background px-4">
-            <div className="w-full max-w-md space-y-6 bg-card p-6 md:p-5 rounded-2xl border-2 border-border shadow-[0_8px_0_rgba(0,0,0,0.08)]">
+            <AuthCard className="space-y-6 p-6 md:p-5">
                 <div className="flex flex-col items-center justify-center text-center space-y-1.5">
-                    <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground mb-3 border-2 border-border shadow-[0_4px_0_rgba(0,0,0,0.08)]">
+                    <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground mb-3 border-2 border-border shadow-sticker-card">
                         <Plane className="h-5 w-5" strokeWidth={3} />
                     </div>
                     <h1 className="text-xl md:text-2xl font-black tracking-tight">
@@ -153,7 +154,7 @@ function LoginForm() {
                         {isSignUp ? "Sign In" : "Sign Up"}
                     </button>
                 </div>
-            </div>
+            </AuthCard>
         </div>
     );
 }

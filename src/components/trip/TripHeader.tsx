@@ -9,11 +9,12 @@ import {
   Users,
   Share2,
   MoreHorizontal,
-  Edit
+  Edit,
+  Plane,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { StickerBadge } from "@/components/ui/StickerBadge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,129 +38,203 @@ export function TripHeader({ trip }: TripHeaderProps) {
   );
 
   const isUpcoming = daysUntilTrip > 0;
+  const isPast = trip.endDate < new Date();
 
   return (
-    <div className="relative">
-      {/* Cover Image - sticker style container */}
-      <div className="rounded-2xl md:rounded-3xl shadow-[0_6px_0_rgba(0,0,0,0.1)] overflow-hidden">
-        <div className="relative h-40 md:h-64 lg:h-80 w-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 z-10" />
-
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={trip.coverImage || "/placeholder-trip.jpg"}
-          alt={trip.name}
-          className="object-cover w-full h-full"
-        />
-
-        {/* Back Button - Mobile */}
-        <div className="absolute top-4 left-4 z-20 md:hidden">
-          <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-black/30 backdrop-blur-md text-white hover:bg-black/50" asChild>
-            <Link href="/dashboard">
-              <ArrowLeft className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-
-        {/* Actions - Top Right */}
-        <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-black/30 backdrop-blur-md text-white hover:bg-black/50">
-            <Share2 className="h-4 w-4 md:h-5 md:w-5" />
+    <div>
+      {/* Row above card: Back (left) + Share & More (right) */}
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-9 rounded-full font-bold border-2 border-border bg-card text-foreground shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all -ml-1 hidden md:inline-flex"
+          asChild
+        >
+          <Link href="/dashboard">
+            <ArrowLeft className="h-3.5 w-3.5 mr-1.5" strokeWidth={2.5} />
+            Back
+          </Link>
+        </Button>
+        <div className="flex items-center gap-2 ml-auto">
+          <Button
+            variant="stickerIcon"
+            size="icon"
+            aria-label="Share trip"
+          >
+            <Share2 className="h-4 w-4" strokeWidth={2.5} />
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-black/30 backdrop-blur-md text-white hover:bg-black/50">
-                <MoreHorizontal className="h-4 w-4 md:h-5 md:w-5" />
+              <Button
+                variant="stickerIcon"
+                size="icon"
+                aria-label="More options"
+              >
+                <MoreHorizontal className="h-4 w-4" strokeWidth={2.5} />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>
+            <DropdownMenuContent align="end" className="rounded-2xl border-2 border-border shadow-sticker-elevated">
+              <DropdownMenuItem className="rounded-xl">
                 <Edit className="h-4 w-4 mr-2" />
                 Edit Trip
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem className="rounded-xl">
                 <Users className="h-4 w-4 mr-2" />
                 Manage Members
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-destructive">
+              <DropdownMenuItem className="text-destructive rounded-xl">
                 Delete Trip
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+      </div>
 
-        {/* Title & Info Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-20">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 md:gap-4">
-            <div className="space-y-1 md:space-y-2">
-              <div className="flex items-center gap-2 flex-wrap">
-                <Badge className="bg-black/40 hover:bg-black/40 text-white backdrop-blur-md border-0 text-[10px] md:text-xs">
-                  {daysDuration} days
-                </Badge>
-                {isUpcoming && daysUntilTrip <= 30 && (
-                  <Badge className="bg-primary border-0 text-primary-foreground text-[10px] md:text-xs">
-                    In {daysUntilTrip} days
-                  </Badge>
-                )}
-              </div>
-              <h1 className="text-lg md:text-2xl font-black text-white drop-shadow-lg leading-tight">
-                {trip.name}
-              </h1>
-              <div className="flex items-center gap-3 md:gap-4 text-white/80 text-[11px] md:text-sm">
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 md:h-4 md:w-4" />
-                  <span>{trip.destination}</span>
+      {/* Boarding pass style card */}
+      <div className="rounded-2xl md:rounded-3xl border-2 border-border bg-card shadow-sticker-card overflow-hidden">
+        {/* Ticket top: airline (no barcode) */}
+        <div className="flex items-center justify-between px-4 py-1.5 bg-muted/30 border-b border-border">
+          <div className="flex items-center gap-2">
+            <Plane className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={2.5} />
+            <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">TripWeave</span>
+          </div>
+          <span className="text-[9px] font-bold text-muted-foreground tabular-nums">TRIP · {trip.id.slice(0, 8).toUpperCase()}</span>
+        </div>
+
+        <div className="flex flex-col md:flex-row">
+          {/* Left: cover image — ticket stub with photo */}
+          <div className="relative h-40 md:h-auto md:w-56 lg:w-72 overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-border">
+            <div className="absolute inset-0 bg-linear-to-t md:bg-linear-to-r from-black/30 via-transparent to-transparent z-1" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={trip.coverImage || "/placeholder-trip.jpg"}
+              alt={trip.name}
+              className="object-cover w-full h-full"
+            />
+
+            {/* Back Button - Mobile only */}
+            <div className="absolute top-3 left-3 z-20 md:hidden">
+              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-black/30 backdrop-blur-md text-white hover:bg-black/50" asChild>
+                <Link href="/dashboard">
+                  <ArrowLeft className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          {/* Vertical perforation divider (desktop) */}
+          <div className="hidden md:block w-5 shrink-0 ticket-perforation-v" />
+
+          {/* Right: ticket fields */}
+          <div className="flex-1 p-4 md:p-5 flex flex-col justify-between gap-4">
+            {/* Row 1: Trip name + status */}
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">
+                  <Plane className="h-3 w-3" />
+                  <span>Passenger</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="h-3.5 w-3.5 md:h-4 md:w-4" />
-                  <span>
-                    {format(trip.startDate, "MMM d")} - {format(trip.endDate, "MMM d, yyyy")}
-                  </span>
+                <h1 className="text-xl md:text-2xl font-black text-foreground leading-tight truncate">
+                  {trip.name}
+                </h1>
+              </div>
+              <div className="shrink-0 text-right">
+                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">
+                  Status
+                </div>
+                <StickerBadge color="yellow" className="bg-primary text-primary-foreground" uppercase={false}>
+                  {isPast ? "Done" : isUpcoming ? (daysUntilTrip <= 30 ? `In ${daysUntilTrip}d` : "Upcoming") : "Ongoing"}
+                </StickerBadge>
+              </div>
+            </div>
+
+            {/* Row 2: From → To (ticket route) */}
+            <div className="flex items-center gap-2 py-2 border-y border-dashed border-border">
+              <div className="flex-1 min-w-0">
+                <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">From</div>
+                <div className="font-black text-sm text-foreground">Your plans</div>
+              </div>
+              <div className="shrink-0 flex items-center gap-1 text-muted-foreground">
+                <div className="w-6 border-t-2 border-dashed border-current" />
+                <Plane className="h-3 w-3" strokeWidth={2.5} />
+                <div className="w-6 border-t-2 border-dashed border-current" />
+              </div>
+              <div className="flex-1 min-w-0 text-right">
+                <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">To</div>
+                <div className="font-black text-sm text-foreground truncate">{trip.destination}</div>
+              </div>
+            </div>
+
+            {/* Row 3: Ticket fields */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              <div>
+                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Destination</div>
+                <div className="flex items-center gap-1.5 font-black text-sm text-foreground">
+                  <MapPin className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                  <span className="truncate">{trip.destination}</span>
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Depart</div>
+                <div className="flex items-center gap-1.5 font-black text-sm text-foreground">
+                  <Calendar className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                  <span>{format(trip.startDate, "MMM d")}</span>
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Return</div>
+                <div className="flex items-center gap-1.5 font-black text-sm text-foreground">
+                  <Calendar className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                  <span>{format(trip.endDate, "MMM d, yyyy")}</span>
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Duration</div>
+                <div className="font-black text-sm text-foreground">
+                  {daysDuration} days
                 </div>
               </div>
             </div>
 
-            {/* Members */}
-            <div className="flex items-center gap-3">
-              <div className="flex -space-x-2">
-                {trip.members.slice(0, 4).map((member, i) => (
-                  <Avatar
-                    key={member.id}
-                    className="h-7 w-7 md:h-9 md:w-9 border-2 border-white ring-0"
-                    style={{ zIndex: 4 - i }}
-                  >
-                    <AvatarImage src={member.user.avatar} alt={member.user.name} />
-                    <AvatarFallback className="bg-primary/20 text-primary text-[10px] md:text-xs font-bold">
-                      {member.user.name[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                ))}
-                {trip.members.length > 4 && (
-                  <div className="h-7 w-7 md:h-9 md:w-9 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-[10px] md:text-xs font-bold text-white border-2 border-white">
-                    +{trip.members.length - 4}
-                  </div>
-                )}
+            {/* Row 4: Crew */}
+            <div className="flex items-center justify-between gap-3 pt-2 border-t-2 border-dashed border-border">
+              <div className="flex items-center gap-3">
+                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                  Crew
+                </div>
+                <div className="flex -space-x-2">
+                  {trip.members.slice(0, 4).map((member, i) => (
+                    <Avatar
+                      key={member.id}
+                      className="h-7 w-7 border-2 border-card ring-0"
+                      style={{ zIndex: 4 - i }}
+                    >
+                      <AvatarImage src={member.user.avatar} alt={member.user.name} />
+                      <AvatarFallback className="bg-primary/20 text-primary text-[10px] font-bold">
+                        {member.user.name[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  ))}
+                  {trip.members.length > 4 && (
+                    <div className="h-7 w-7 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold text-muted-foreground border-2 border-card">
+                      +{trip.members.length - 4}
+                    </div>
+                  )}
+                </div>
               </div>
-              <Button variant="ghost" size="sm" className="hidden md:flex h-9 rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 border-0">
-                <Users className="h-4 w-4 mr-2" />
+              <Button variant="outline" size="sm" className="hidden md:flex h-8 rounded-full border-2 border-border shadow-sticker-badge font-bold text-xs hover:-translate-y-px transition-all">
+                <Users className="h-3.5 w-3.5 mr-1.5" />
                 Invite
               </Button>
             </div>
           </div>
         </div>
-        </div>
+
+        {/* Bottom perforation — tear line */}
+        <div className="section-perforation" />
       </div>
 
-      {/* Desktop Back Button */}
-      <div className="hidden md:block absolute top-4 left-4 z-20">
-        <Button variant="ghost" size="sm" className="h-9 rounded-full bg-black/30 backdrop-blur-md text-white hover:bg-black/50" asChild>
-          <Link href="/dashboard">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
-          </Link>
-        </Button>
-      </div>
     </div>
   );
 }

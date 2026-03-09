@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Camera, MapPin, Plane, Trophy } from "lucide-react";
 import { TripCard } from "@/components/trip/TripCard";
+import { StickerAnimator } from "@/components/ui/StickerAnimator";
 import { mockTrips } from "@/lib/mock-data";
 
 export default function ProfilePage() {
@@ -30,7 +31,7 @@ export default function ProfilePage() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
                     <div className="relative group mx-auto md:mx-0">
-                        <Avatar className="h-20 w-20 md:h-24 md:w-24 border-2 border-border shadow-[0_4px_0_rgba(0,0,0,0.08)]">
+                        <Avatar className="h-20 w-20 md:h-24 md:w-24 border-2 border-border shadow-sticker-card">
                             <AvatarImage src="https://github.com/shadcn.png" alt={user.name} />
                             <AvatarFallback className="text-lg font-black bg-primary/20 text-primary">AZ</AvatarFallback>
                         </Avatar>
@@ -62,13 +63,13 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
-                    <Button variant="outline" size="sm" className="w-full md:w-auto font-bold border-2 border-border rounded-xl">Edit Profile</Button>
+                    <Button variant="stickerOutline" size="sm" className="w-full md:w-auto rounded-xl">Edit Profile</Button>
                 </div>
 
                 {/* content */}
                 <div className="grid gap-4 md:grid-cols-2">
                     {/* Stats/Bio */}
-                    <Card className="h-full border-2 border-border rounded-2xl shadow-[0_4px_0_rgba(0,0,0,0.08)]">
+                    <Card className="h-full border-2 border-border rounded-2xl shadow-sticker-card">
                         <CardHeader className="pb-2">
                             <CardTitle className="text-lg font-black">About</CardTitle>
                         </CardHeader>
@@ -92,7 +93,7 @@ export default function ProfilePage() {
                     </Card>
 
                     {/* Achievements */}
-                    <Card className="h-full border-2 border-border rounded-2xl shadow-[0_4px_0_rgba(0,0,0,0.08)]">
+                    <Card className="h-full border-2 border-border rounded-2xl shadow-sticker-card">
                         <CardHeader className="pb-2">
                             <CardTitle className="flex items-center gap-2 text-lg font-black">
                                 <Trophy className="h-4 w-4 text-gold" />
@@ -102,16 +103,18 @@ export default function ProfilePage() {
                         </CardHeader>
                         <CardContent className="pt-0">
                             <div className="space-y-3">
-                                {user.achievements.map((badge) => (
-                                    <div key={badge.id} className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-muted/50 transition-colors cursor-default border border-transparent hover:border-border">
-                                        <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-lg shrink-0 border-2 border-border">
-                                            {badge.icon}
+                                {user.achievements.map((badge, i) => (
+                                    <StickerAnimator key={badge.id} delay={i * 0.06}>
+                                        <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-muted/50 transition-colors cursor-default border border-transparent hover:border-border">
+                                            <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-lg shrink-0 border-2 border-border">
+                                                {badge.icon}
+                                            </div>
+                                            <div>
+                                                <h4 className="font-black text-sm">{badge.name}</h4>
+                                                <p className="text-[11px] text-muted-foreground">{badge.description}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h4 className="font-black text-sm">{badge.name}</h4>
-                                            <p className="text-[11px] text-muted-foreground">{badge.description}</p>
-                                        </div>
-                                    </div>
+                                    </StickerAnimator>
                                 ))}
                             </div>
                         </CardContent>
@@ -125,11 +128,13 @@ export default function ProfilePage() {
                             <Plane className="h-4 w-4 text-primary" />
                             Your Adventures
                         </h2>
-                        <Button variant="outline" size="sm" className="font-bold border-2 border-border rounded-xl">View All</Button>
+                        <Button variant="stickerOutline" size="sm" className="rounded-xl">View All</Button>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {mockTrips.map((trip) => (
-                            <TripCard key={trip.id} trip={trip} />
+                        {mockTrips.map((trip, i) => (
+                            <StickerAnimator key={trip.id} delay={i * 0.07}>
+                                <TripCard trip={trip} />
+                            </StickerAnimator>
                         ))}
                     </div>
                 </div>

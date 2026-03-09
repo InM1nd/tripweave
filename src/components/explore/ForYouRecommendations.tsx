@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { getForYouRecommendations } from "@/actions/recommendations";
 import { PlaceCard } from "./PlaceCard";
+import { StickerAnimator } from "@/components/ui/StickerAnimator";
 import { Button } from "@/components/ui/button";
 import { Loader2, RefreshCw, Telescope, Utensils, TreePine, Landmark } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -92,7 +93,7 @@ export function ForYouRecommendations({ initialPlaces, onAddPlace }: ForYouRecom
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center gap-3 bg-muted/30 p-3 md:p-2.5 rounded-2xl border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.06)]">
+            <div className="flex flex-wrap items-center gap-3 bg-muted/30 p-3 md:p-2.5 rounded-2xl border-2 border-border shadow-sticker-sm-soft">
                 <span className="text-xs md:text-md font-bold">Personalize:</span>
                 {FILTER_OPTIONS.map(option => (
                     <div key={option.id} className="flex items-center space-x-2">
@@ -123,14 +124,15 @@ export function ForYouRecommendations({ initialPlaces, onAddPlace }: ForYouRecom
                 </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {places.map((item) => (
-                    <PlaceCard
-                        key={item.id}
-                        place={item}
-                        isRecommendation={true}
-                        onAddToTrip={() => onAddPlace(item)}
-                    />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-stretch">
+                {places.map((item, i) => (
+                    <StickerAnimator key={item.id} delay={i * 0.05} className="h-full flex flex-col">
+                        <PlaceCard
+                            place={item}
+                            isRecommendation={true}
+                            onAddToTrip={() => onAddPlace(item)}
+                        />
+                    </StickerAnimator>
                 ))}
             </div>
 
@@ -141,7 +143,7 @@ export function ForYouRecommendations({ initialPlaces, onAddPlace }: ForYouRecom
                         variant="outline"
                         onClick={() => loadMore()}
                         disabled={isLoading}
-                        className="w-full max-w-sm gap-2 font-bold rounded-2xl border-2 border-border"
+                        className="w-full max-w-sm gap-2 font-bold rounded-2xl border-2 border-border shadow-sticker-sm-soft"
                     >
                         {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
                         Load More Recommendations

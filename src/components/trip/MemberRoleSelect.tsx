@@ -63,7 +63,7 @@ export function MemberRoleSelect({
             onValueChange={(val) => handleRoleChange(val as Role)}
             disabled={disabled || isLoading}
         >
-            <SelectTrigger className="h-9 w-[120px] text-sm font-bold rounded-xl border-2 border-border bg-card shadow-[0_2px_0_rgba(0,0,0,0.06)] text-foreground">
+            <SelectTrigger className="h-9 w-[120px] text-sm font-bold rounded-xl border-2 border-border bg-card shadow-sticker-badge text-foreground">
                 <SelectValue />
             </SelectTrigger>
             <SelectContent>

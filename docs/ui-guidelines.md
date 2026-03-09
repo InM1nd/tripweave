@@ -55,6 +55,14 @@ All shadows in TripWeave are explicitly defined in square brackets to ensure zer
 <button className="shadow-[0_4px_0_rgba(0,0,0,0.08)] hover:-translate-y-px hover:shadow-[0_6px_0... transition-all">
 ```
 
+**Design system (Tailwind v4):** Prefer token classes from `@theme` in `globals.css`: `shadow-sticker-card`, `shadow-sticker-sm`, `shadow-sticker-modal`, `shadow-sticker-elevated`, etc. See `docs/design-tokens.md`.
+
+### 2.4 Modals & dialogs (standard styling)
+Use a consistent sticker look for all modal/dialog surfaces:
+- **DialogContent / DrawerContent:** `border-2 border-border rounded-2xl shadow-sticker-modal`. Add via `className` if the base component does not already apply it.
+- **DialogHeader (optional):** `border-b-2 border-border pb-3` for a clear separation between title and body.
+This keeps modals (Add to Trip, Create Trip, Add Event, Add Document, Add Expense, etc.) visually aligned with the rest of the app.
+
 ## 🧩 3. Component Blueprints
 
 ### 3.1 The "Sticker Badge"

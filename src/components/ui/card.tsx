@@ -2,20 +2,21 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
+import { getStickerBgClass } from "@/lib/design-tokens"
 
 const cardVariants = cva(
-  "rounded-2xl border-2 text-card-foreground shadow-[0_4px_0_rgba(0,0,0,0.08)] transition-transform duration-200",
+  "rounded-2xl border-2 text-card-foreground shadow-sticker-card transition-transform duration-200",
   {
     variants: {
       variant: {
         default: "bg-card border-border",
-        sticker: "bg-sticker-yellow shadow-sticker border-border hover:translate-y-px",
-        stickerPink: "bg-sticker-pink shadow-sticker border-border hover:translate-y-px",
-        stickerBlue: "bg-sticker-blue shadow-sticker border-border hover:translate-y-px",
-        stickerGreen: "bg-sticker-green shadow-sticker border-border hover:translate-y-px",
-        stickerLilac: "bg-sticker-lilac shadow-sticker border-border hover:translate-y-px",
-        stickerCoral: "bg-sticker-coral shadow-sticker border-border hover:translate-y-px text-white",
-        stickerOlive: "bg-sticker-olive shadow-sticker border-border hover:translate-y-px text-white",
+        sticker: `${getStickerBgClass("yellow")} border-border hover:translate-y-px`,
+        stickerPink: `${getStickerBgClass("pink")} border-border hover:translate-y-px`,
+        stickerBlue: `${getStickerBgClass("blue")} border-border hover:translate-y-px`,
+        stickerGreen: `${getStickerBgClass("green")} border-border hover:translate-y-px`,
+        stickerLilac: `${getStickerBgClass("lilac")} border-border hover:translate-y-px`,
+        stickerCoral: `${getStickerBgClass("coral")} border-border hover:translate-y-px`,
+        stickerOlive: `${getStickerBgClass("olive")} border-border hover:translate-y-px`,
       },
     },
     defaultVariants: {

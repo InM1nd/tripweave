@@ -67,7 +67,7 @@ export function ImageUpload({
     return (
         <div className={cn("w-full", className)}>
             {value ? (
-                <div className="relative h-32 w-full rounded-xl overflow-hidden border-2 border-border bg-muted shadow-[0_2px_0_rgba(0,0,0,0.06)] group">
+                <div className="relative h-32 w-full rounded-xl overflow-hidden border-2 border-border bg-muted shadow-sticker-sm-soft group">
                     <Image
                         src={value}
                         alt="Upload"

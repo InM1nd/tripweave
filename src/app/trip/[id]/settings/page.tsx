@@ -18,9 +18,11 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Trip } from "@prisma/client";
-
+import { getStickerBgClass } from "@/lib/design-tokens";
 import { getTrip, updateTrip, deleteTrip } from "@/actions/trip";
 import { updateTripSchema, UpdateTripValues } from "@/lib/validations/trip";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { DestructiveAlertDialog } from "@/components/ui/alert-dialog";
 
 export default function SettingsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -81,8 +83,6 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
   }
 
   async function handleDelete() {
-    if (!confirm("Are you sure you want to delete this trip? This action cannot be undone.")) return;
-
     setSaving(true);
     try {
       const result = await deleteTrip(id);
@@ -113,22 +113,19 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
 
   return (
     <div className="space-y-5 md:space-y-6 max-w-4xl mx-auto pb-12">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b-2 border-border pb-4">
-        <div>
-          <div className="bg-sticker-blue text-foreground px-3 py-1 rounded-full font-black text-xs border-2 border-border shadow-[0_3px_0_rgba(0,0,0,0.08)] inline-block mb-2 rotate-1">
-            ⚙️ Configuration
-          </div>
-          <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-foreground leading-[0.9]">Trip Settings</h2>
-          <p className="text-muted-foreground font-bold text-sm mt-1">Manage your trip details and preferences</p>
-          <p className="text-sm font-bold text-foreground/60 mt-2 bg-secondary/50 inline-block px-3 py-1 rounded-md border border-border">
-            ✨ Tip: You can now drag and drop an image to update the trip cover!
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        badge={{ label: "⚙️ Configuration", color: "blue" }}
+        title="Trip Settings"
+        description="Manage your trip details and preferences"
+        className="border-b-2 border-border pb-4"
+      />
+      <p className="text-sm font-bold text-foreground/60 bg-secondary/50 inline-block px-3 py-1 rounded-md border border-border -mt-2">
+        ✨ Tip: You can now drag and drop an image to update the trip cover!
+      </p>
 
       <div className="grid gap-5 md:gap-6">
         {/* General Settings */}
-        <Card className="border-2 border-border bg-card shadow-[0_4px_0_rgba(0,0,0,0.08)] rounded-3xl overflow-hidden">
+        <Card className="border-2 border-border bg-card shadow-sticker-card rounded-3xl overflow-hidden">
           <CardHeader className="p-5 md:p-6 pb-4 md:pb-4 border-b-2 border-border bg-secondary/30">
             <CardTitle className="text-lg md:text-xl font-black">General Information</CardTitle>
             <CardDescription className="text-sm font-bold text-muted-foreground">Update the basic details of your trip.</CardDescription>
@@ -146,13 +143,13 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
 
             <div className="grid gap-2">
               <Label htmlFor="name" className="font-bold text-sm">Trip Name</Label>
-              <Input id="name" {...form.register("name")} className="border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.04)] font-bold rounded-xl h-11" />
+              <Input id="name" {...form.register("name")} className="border-2 border-border shadow-sticker-badge font-bold rounded-xl h-11" />
               {form.formState.errors.name && <p className="text-danger font-bold text-xs">{form.formState.errors.name.message}</p>}
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="destination" className="font-bold text-sm">Destination</Label>
-              <Input id="destination" {...form.register("destination")} className="border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.04)] font-bold rounded-xl h-11" />
+              <Input id="destination" {...form.register("destination")} className="border-2 border-border shadow-sticker-badge font-bold rounded-xl h-11" />
               {form.formState.errors.destination && <p className="text-danger font-bold text-xs">{form.formState.errors.destination.message}</p>}
             </div>
 
@@ -164,7 +161,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-full justify-start text-left font-bold border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.04)] rounded-xl h-11",
+                        "w-full justify-start text-left font-bold border-2 border-border shadow-sticker-badge rounded-xl h-11",
                         !form.watch("startDate") && "text-muted-foreground"
                       )}
                     >
@@ -172,7 +169,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
                       {form.watch("startDate") ? format(form.watch("startDate")!, "PPP") : <span>Start Date</span>}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 border-2 border-border shadow-[0_4px_0_rgba(0,0,0,0.08)] rounded-xl overflow-hidden">
+                  <PopoverContent className="w-auto p-0 border-2 border-border shadow-sticker-card rounded-xl overflow-hidden">
                     <Calendar
                       mode="single"
                       selected={form.watch("startDate")}
@@ -186,7 +183,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-full justify-start text-left font-bold border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.04)] rounded-xl h-11",
+                        "w-full justify-start text-left font-bold border-2 border-border shadow-sticker-badge rounded-xl h-11",
                         !form.watch("endDate") && "text-muted-foreground"
                       )}
                     >
@@ -194,7 +191,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
                       {form.watch("endDate") ? format(form.watch("endDate")!, "PPP") : <span>End Date</span>}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 border-2 border-border shadow-[0_4px_0_rgba(0,0,0,0.08)] rounded-xl overflow-hidden">
+                  <PopoverContent className="w-auto p-0 border-2 border-border shadow-sticker-card rounded-xl overflow-hidden">
                     <Calendar
                       mode="single"
                       selected={form.watch("endDate")}
@@ -211,7 +208,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
               <Textarea
                 id="description"
                 {...form.register("description")}
-                className="resize-none min-h-[120px] border-2 border-border shadow-[0_2px_0_rgba(0,0,0,0.04)] font-bold rounded-xl"
+                className="resize-none min-h-[120px] border-2 border-border shadow-sticker-badge font-bold rounded-xl"
               />
             </div>
           </CardContent>
@@ -219,7 +216,8 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
             <Button
               onClick={form.handleSubmit(onSubmit)}
               disabled={saving}
-              className="w-full md:w-auto font-bold border-2 border-border shadow-[0_3px_0_rgba(0,0,0,0.1)] hover:-translate-y-px transition-all rounded-2xl bg-sticker-green text-foreground hover:bg-sticker-green/90 px-8 h-11"
+              variant="stickerGreen"
+              className="w-full md:w-auto px-8 h-11"
             >
               {saving ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Save className="h-5 w-5 mr-2" strokeWidth={3} />}
               Save Changes
@@ -228,7 +226,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
         </Card>
 
         {/* Danger Zone */}
-        <Card className="border-4 border-dashed border-danger bg-danger/5 rounded-3xl shadow-[0_4px_0_rgba(0,0,0,0.04)]">
+        <Card className="border-4 border-dashed border-danger bg-danger/5 rounded-3xl shadow-sticker-dashed">
           <CardHeader className="p-5 md:p-6 pb-2 md:pb-3 border-b-4 border-dashed border-danger/20">
             <CardTitle className="text-xl md:text-2xl font-black text-danger">Danger Zone</CardTitle>
             <CardDescription className="text-sm font-bold text-danger/80">
@@ -243,10 +241,18 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
                   Once you delete a trip, there is no going back.
                 </p>
               </div>
-              <Button variant="destructive" className="w-full sm:w-auto shrink-0 font-bold border-2 border-danger shadow-[0_3px_0_rgba(220,38,38,0.2)] hover:-translate-y-px transition-all rounded-2xl h-11 px-6" onClick={handleDelete} disabled={saving}>
-                <Trash2 className="h-5 w-5 mr-2" strokeWidth={3} />
-                Delete Trip
-              </Button>
+              <DestructiveAlertDialog
+                trigger={
+                  <Button variant="destructive" className="w-full sm:w-auto shrink-0 font-bold border-2 border-danger shadow-[0_3px_0_rgba(220,38,38,0.2)] hover:-translate-y-px transition-all rounded-2xl h-11 px-6" disabled={saving}>
+                    <Trash2 className="h-5 w-5 mr-2" strokeWidth={3} />
+                    Delete Trip
+                  </Button>
+                }
+                title="Delete this trip?"
+                description="Once you delete a trip, all events, members, and documents will be permanently removed. This action cannot be undone."
+                confirmLabel="Delete Trip"
+                onConfirm={handleDelete}
+              />
             </div>
           </CardContent>
         </Card>

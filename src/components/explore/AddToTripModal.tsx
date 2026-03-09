@@ -19,7 +19,7 @@ import { format } from "date-fns";
 interface AddToTripModalProps {
     isOpen: boolean;
     onClose: () => void;
-    place: { title?: string; name?: string; id?: string | number };
+    place: { title?: string; name?: string; id?: string | number; type?: string; source?: string; description?: string | null; image?: string | null; url?: string | null; location?: string | null; address?: string | null; lat?: number | null; lng?: number | null };
     trips: { id: string; name: string; startDate: string | Date; endDate: string | Date }[];
 }
 
@@ -28,17 +28,36 @@ export function AddToTripModal({ isOpen, onClose, place, trips }: AddToTripModal
     const router = useRouter();
 
     const handleSelectTrip = async (tripId: string) => {
+        if (!tripId?.trim()) {
+            toast.error("Please select a trip");
+            return;
+        }
+        const payload = {
+            title: place?.title || place?.name || "",
+            name: place?.name || place?.title,
+            description: place?.description ?? null,
+            image: place?.image ?? null,
+            url: place?.url ?? null,
+            address: place?.address ?? null,
+            location: place?.location ?? null,
+            lat: place?.lat ?? null,
+            lng: place?.lng ?? null,
+            type: place?.type ?? undefined,
+            source: place?.source ?? undefined,
+        };
         setIsSubmitting(true);
         try {
-            const result = await convertPlaceToEvent(tripId, place);
+            const result = await convertPlaceToEvent(tripId, payload);
             if (result.success) {
-                toast.success(`Added "${place.title || place.name}" to trip!`);
+                toast.success(`Added to Idea Board! Assign it to a day from the Suggested tab.`);
                 onClose();
-                router.push(`/trip/${tripId}/timeline`);
+                router.push(`/trip/${tripId}/suggested`);
             } else {
+                console.error("Add to trip failed:", result.error);
                 toast.error(result.error || "Failed to add to trip");
             }
-        } catch {
+        } catch (e) {
+            console.error("Add to trip error:", e);
             toast.error("Something went wrong");
         } finally {
             setIsSubmitting(false);
@@ -50,8 +69,8 @@ export function AddToTripModal({ isOpen, onClose, place, trips }: AddToTripModal
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
+            <DialogContent className="sm:max-w-[425px] border-2 border-border rounded-2xl shadow-sticker-modal">
+                <DialogHeader className="border-b-2 border-border pb-3">
                     <DialogTitle>Add to Trip</DialogTitle>
                     <DialogDescription>
                         Select a trip to add &quot;{place?.title || place?.name}&quot; to.

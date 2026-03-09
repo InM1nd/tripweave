@@ -4,6 +4,7 @@ import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { MoreHorizontal, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { Event } from "@prisma/client";
@@ -32,14 +33,14 @@ export function DayColumn({ date, dayNumber, events, tripId }: DayColumnProps) {
             <CardHeader className="pb-3 border-b border-border/40 bg-muted/20">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary text-sm">
+                        <div className="h-8 w-8 rounded-xl bg-primary/10 border-2 border-border flex items-center justify-center font-bold text-foreground text-xs shrink-0 shadow-sticker-badge">
                             Day {dayNumber}
                         </div>
                         <div>
                             <CardTitle className="text-base">{format(date, "EEE, MMM d")}</CardTitle>
                         </div>
                     </div>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Button variant="outline" size="icon" className="h-8 w-8 rounded-full border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all">
                         <MoreHorizontal className="h-4 w-4" />
                     </Button>
                 </div>
@@ -57,16 +58,22 @@ export function DayColumn({ date, dayNumber, events, tripId }: DayColumnProps) {
                         ))}
 
                         {events.length === 0 && !isOver && (
-                            <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground py-8 border-2 border-dashed border-border/40 rounded-lg bg-background/50">
-                                <p className="text-xs">No activities</p>
-                            </div>
+                            <EmptyState
+                                variant="sticker"
+                                title="No activities"
+                                className="py-6 px-4 flex-1 min-h-[100px]"
+                            />
                         )}
                     </div>
                 </SortableContext>
 
                 <AddEventModal tripId={tripId} defaultDate={date}>
-                    <Button variant="ghost" size="sm" className="w-full mt-auto border border-dashed border-border/50 text-muted-foreground hover:text-primary hover:border-primary/50">
-                        <Plus className="h-3 w-3 mr-2" />
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full mt-auto rounded-xl border-2 border-border border-dashed bg-card font-bold text-foreground shadow-sticker-dashed hover:border-primary/50 hover:-translate-y-px hover:shadow-sticker-sm transition-all"
+                    >
+                        <Plus className="h-3 w-3 mr-2" strokeWidth={2.5} />
                         Add Activity
                     </Button>
                 </AddEventModal>
