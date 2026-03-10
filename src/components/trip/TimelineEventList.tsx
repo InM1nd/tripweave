@@ -319,7 +319,7 @@ export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListPr
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
         >
-            <div className="space-y-6 sm:space-y-8 pb-20 min-w-0 w-full">
+            <div className="space-y-6 sm:space-y-8 pb-0 md:pb-20 min-w-0 w-full">
                 {sortedDates.map((dateKey) => (
                     <DayContainer
                         key={dateKey}

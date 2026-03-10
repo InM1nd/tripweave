@@ -36,14 +36,14 @@ export default async function TimelinePage({ params }: { params: Promise<{ id: s
         actions={
           <div className="flex flex-wrap gap-2 sm:gap-3">
             <ImportPlanModal tripId={id}>
-              <Button variant="outline" size="sm" className="gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold border-2 border-border shadow-sticker-sm hover:-translate-y-px transition-all rounded-full bg-card h-8 sm:h-9 px-3 sm:px-4">
-                <FileSpreadsheet className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={3} />
-                <span className="hidden sm:inline">Import</span>
+              <Button variant="outline" size="sm" className="gap-1.5 text-sm font-bold border-2 border-border shadow-sticker-sm hover:-translate-y-px transition-all rounded-full bg-card h-9 px-4">
+                <FileSpreadsheet className="h-4 w-4" strokeWidth={3} />
+                Import
               </Button>
             </ImportPlanModal>
             <AddEventModal tripId={id}>
-              <Button size="sm" className="gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all rounded-full bg-primary text-primary-foreground hover:bg-primary/90 h-8 sm:h-9 px-3 sm:px-4">
-                <Plus className="h-3.5 w-3.5 sm:h-5 sm:w-5" strokeWidth={3} />
+              <Button size="sm" className="gap-1.5 text-sm font-bold border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all rounded-full bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4">
+                <Plus className="h-4 w-4" strokeWidth={3} />
                 Add Event
               </Button>
             </AddEventModal>

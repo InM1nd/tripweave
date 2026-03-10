@@ -211,7 +211,7 @@ export function DashboardLayout({
             </div>
           </header>
 
-          <main className="flex-1 min-w-0 p-0 md:p-5 lg:p-6 max-w-[1600px] mx-auto w-full">
+          <main className="flex-1 min-w-0 p-2 md:p-5 lg:p-6 max-w-[1600px] mx-auto w-full">
             <AnimatePresence mode="wait">
               <motion.div
                 key={layoutKey}
