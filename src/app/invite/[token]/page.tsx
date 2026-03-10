@@ -39,9 +39,14 @@ export default function InvitePage({ params }: InvitePageProps) {
 
     useEffect(() => {
         const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            setUser(user);
-            setIsAuthLoading(false);
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                setUser(user);
+            } catch {
+                // Offline or auth unavailable — treat as not logged in
+            } finally {
+                setIsAuthLoading(false);
+            }
         };
         checkUser();
     }, [supabase]);

@@ -94,12 +94,12 @@ export function TripHeader({ trip }: TripHeaderProps) {
       {/* Boarding pass style card */}
       <div className="rounded-2xl md:rounded-3xl border-2 border-border bg-card shadow-sticker-card overflow-hidden">
         {/* Ticket top: airline (no barcode) */}
-        <div className="flex items-center justify-between px-4 py-1.5 bg-muted/30 border-b border-border">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between gap-2 px-3 sm:px-4 py-1.5 bg-muted/30 border-b border-border min-w-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <Plane className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={2.5} />
             <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">TripWeave</span>
           </div>
-          <span className="text-[9px] font-bold text-muted-foreground tabular-nums">TRIP · {trip.id.slice(0, 8).toUpperCase()}</span>
+          <span className="text-[9px] font-bold text-muted-foreground tabular-nums truncate">TRIP · {trip.id.slice(0, 8).toUpperCase()}</span>
         </div>
 
         <div className="flex flex-col md:flex-row">
@@ -127,7 +127,7 @@ export function TripHeader({ trip }: TripHeaderProps) {
           <div className="hidden md:block w-5 shrink-0 ticket-perforation-v" />
 
           {/* Right: ticket fields */}
-          <div className="flex-1 p-4 md:p-5 flex flex-col justify-between gap-4">
+          <div className="flex-1 p-3 sm:p-4 md:p-5 flex flex-col justify-between gap-3 sm:gap-4">
             {/* Row 1: Trip name + status */}
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 min-w-0">
@@ -150,56 +150,56 @@ export function TripHeader({ trip }: TripHeaderProps) {
             </div>
 
             {/* Row 2: From → To (ticket route) */}
-            <div className="flex items-center gap-2 py-2 border-y border-dashed border-border">
+            <div className="flex items-center gap-1.5 sm:gap-2 py-2 border-y border-dashed border-border">
               <div className="flex-1 min-w-0">
                 <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">From</div>
-                <div className="font-black text-sm text-foreground">Your plans</div>
+                <div className="font-black text-xs sm:text-sm text-foreground truncate">Your plans</div>
               </div>
-              <div className="shrink-0 flex items-center gap-1 text-muted-foreground">
-                <div className="w-6 border-t-2 border-dashed border-current" />
+              <div className="shrink-0 flex items-center gap-0.5 sm:gap-1 text-muted-foreground">
+                <div className="w-3 sm:w-6 border-t-2 border-dashed border-current" />
                 <Plane className="h-3 w-3" strokeWidth={2.5} />
-                <div className="w-6 border-t-2 border-dashed border-current" />
+                <div className="w-3 sm:w-6 border-t-2 border-dashed border-current" />
               </div>
               <div className="flex-1 min-w-0 text-right">
                 <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">To</div>
-                <div className="font-black text-sm text-foreground truncate">{trip.destination}</div>
+                <div className="font-black text-xs sm:text-sm text-foreground truncate">{trip.destination}</div>
               </div>
             </div>
 
             {/* Row 3: Ticket fields */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-              <div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+              <div className="min-w-0">
                 <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Destination</div>
-                <div className="flex items-center gap-1.5 font-black text-sm text-foreground">
+                <div className="flex items-center gap-1 sm:gap-1.5 font-black text-xs sm:text-sm text-foreground">
                   <MapPin className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                   <span className="truncate">{trip.destination}</span>
                 </div>
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Depart</div>
-                <div className="flex items-center gap-1.5 font-black text-sm text-foreground">
+                <div className="flex items-center gap-1 sm:gap-1.5 font-black text-xs sm:text-sm text-foreground">
                   <Calendar className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                  <span>{format(trip.startDate, "MMM d")}</span>
+                  <span className="truncate">{format(trip.startDate, "MMM d")}</span>
                 </div>
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Return</div>
-                <div className="flex items-center gap-1.5 font-black text-sm text-foreground">
+                <div className="flex items-center gap-1 sm:gap-1.5 font-black text-xs sm:text-sm text-foreground">
                   <Calendar className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                  <span>{format(trip.endDate, "MMM d, yyyy")}</span>
+                  <span className="truncate">{format(trip.endDate, "MMM d")}</span>
                 </div>
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Duration</div>
-                <div className="font-black text-sm text-foreground">
+                <div className="font-black text-xs sm:text-sm text-foreground">
                   {daysDuration} days
                 </div>
               </div>
             </div>
 
             {/* Row 4: Crew */}
-            <div className="flex items-center justify-between gap-3 pt-2 border-t-2 border-dashed border-border">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between gap-2 sm:gap-3 pt-2 border-t-2 border-dashed border-border">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
                   Crew
                 </div>

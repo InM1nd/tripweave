@@ -1,5 +1,5 @@
 /**
- * TripWeave Service Worker v1.2.0
+ * TripWeave Service Worker v1.3.0
  *
  * Cache strategy summary
  * ──────────────────────
@@ -17,31 +17,38 @@
  *      endpoints, trip data is embedded in the server-rendered HTML — so
  *      caching navigation responses effectively caches the last known state
  *      of each page.
- *      Network error → serve /offline from OFFLINE_CACHE.
+ *      Network error + no page cache → serve /offline from OFFLINE_CACHE.
  *
  * 3. POST / Server Actions  (/api/**, RSC action POSTs)
  *    → Always network. POST responses are not cacheable by spec and must
  *      never be served stale (they mutate data).
  *
  * 4. OFFLINE page  (/offline)
- *    → Pre-cached at install in a dedicated cache. Served as fallback for
- *      failed navigations and takes priority over any stale page cache when
- *      the network is completely unreachable.
+ *    → Pre-cached at install in a dedicated cache. Served as last-resort
+ *      fallback for failed navigations when the specific page is not in
+ *      PAGE_CACHE.
  *
- * Priority on conflict
- * ────────────────────
- * navigate offline → OFFLINE_CACHE beats PAGE_CACHE.
- * The offline page is always a definitive "no network" signal, while a
- * stale page could silently show outdated data — prefer explicitness.
+ * 5. PRE-CACHED routes  (/, /dashboard, /login, /offline)
+ *    → Fetched and stored in PAGE_CACHE at install. These critical routes
+ *      are available offline even if the user has never visited them.
+ *
+ * Priority on navigate offline
+ * ────────────────────────────
+ * 1. PAGE_CACHE match for the exact URL → return it (stale but useful data)
+ * 2. OFFLINE_CACHE /offline → generic "You are offline" fallback
+ * 3. Inline HTML response → absolute last resort
  */
 
-const SW_VERSION = "1.2.0";
+const SW_VERSION = "1.3.0";
 
 const OFFLINE_CACHE = "tw-offline-v1";   // /offline page only
 const STATIC_CACHE  = "tw-static-v1";   // /_next/static/** + /icons/**
-const PAGE_CACHE    = "tw-pages-v1";    // navigate responses (SWR)
+const PAGE_CACHE    = "tw-pages-v1";    // navigate responses (SWR + pre-cache)
 
 const OFFLINE_URL   = "/offline";
+
+/** Critical routes pre-cached at install so they work offline immediately. */
+const PRECACHE_ROUTES = ["/", "/dashboard", "/login", "/offline"];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -59,7 +66,7 @@ function isNavigate(request) {
 }
 
 /** True for POST / Server Actions — must never be cached. */
-function isPost(request) {
+function isMutating(request) {
   return request.method !== "GET" && request.method !== "HEAD";
 }
 
@@ -68,10 +75,25 @@ function isPost(request) {
 self.addEventListener("install", (event) => {
   console.log("[SW] install v" + SW_VERSION);
   event.waitUntil(
-    caches
-      .open(OFFLINE_CACHE)
-      .then((cache) => cache.add(OFFLINE_URL))
-      .then(() => self.skipWaiting())
+    Promise.all([
+      // 1. Dedicated offline fallback cache
+      caches.open(OFFLINE_CACHE).then((cache) => cache.add(OFFLINE_URL)),
+      // 2. Pre-cache critical routes into PAGE_CACHE
+      caches.open(PAGE_CACHE).then((cache) =>
+        Promise.all(
+          PRECACHE_ROUTES.map((url) =>
+            fetch(url)
+              .then((res) => {
+                if (res.ok) return cache.put(url, res);
+              })
+              .catch(() => {
+                // Install may happen offline (e.g. SW update while offline);
+                // silently skip routes we can't fetch right now.
+              })
+          )
+        )
+      ),
+    ]).then(() => self.skipWaiting())
   );
 });
 
@@ -103,7 +125,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
   // 1. Non-GET (POST, Server Actions) → always network, never intercept.
-  if (isPost(event.request)) return;
+  if (isMutating(event.request)) return;
 
   // 2. Cross-origin requests (Supabase, fonts, etc.) → transparent proxy.
   if (url.origin !== self.location.origin) return;
@@ -116,7 +138,7 @@ self.addEventListener("fetch", (event) => {
 
   // 4. Full-page navigation → Stale-while-revalidate, offline fallback.
   if (isNavigate(event.request)) {
-    event.respondWith(staleWhileRevalidateWithOfflineFallback(event));
+    event.respondWith(staleWhileRevalidate(event));
     return;
   }
 
@@ -139,14 +161,13 @@ async function cacheFirst(request, cacheName) {
     }
     return response;
   } catch {
-    // Static asset unavailable offline — nothing useful to return.
     return new Response("Asset unavailable offline", { status: 503 });
   }
 }
 
 // ─── Strategy: Stale-while-revalidate with offline fallback ──────────────────
 
-async function staleWhileRevalidateWithOfflineFallback(event) {
+async function staleWhileRevalidate(event) {
   const request = event.request;
   const cache = await caches.open(PAGE_CACHE);
   const cached = await cache.match(request);
@@ -159,7 +180,7 @@ async function staleWhileRevalidateWithOfflineFallback(event) {
       }
       return response;
     })
-    .catch(() => null); // swallow network errors for background revalidation
+    .catch(() => null);
 
   // Cache hit → return immediately; keep SW alive until background fetch completes.
   if (cached) {
@@ -171,12 +192,17 @@ async function staleWhileRevalidateWithOfflineFallback(event) {
   const response = await networkPromise;
   if (response) return response;
 
-  // Network failed and no cache → serve /offline.
+  // Network failed and no page-level cache → serve generic /offline page.
   const offlineResponse = await caches.match(OFFLINE_URL);
   return (
     offlineResponse ||
-    new Response("<h1>You are offline</h1>", {
-      headers: { "Content-Type": "text/html" },
-    })
+    new Response(
+      "<!DOCTYPE html><html><head><meta charset=utf-8><title>Offline</title></head>" +
+        "<body style='font-family:system-ui;display:flex;align-items:center;" +
+        "justify-content:center;min-height:100vh;margin:0'>" +
+        "<div style='text-align:center'><h1>You are offline</h1>" +
+        "<button onclick='location.reload()'>Retry</button></div></body></html>",
+      { status: 200, headers: { "Content-Type": "text/html" } }
+    )
   );
 }

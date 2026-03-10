@@ -121,7 +121,7 @@ function DayContainer({
                 {/* Single shared vertical line + one animated dot per day */}
                 <div
                     ref={lineRef}
-                    className="ml-6 pl-6 border-l-2 border-border/50 space-y-3 min-h-[50px] relative"
+                    className="ml-3 pl-4 sm:ml-6 sm:pl-6 border-l-2 border-border/50 space-y-3 min-h-[50px] relative"
                 >
                     <AnimatePresence>
                         {dotState && (

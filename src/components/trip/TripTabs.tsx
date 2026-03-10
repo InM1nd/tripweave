@@ -42,7 +42,7 @@ export function TripTabs({ tripId }: TripTabsProps) {
               key={tab.href}
               href={`/trip/${tripId}/${tab.href}`}
               className={cn(
-                "flex items-center gap-1.5 px-3.5 py-2.5 text-sm font-bold transition-all whitespace-nowrap select-none shrink-0 relative",
+                "flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-all whitespace-nowrap select-none shrink-0 relative",
                 "rounded-t-xl border-2 border-b-0",
                 isActive
                   ? "bg-card text-foreground border-border shadow-sticker-top z-10 -mb-[2px] pb-[calc(0.625rem+2px)]"

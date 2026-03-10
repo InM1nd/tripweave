@@ -7,7 +7,26 @@ import { Toaster } from "sonner";
 import { LenisProvider } from "@/components/landing/LenisProvider";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // Fetch even when offline — let SW serve cached responses.
+            // Without this, React Query pauses queries when navigator.onLine is false.
+            networkMode: "always",
+            retry: (failureCount, error) => {
+              // Don't retry network errors when offline
+              if (typeof navigator !== "undefined" && !navigator.onLine) return false;
+              return failureCount < 2;
+            },
+          },
+          mutations: {
+            networkMode: "always",
+          },
+        },
+      })
+  );
 
   useEffect(() => {
     if (

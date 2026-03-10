@@ -95,22 +95,22 @@ export function SortableTimelineEvent({
                     <GripVertical className="h-6 w-6 text-foreground/50" strokeWidth={3} />
                 </div>
 
-                <div className="flex-1 p-3 sm:p-4 flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center min-w-0">
+                <div className="flex-1 p-2.5 sm:p-4 flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center min-w-0">
                     {/* Time & Type column */}
-                    <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-center w-full sm:w-28 shrink-0 gap-2 sm:gap-1.5">
-                        <div className="text-[11px] uppercase font-bold tracking-widest rounded-lg px-2 py-1 bg-foreground/10 border border-foreground/10 flex items-center justify-center">
+                    <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-center w-full sm:w-28 shrink-0 gap-1.5">
+                        <div className="text-[10px] sm:text-[11px] uppercase font-bold tracking-widest rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1 bg-foreground/10 border border-foreground/10 flex items-center justify-center truncate max-w-[50%] sm:max-w-none">
                             {event.type}
                         </div>
-                        <div className="flex items-center text-sm font-bold whitespace-nowrap opacity-90">
-                            <Clock className="w-4 h-4 mr-1.5 shrink-0" strokeWidth={2.5} />
+                        <div className="flex items-center text-xs sm:text-sm font-bold whitespace-nowrap opacity-90">
+                            <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 shrink-0" strokeWidth={2.5} />
                             {formatTimeInfo(event.startTime)}
                         </div>
                     </div>
 
                     {/* Main content */}
-                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-1.5">
+                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
                         <h4
-                            className="font-bold text-lg leading-tight truncate"
+                            className="font-bold text-base sm:text-lg leading-tight truncate"
                             title={event.title}
                         >
                             {event.title}
@@ -141,7 +141,7 @@ export function SortableTimelineEvent({
                     </div>
 
                     {/* Actions & Meta */}
-                    <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t-2 sm:border-t-0 sm:border-l-2 border-foreground/20 sm:pl-4 shrink-0 gap-2">
+                    <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 sm:border-l-2 border-foreground/20 sm:pl-4 shrink-0 gap-1.5 sm:gap-2">
                         {event.cost && (
                             <div className="flex items-center text-sm font-bold px-3 py-1.5 rounded-lg bg-foreground text-background dark:bg-muted-foreground dark:text-muted shrink-0 border border-border/20">
                                 {event.currency} {event.cost.toLocaleString()}

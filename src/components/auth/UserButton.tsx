@@ -23,8 +23,12 @@ export function UserButton({ afterSignOutUrl = "/" }: { afterSignOutUrl?: string
 
     useEffect(() => {
         const getUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            setUser(user);
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                setUser(user);
+            } catch {
+                // Offline or auth unavailable — keep user as null (renders nothing)
+            }
         };
         getUser();
     }, [supabase]);
