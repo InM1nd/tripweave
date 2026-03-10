@@ -253,7 +253,7 @@ export function CreateTripModal({ children }: { children?: React.ReactNode }) {
             </Button>
           )}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[500px] border-2 border-border rounded-2xl shadow-sticker-modal">
+        <DialogContent className="sm:max-w-[500px] max-h-[90dvh] overflow-y-auto border-2 border-border rounded-2xl shadow-sticker-modal">
           <DialogHeader className="border-b-2 border-border pb-4">
             <DialogTitle className="font-black text-xl">Create New Trip</DialogTitle>
             <DialogDescription>
@@ -282,7 +282,7 @@ export function CreateTripModal({ children }: { children?: React.ReactNode }) {
             Start planning your next adventure.
           </DrawerDescription>
         </DrawerHeader>
-        <div className="pb-8">
+        <div className="max-h-[85vh] overflow-y-auto pb-8">
           {FormContent}
         </div>
       </DrawerContent>

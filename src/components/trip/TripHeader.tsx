@@ -41,7 +41,7 @@ export function TripHeader({ trip }: TripHeaderProps) {
   const isPast = trip.endDate < new Date();
 
   return (
-    <div>
+    <div className="px-4 md:px-0">
       {/* Row above card: Back (left) + Share & More (right) */}
       <div className="flex items-center justify-between gap-2 mb-2">
         <Button

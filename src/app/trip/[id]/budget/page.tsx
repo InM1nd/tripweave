@@ -133,7 +133,7 @@ export default async function BudgetPage({ params }: { params: Promise<{ id: str
                         Paid by {payer} • {expense.category}
                       </p>
                     </div>
-                    <span className="font-black text-sm">{currency} {expense.cost}</span>
+                    <span className="font-black text-sm shrink-0">{currency} {expense.cost}</span>
                   </div>
                 );
               })}

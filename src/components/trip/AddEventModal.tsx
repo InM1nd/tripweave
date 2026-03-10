@@ -291,7 +291,7 @@ export function AddEventModal({ children, tripId, defaultDate }: AddEventModalPr
         <DialogTrigger asChild>
           {children || <Button>Add Event</Button>}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto border-2 border-border rounded-2xl shadow-sticker-modal">
+        <DialogContent className="sm:max-w-[500px] max-h-[90dvh] overflow-y-auto border-2 border-border rounded-2xl shadow-sticker-modal">
           <DialogHeader className="border-b-2 border-border pb-3">
             <DialogTitle className="text-lg font-black">Add New Event</DialogTitle>
             <DialogDescription className="text-xs">

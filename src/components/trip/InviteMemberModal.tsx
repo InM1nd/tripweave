@@ -237,7 +237,7 @@ export function InviteMemberModal({ tripId }: InviteMemberModalProps) {
                         <span className="hidden sm:inline">Invite</span>
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[440px]">
+                <DialogContent className="sm:max-w-[440px] max-h-[90dvh] overflow-y-auto border-2 border-border rounded-2xl shadow-sticker-modal">
                     <DialogHeader>
                         <DialogTitle>Invite People</DialogTitle>
                         <DialogDescription>

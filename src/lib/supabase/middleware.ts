@@ -43,6 +43,7 @@ export async function updateSession(request: NextRequest) {
         !request.nextUrl.pathname.startsWith('/auth') &&
         !request.nextUrl.pathname.startsWith('/explore') &&
         !request.nextUrl.pathname.startsWith('/invite') &&
+        !request.nextUrl.pathname.startsWith('/offline') &&
         request.nextUrl.pathname !== '/'
     ) {
         // Redirect to login if accessing protected route without user

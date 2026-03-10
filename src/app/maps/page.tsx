@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 
 const GlobalMap = dynamic(() => import("@/components/map/GlobalMap").then(mod => mod.GlobalMap), {
     loading: () => (
-        <div className="flex items-center justify-center h-[calc(100vh-200px)]">
+        <div className="flex items-center justify-center h-[calc(100dvh-200px)]">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
     ),

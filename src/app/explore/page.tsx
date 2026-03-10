@@ -45,13 +45,13 @@ export default async function ExplorePage() {
 
     return (
         <DashboardLayout>
-            <div className="relative min-h-[80vh]">
+            <div className="relative min-h-[80dvh]">
                 <div className="relative z-10 space-y-6 md:space-y-8 max-w-7xl p-4 md:p-0">
                     <PageHeader
                         badge={{ label: "Discover places", icon: <Compass className="h-4 w-4" />, color: "green" }}
                         title="Explore & Discover"
                         description={
-                            <span className="flex items-center gap-1.5">
+                            <span className="flex flex-wrap items-center gap-1.5">
                                 <Sparkles className="w-5 h-5 text-sticker-yellow fill-current" />
                                 Curated for your upcoming trip to <span className="font-black text-foreground bg-sticker-yellow/30 px-2 py-0.5 rounded-md border-2 border-sticker-yellow/40">{upcomingTrip.destination}</span>
                             </span>

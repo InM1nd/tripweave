@@ -75,7 +75,7 @@ export function TripMap() {
       {/* Mobile: horizontal scrollable location cards */}
       <div className="block lg:hidden">
         <ScrollArea className="w-full">
-          <div className="flex gap-3 px-1 pb-2 min-w-max">
+          <div className="flex gap-3 px-4 pb-2 min-w-max">
             {mockLocations.map((location) => (
               <Card
                 key={location.id}
@@ -105,7 +105,7 @@ export function TripMap() {
       </div>
 
       {/* Main layout */}
-      <div className="flex flex-col lg:flex-row gap-6 h-[50vh] lg:h-[calc(100vh-200px)] min-h-[300px] lg:min-h-[500px]">
+      <div className="flex flex-col lg:flex-row gap-6 h-[50dvh] lg:h-[calc(100dvh-200px)] min-h-[300px] lg:min-h-[500px]">
         {/* Desktop sidebar list */}
         <div className="hidden lg:flex w-80 flex-col gap-4 overflow-y-auto pr-2">
           {mockLocations.map((location) => (

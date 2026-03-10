@@ -136,7 +136,7 @@ export default async function DashboardPage() {
 
   return (
     <DashboardLayout>
-      <div className="relative min-h-[80vh]">
+      <div className="relative min-h-[80dvh]">
         <div className="relative z-10 space-y-6 md:space-y-8 max-w-7xl p-4 md:p-0">
           {/* Header */}
           <PageHeader

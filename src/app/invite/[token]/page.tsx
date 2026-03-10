@@ -85,7 +85,7 @@ export default function InvitePage({ params }: InvitePageProps) {
 
     if (isLoading || isAuthLoading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-background">
+            <div className="flex items-center justify-center min-h-[100dvh] bg-background">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
         );
@@ -93,7 +93,7 @@ export default function InvitePage({ params }: InvitePageProps) {
 
     if (!invite) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4 text-center">
+            <div className="flex flex-col items-center justify-center min-h-[100dvh] bg-background p-4 text-center">
                 <h1 className="text-xl font-black mb-2">Invalid Invite</h1>
                 <p className="text-sm text-muted-foreground mb-4">This invite link is invalid or has expired.</p>
                 <Button onClick={() => router.push("/dashboard")} className="font-bold border-2 border-border rounded-xl">Go to Dashboard</Button>
@@ -107,7 +107,7 @@ export default function InvitePage({ params }: InvitePageProps) {
     );
 
     return (
-        <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+        <div className="min-h-[100dvh] bg-background flex flex-col items-center justify-center p-4">
             <AuthCard>
                 {/* Cover Image */}
                 <div className="relative h-40 bg-muted">

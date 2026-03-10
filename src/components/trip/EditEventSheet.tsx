@@ -487,7 +487,7 @@ export function EditEventSheet({ event, open, onOpenChange, tripId }: EditEventS
                                 </div>
 
                                 {/* Footer Actions for Edit Mode */}
-                                <div className="sticky bottom-0 left-0 right-0 -mx-6 -mb-6 p-4 bg-background border-t border-border flex items-center justify-end gap-3 z-10">
+                                <div className="sticky bottom-0 left-0 right-0 -mx-6 -mb-6 px-4 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] bg-background border-t border-border flex items-center justify-end gap-3 z-10">
                                     <Button type="button" variant="outline" onClick={() => setIsEditing(false)} className="rounded-2xl font-bold">
                                         Cancel
                                     </Button>

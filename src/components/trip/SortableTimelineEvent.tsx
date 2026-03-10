@@ -90,7 +90,7 @@ export function SortableTimelineEvent({
                 <div
                     {...attributes}
                     {...listeners}
-                    className="flex sm:w-10 items-center justify-center bg-foreground/10 cursor-grab hover:bg-foreground/20 transition-colors py-2 sm:py-0 border-b-2 sm:border-b-0 sm:border-r-2 border-border"
+                    className="flex sm:w-10 items-center justify-center bg-foreground/10 cursor-grab hover:bg-foreground/20 transition-colors py-3 sm:py-0 border-b-2 sm:border-b-0 sm:border-r-2 border-border"
                 >
                     <GripVertical className="h-6 w-6 text-foreground/50" strokeWidth={3} />
                 </div>

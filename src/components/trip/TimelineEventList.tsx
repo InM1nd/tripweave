@@ -85,7 +85,7 @@ function DayContainer({
                 {/* Sticky date header — positioned just below TripTabs via CSS variable (see trip layout). */}
                 <div
                     className="flex items-center justify-between mb-4 sticky z-10 bg-background/97 backdrop-blur-md py-3 border-b border-border/40"
-                    style={{ top: 'var(--trip-tabs-offset, 7rem)' }}
+                    style={{ top: 'var(--trip-tabs-offset, 6.5rem)' }}
                 >
                     <div className="flex items-center gap-3 md:gap-4">
                         <div className="h-12 w-12 rounded-2xl bg-primary/10 border-2 border-border flex flex-col items-center justify-center shrink-0 shadow-sticker-sm">

@@ -71,7 +71,7 @@ function LoginForm() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-background px-4">
+        <div className="min-h-[100dvh] flex items-center justify-center bg-background px-4">
             <AuthCard className="space-y-6 p-6 md:p-5">
                 <div className="flex flex-col items-center justify-center text-center space-y-1.5">
                     <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground mb-3 border-2 border-border shadow-sticker-card">
@@ -161,7 +161,7 @@ function LoginForm() {
 
 export default function LoginPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
+        <Suspense fallback={<div className="min-h-[100dvh] flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
             <LoginForm />
         </Suspense>
     );

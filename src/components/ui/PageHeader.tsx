@@ -33,11 +33,11 @@ export function PageHeader({
     <div
       className={cn(
         "flex flex-col gap-2",
-        actions && "sm:flex-row sm:items-end justify-between gap-3",
+        actions && "sm:flex-row sm:flex-wrap sm:items-end justify-between gap-3",
         className
       )}
     >
-      <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start min-w-0">
         {badge && (
           <StickerBadge color={badge.color} className="mb-2" uppercase={badge.uppercase ?? false}>
             {badge.icon && <>{badge.icon} </>}

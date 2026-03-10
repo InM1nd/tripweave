@@ -155,7 +155,7 @@ export default function SettingsPage({ params }: { params: Promise<{ id: string 
 
             <div className="grid gap-2">
               <Label className="font-bold text-sm">Dates</Label>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button

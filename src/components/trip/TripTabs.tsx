@@ -32,7 +32,7 @@ export function TripTabs({ tripId }: TripTabsProps) {
   const currentTab = pathname.split("/").pop();
 
   return (
-    <div className="sticky top-14 md:top-0 z-30 bg-background/80 backdrop-blur-xl transition-all overflow-visible">
+    <div className="sticky top-12 md:top-0 z-30 bg-background/80 backdrop-blur-xl transition-all overflow-visible">
       {/* Folder-style tabs row — pills stay left, don't stretch full width */}
       <nav className="flex items-end justify-start gap-0.5 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] w-full px-2 pt-2">
         {tabs.map((tab) => {

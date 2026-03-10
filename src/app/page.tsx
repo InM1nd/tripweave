@@ -183,13 +183,13 @@ function PolaroidFlip() {
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground font-sans transition-colors duration-300 overflow-x-hidden">
+    <div className="flex min-h-[100dvh] flex-col bg-background text-foreground font-sans transition-colors duration-300 overflow-x-hidden">
       {/* ── Header ─────────────────────────────────────────────── */}
       <LandingHeader />
 
       <main className="flex-1 relative z-10 flex flex-col items-center w-full pt-[67px]">
         {/* ── HERO ──────────────────────────────────────────────── */}
-        <section className="w-full relative px-4 sm:px-6 lg:px-8 pt-20 pb-28 md:pt-28 md:pb-36 flex flex-col items-center justify-center min-h-[90vh] overflow-hidden">
+        <section className="w-full relative px-4 sm:px-6 lg:px-8 pt-20 pb-28 md:pt-28 md:pb-36 flex flex-col items-center justify-center min-h-[90dvh] overflow-hidden">
 
           {/* World map background — fills entire hero */}
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">

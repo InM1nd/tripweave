@@ -91,7 +91,7 @@ export function SuggestedPlaceCard({ event, currentUserId, tripId, tripStartDate
                     <Button
                         variant="stickerIcon"
                         size="icon"
-                        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity z-20"
+                        className="absolute top-4 right-4 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity z-20"
                         onClick={(e) => e.stopPropagation()}
                         disabled={isDeleting}
                         aria-label="Remove suggestion"

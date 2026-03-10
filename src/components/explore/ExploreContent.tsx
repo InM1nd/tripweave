@@ -198,7 +198,7 @@ export function ExploreContent({ myPlaces, recommendations, trips }: ExploreCont
 
             {/* Mobile Floating Action Button for Importer */}
             {activeTab === "my-list" && (
-                <div className="md:hidden fixed bottom-6 right-6 z-40 animate-in zoom-in duration-300">
+                <div className="md:hidden fixed bottom-20 right-4 z-40 animate-in zoom-in duration-300">
                     <Dialog open={isImporterOpen} onOpenChange={setIsImporterOpen}>
                     <DialogTrigger asChild>
                         <Button variant="stickerCoral" size="icon" className="h-16 w-16 rounded-full">

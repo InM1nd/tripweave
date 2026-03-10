@@ -78,25 +78,25 @@ export function LandingHeader() {
       <div className="h-[3px] w-full bg-primary" aria-hidden="true" />
 
       {/* Main row */}
-      <div className="h-[64px] px-4 md:px-8 lg:px-10 flex items-center gap-0">
+      <div className="h-[64px] px-3 sm:px-4 md:px-8 lg:px-10 flex items-center gap-0">
 
         {/* ── Logo stamp ─────────────────────────── */}
         <Link
           href="/"
-          className="flex items-center gap-3 shrink-0 group"
+          className="flex items-center gap-2 sm:gap-3 shrink-0 group"
           aria-label="TripWeave home"
         >
-          {/* Circular stamp badge */}
-          <div className="relative h-10 w-10 rounded-full bg-primary border-2 border-border shadow-sticker-sm flex items-center justify-center transition-transform duration-150 group-hover:-translate-y-0.5">
+          {/* Circular stamp badge — slightly smaller on xs */}
+          <div className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-primary border-2 border-border shadow-sticker-sm flex items-center justify-center transition-transform duration-150 group-hover:-translate-y-0.5">
             <Plane
-              className="h-5 w-5 text-primary-foreground"
+              className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground"
               strokeWidth={2.5}
             />
           </div>
 
           {/* Wordmark + tagline */}
           <div className="flex flex-col leading-none gap-[3px]">
-            <span className="font-black text-[17px] tracking-tighter text-foreground">
+            <span className="font-black text-[15px] sm:text-[17px] tracking-tighter text-foreground">
               TripWeave
             </span>
             <span className="text-[7.5px] font-bold tracking-[0.22em] uppercase text-muted-foreground hidden sm:block">
@@ -156,7 +156,7 @@ export function LandingHeader() {
         <div className="flex-1" />
 
         {/* ── Right actions ───────────────────────── */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
           <ThemeToggle />
 
           <Link href="/login" className="hidden sm:block">
@@ -165,14 +165,16 @@ export function LandingHeader() {
             </span>
           </Link>
 
-          {/* CTA — ticket stub: perforated left edge + solid button */}
+          {/* CTA — ticket stub: perforated left edge + solid button.
+              Mobile: standalone pill button with border on all sides.
+              sm+: attach to perforated tear-off strip (left edge flat). */}
           <Link href="/login?signup=true" className="flex items-center group">
-            {/* Perforated tear-off strip (sm and up) */}
+            {/* Perforated tear-off strip — sm and up only */}
             <div
               className="landing-header-cta-edge w-[10px] h-10 shrink-0 hidden sm:block"
               aria-hidden="true"
             />
-            <Button className="h-10 rounded-r-2xl rounded-l-none sm:rounded-l-none rounded-full sm:rounded-none font-black text-sm shadow-sticker-card border-2 border-border border-l-0 sm:border-l-0 hover:-translate-y-px hover:shadow-sticker-card-hover transition-all px-5 gap-1.5">
+            <Button className="h-10 rounded-full sm:rounded-r-2xl sm:rounded-l-none font-black text-sm shadow-sticker-card border-2 border-border sm:border-l-0 hover:-translate-y-px hover:shadow-sticker-card-hover transition-all px-4 sm:px-5 gap-1.5">
               Start Free
               <Plane className="h-3.5 w-3.5" strokeWidth={2.5} />
             </Button>

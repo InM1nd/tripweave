@@ -119,20 +119,20 @@ export default async function MembersPage({ params }: { params: Promise<{ id: st
                 <StickerAnimator key={invite.id} delay={i * 0.06}>
                   <div className="border-2 border-dashed border-border bg-background/50 rounded-2xl shadow-sticker-sm-soft p-3 md:p-4">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9 border-2 border-border rounded-xl">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <Avatar className="h-9 w-9 border-2 border-border rounded-xl shrink-0">
                           <AvatarFallback className="bg-secondary text-muted-foreground font-black text-xs rounded-xl">
                             {invite.email ? invite.email[0].toUpperCase() : "P"}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <p className="text-sm font-black truncate">{invite.email || "Public Link"}</p>
-                          <p className="text-[11px] font-bold text-muted-foreground mt-0.5">
+                          <p className="text-[11px] font-bold text-muted-foreground mt-0.5 truncate">
                             Invited as {invite.role} · Expires {new Date(invite.expiresAt).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
-                      <div className="scale-90 opacity-80 hover:opacity-100 hover:scale-100 transition-all origin-right">
+                      <div className="scale-90 opacity-80 hover:opacity-100 hover:scale-100 transition-all origin-right shrink-0 ml-2">
                         <CancelInviteButton inviteId={invite.id} />
                       </div>
                     </div>

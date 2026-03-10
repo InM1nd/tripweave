@@ -55,7 +55,7 @@ export function GlobalMap() {
     const [activeLocation, setActiveLocation] = useState(globalLocations[0]);
 
     return (
-        <div className="flex flex-col gap-4 h-[calc(100dvh-130px)] md:h-[calc(100vh-140px)] w-full">
+        <div className="flex flex-col gap-4 h-[calc(100dvh-130px)] md:h-[calc(100dvh-140px)] w-full">
             <div className="flex-1 rounded-2xl overflow-hidden border border-border/40 relative z-0 shadow-sticker-card">
                 <MapContainer
                     center={[30, 0]} // Global center
