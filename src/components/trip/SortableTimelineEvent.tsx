@@ -10,7 +10,6 @@ import {
     MoreHorizontal,
     Pencil,
     Trash2,
-    AlignLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -95,9 +94,9 @@ export function SortableTimelineEvent({
                     <GripVertical className="h-5 w-5 sm:h-6 sm:w-6 text-foreground/50" strokeWidth={3} />
                 </div>
 
-                <div className="flex-1 p-3 sm:p-4 flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center min-w-0 overflow-hidden">
+                <div className="flex-1 min-w-0 min-h-0 p-3 sm:p-4 flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center max-w-full overflow-hidden">
                     {/* Time & Type column */}
-                    <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-center w-full sm:w-28 shrink-0 gap-1 sm:gap-1.5 min-w-0">
+                    <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-center w-full sm:w-28 shrink-0 gap-1 sm:gap-1.5 min-w-0 max-w-full">
                         <div className="text-[9px] sm:text-[11px] uppercase font-bold tracking-widest rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1 bg-foreground/10 border border-foreground/10 flex items-center justify-center truncate max-w-[40%] sm:max-w-none">
                             {event.type}
                         </div>
@@ -108,31 +107,31 @@ export function SortableTimelineEvent({
                     </div>
 
                     {/* Main content */}
-                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-2 overflow-hidden">
+                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-2 overflow-hidden w-full">
                         <h4
-                            className="font-bold text-base sm:text-lg leading-tight truncate"
+                            className="font-bold text-base sm:text-lg leading-tight truncate min-w-0 overflow-hidden"
                             title={event.title}
                         >
                             {event.title}
                         </h4>
 
                         {(event.location || event.description) && (
-                            <div className="flex flex-col justify-start gap-1 text-xs sm:text-sm font-semibold opacity-80 min-w-0 overflow-hidden">
+                            <div className="flex flex-col justify-start gap-1 text-xs sm:text-sm font-semibold opacity-80 min-w-0 w-full overflow-hidden">
                                 {event.description && (
                                     <div
-                                        className="flex items-start gap-1.5 min-w-0 overflow-hidden"
+                                        className="flex items-start gap-1.5 min-w-0 w-full overflow-hidden"
                                         title={event.description}
                                     >
-                                        <span className="line-clamp-2 break-words">{event.description}</span>
+                                        <span className="line-clamp-2 wrap-break-word min-w-0 overflow-hidden">{event.description}</span>
                                     </div>
                                 )}
                                 {event.location && (
                                     <div
-                                        className="flex items-center gap-1.5 min-w-0 overflow-hidden"
+                                        className="flex items-center gap-1.5 min-w-0 w-full overflow-hidden"
                                         title={event.location}
                                     >
                                         <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" strokeWidth={3} />
-                                        <span className="truncate">{event.location}</span>
+                                        <span className="truncate min-w-0">{event.location}</span>
                                     </div>
                                 )}
                             </div>

@@ -103,16 +103,33 @@ export function TripHeader({ trip }: TripHeaderProps) {
         </div>
 
         <div className="flex flex-col md:flex-row">
-          {/* Left: cover image — ticket stub with photo, vignette + inset shadow on mobile/desktop */}
-          <div className="relative h-32 sm:h-40 md:h-auto md:w-56 lg:w-72 overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-border shadow-[inset_0_0_40px_rgba(0,0,0,0.18)]">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.4)_100%)] z-[1] pointer-events-none" aria-hidden />
-            <div className="absolute inset-0 bg-linear-to-t md:bg-linear-to-r from-black/30 via-transparent to-transparent z-[1] pointer-events-none" aria-hidden />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={trip.coverImage || "/placeholder-trip.jpg"}
-              alt={trip.name}
-              className="object-cover w-full h-full relative z-0"
-            />
+          {/* Left: cover image — ticket stub with photo, hard inset shadow (pressed into ticket) */}
+          <div
+            className="relative h-32 sm:h-40 md:h-auto md:w-56 lg:w-72 overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-border"
+            style={{
+              boxShadow: "inset 0 0 0 10px rgba(0,0,0,0.22), inset 0 6px 0 0 rgba(0,0,0,0.18), inset 0 -4px 0 0 rgba(0,0,0,0.12), inset 6px 0 0 0 rgba(0,0,0,0.15), inset -6px 0 0 0 rgba(0,0,0,0.12)",
+            }}
+          >
+            {trip.coverImage && (
+              <div className="absolute inset-0 bg-linear-to-t md:bg-linear-to-r from-black/30 via-transparent to-transparent pointer-events-none z-1" aria-hidden />
+            )}
+            {trip.coverImage ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={trip.coverImage}
+                alt={trip.name}
+                className="object-cover w-full h-full relative z-0"
+              />
+            ) : (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 sm:gap-3 bg-linear-to-br from-muted/60 via-muted/40 to-primary/10 z-0">
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-2xl border-2 border-border bg-card/80 flex items-center justify-center shadow-sticker-sm">
+                  <Plane className="h-6 w-6 sm:h-7 sm:w-7 text-muted-foreground" strokeWidth={2} />
+                </div>
+                <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-muted-foreground px-2 text-center">
+                  No cover
+                </span>
+              </div>
+            )}
 
             {/* Mobile overlay buttons: Back (left), Share & More (right) — sticker-style for visibility */}
             <div className="absolute top-2 left-2 right-2 z-20 md:hidden flex items-center justify-between pointer-events-none">
