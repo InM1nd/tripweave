@@ -49,7 +49,7 @@ export function EmptyState({
       )}
       <h3 className="font-semibold text-lg text-foreground mb-1">{title}</h3>
       {description != null && (
-        <div className="text-sm text-muted-foreground max-w-[280px] mb-4">
+        <div className="text-sm text-muted-foreground w-full max-w-[280px] mb-4 min-w-0">
           {typeof description === "string" ? <p>{description}</p> : description}
         </div>
       )}
@@ -61,7 +61,7 @@ export function EmptyState({
     return (
       <div
         className={cn(
-          "flex flex-col items-center justify-center text-center border-2 border-dashed border-border rounded-2xl bg-muted/10 shadow-sticker-dashed p-8 md:p-12",
+          "flex flex-col items-center justify-center text-center border-2 border-dashed border-border rounded-2xl bg-muted/10 shadow-sticker-dashed w-full min-w-0 max-w-full overflow-hidden px-4 py-6 sm:p-8 md:p-12",
           className
         )}
       >

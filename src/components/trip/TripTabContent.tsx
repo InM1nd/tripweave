@@ -13,7 +13,7 @@ export function TripTabContent({ children }: { children: React.ReactNode }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="px-4 md:px-0"
+      className="px-4 md:px-0 min-w-0"
     >
       {children}
     </motion.div>

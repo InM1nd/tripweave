@@ -194,7 +194,7 @@ export function DashboardLayout({
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-h-[100dvh] pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
           {/* Mobile Header */}
-          <header className="md:hidden sticky top-0 z-20 bg-bg-base border-b-2 border-border">
+          <header className="md:hidden sticky top-0 z-20 bg-background border-b-2 border-border">
             <div className="px-4 h-12 flex items-center justify-between">
               <Link href="/dashboard" className="flex items-center gap-1.5">
                 <div className="h-7 w-7 rounded-lg bg-accent flex items-center justify-center text-accent-text border-2 border-border">
@@ -211,7 +211,7 @@ export function DashboardLayout({
             </div>
           </header>
 
-          <main className="flex-1 p-0 md:p-5 lg:p-6 max-w-[1600px] mx-auto w-full">
+          <main className="flex-1 p-0 md:p-5 lg:p-6 max-w-[1600px] mx-auto w-full min-w-0 overflow-x-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={layoutKey}
@@ -219,6 +219,7 @@ export function DashboardLayout({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="min-w-0"
               >
                 {children}
               </motion.div>
@@ -227,7 +228,7 @@ export function DashboardLayout({
 
           {/* Mobile Bottom Navigation */}
           {/* pb-[env(safe-area-inset-bottom)] ensures home-indicator clearance on notched iOS (PWA: viewport-fit=cover) */}
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t-2 border-border bg-bg-base z-50 pb-[env(safe-area-inset-bottom)]">
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t-2 border-border bg-background z-50 pb-[env(safe-area-inset-bottom)]">
             <div className="flex items-center justify-around h-14 px-2">
               {navItems.slice(0, 4).map((item) => (
                 <MobileNavLink

@@ -82,26 +82,26 @@ function DayContainer({
                     isOver && "bg-primary/5"
                 )}
             >
-                {/* Sticky date header — positioned just below TripTabs via CSS variable (see trip layout). */}
+                {/* Sticky date header — below header on mobile, below tabs on desktop */}
                 <div
-                    className="flex items-center justify-between mb-4 sticky z-10 bg-background/97 backdrop-blur-md py-3 border-b border-border/40"
-                    style={{ top: 'var(--trip-tabs-offset, 6.5rem)' }}
+                    className="flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-4 sticky z-10 bg-background py-2 sm:py-3 border-b border-border/40 min-w-0"
+                    style={{ top: "var(--trip-tabs-offset, 4.5rem)" }}
                 >
-                    <div className="flex items-center gap-3 md:gap-4">
-                        <div className="h-12 w-12 rounded-2xl bg-primary/10 border-2 border-border flex flex-col items-center justify-center shrink-0 shadow-sticker-sm">
-                            <span className="text-xl font-bold text-foreground leading-none">
+                    <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0">
+                        <div className="h-9 w-9 sm:h-12 sm:w-12 rounded-xl sm:rounded-2xl bg-primary/10 border-2 border-border flex flex-col items-center justify-center shrink-0 shadow-sticker-sm">
+                            <span className="text-base sm:text-xl font-bold text-foreground leading-none">
                                 {date.getDate()}
                             </span>
-                            <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
+                            <span className="text-[8px] sm:text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
                                 {date.toLocaleDateString("en-US", { month: "short" })}
                             </span>
                         </div>
-                        <div>
-                            <h3 className="font-bold text-lg text-foreground">
+                        <div className="min-w-0">
+                            <h3 className="font-bold text-sm sm:text-lg text-foreground truncate">
                                 {date.toLocaleDateString("en-US", { weekday: "long" })}
                             </h3>
-                            <p className="text-sm font-medium text-muted-foreground">
-                                {count} {count === 1 ? "activity" : "activities"} planned
+                            <p className="text-[11px] sm:text-sm font-medium text-muted-foreground">
+                                {count} {count === 1 ? "activity" : "activities"}
                             </p>
                         </div>
                     </div>
@@ -110,18 +110,18 @@ function DayContainer({
                         <Button
                             variant="outline"
                             size="sm"
-                            className="gap-2 rounded-full border-2 border-border bg-card text-foreground font-bold shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all"
+                            className="gap-1.5 sm:gap-2 h-8 sm:h-9 rounded-full border-2 border-border bg-card text-foreground text-xs sm:text-sm font-bold shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all shrink-0"
                         >
-                            <Plus className="h-4 w-4" strokeWidth={2.5} />
+                            <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} />
                             <span className="hidden sm:inline">Add Event</span>
                         </Button>
                     </AddEventModal>
                 </div>
 
-                {/* Single shared vertical line + one animated dot per day */}
+                {/* Vertical timeline line */}
                 <div
                     ref={lineRef}
-                    className="ml-3 pl-4 sm:ml-6 sm:pl-6 border-l-2 border-border/50 space-y-3 min-h-[50px] relative"
+                    className="ml-2 pl-3 sm:ml-6 sm:pl-6 border-l-2 border-border/50 space-y-2 sm:space-y-3 min-h-[40px] sm:min-h-[50px] relative"
                 >
                     <AnimatePresence>
                         {dotState && (
@@ -319,7 +319,7 @@ export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListPr
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
         >
-            <div className="space-y-8 pb-20">
+            <div className="space-y-6 sm:space-y-8 pb-20 min-w-0">
                 {sortedDates.map((dateKey) => (
                     <DayContainer
                         key={dateKey}

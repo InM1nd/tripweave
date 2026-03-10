@@ -78,7 +78,7 @@ export function SortableTimelineEvent({
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 className={cn(
-                  "overflow-hidden transition-all duration-300 rounded-[20px] border-2 border-border flex flex-col sm:flex-row hover:-translate-y-1 min-h-20",
+                  "overflow-hidden transition-all duration-300 rounded-2xl sm:rounded-[20px] border-2 border-border flex flex-col sm:flex-row hover:-translate-y-1 min-h-16 sm:min-h-20 min-w-0 w-full",
                   "shadow-sticker-card",
                   "hover:shadow-sticker-card-hover",
                   theme.card,
@@ -86,19 +86,19 @@ export function SortableTimelineEvent({
                         "shadow-none ring-4 ring-foreground cursor-grabbing scale-[1.02]"
                 )}
             >
-                {/* Drag handle */}
+                {/* Drag handle — taller on mobile for touch */}
                 <div
                     {...attributes}
                     {...listeners}
-                    className="flex sm:w-10 items-center justify-center bg-foreground/10 cursor-grab hover:bg-foreground/20 transition-colors py-3 sm:py-0 border-b-2 sm:border-b-0 sm:border-r-2 border-border"
+                    className="flex sm:w-10 items-center justify-center bg-foreground/10 cursor-grab hover:bg-foreground/20 transition-colors py-2.5 sm:py-0 min-h-[44px] sm:min-h-0 border-b-2 sm:border-b-0 sm:border-r-2 border-border min-w-[44px] sm:min-w-0 touch-manipulation"
                 >
-                    <GripVertical className="h-6 w-6 text-foreground/50" strokeWidth={3} />
+                    <GripVertical className="h-5 w-5 sm:h-6 sm:w-6 text-foreground/50" strokeWidth={3} />
                 </div>
 
-                <div className="flex-1 p-2.5 sm:p-4 flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center min-w-0">
+                <div className="flex-1 p-2 sm:p-4 flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center min-w-0 overflow-hidden">
                     {/* Time & Type column */}
-                    <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-center w-full sm:w-28 shrink-0 gap-1.5">
-                        <div className="text-[10px] sm:text-[11px] uppercase font-bold tracking-widest rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1 bg-foreground/10 border border-foreground/10 flex items-center justify-center truncate max-w-[50%] sm:max-w-none">
+                    <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-center w-full sm:w-28 shrink-0 gap-1 sm:gap-1.5">
+                        <div className="text-[9px] sm:text-[11px] uppercase font-bold tracking-widest rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1 bg-foreground/10 border border-foreground/10 flex items-center justify-center truncate max-w-[45%] sm:max-w-none">
                             {event.type}
                         </div>
                         <div className="flex items-center text-xs sm:text-sm font-bold whitespace-nowrap opacity-90">
@@ -117,7 +117,7 @@ export function SortableTimelineEvent({
                         </h4>
 
                         {(event.location || event.description) && (
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4 text-sm font-semibold opacity-80">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4 text-sm font-semibold opacity-80 min-w-0">
                                 {event.location && (
                                     <div
                                         className="flex items-center gap-1.5 min-w-0 truncate"
@@ -129,7 +129,7 @@ export function SortableTimelineEvent({
                                 )}
                                 {event.description && (
                                     <div
-                                        className="hidden sm:flex items-center gap-1.5 min-w-0 truncate"
+                                        className="flex items-center gap-1.5 min-w-0 truncate"
                                         title={event.description}
                                     >
                                         <AlignLeft className="h-4 w-4 shrink-0" strokeWidth={3} />
@@ -141,18 +141,19 @@ export function SortableTimelineEvent({
                     </div>
 
                     {/* Actions & Meta */}
-                    <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 sm:border-l-2 border-foreground/20 sm:pl-4 shrink-0 gap-1.5 sm:gap-2">
+                    <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 sm:border-l-2 border-foreground/20 sm:pl-4 shrink-0 gap-1.5 sm:gap-2 min-w-0">
                         {event.cost && (
-                            <div className="flex items-center text-sm font-bold px-3 py-1.5 rounded-lg bg-foreground text-background dark:bg-muted-foreground dark:text-muted shrink-0 border border-border/20">
+                            <div className="flex items-center text-xs sm:text-sm font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-foreground text-background dark:bg-muted-foreground dark:text-muted shrink-0 border border-border/20 min-w-0 max-w-full truncate" title={`${event.currency} ${event.cost.toLocaleString()}`}>
                                 {event.currency} {event.cost.toLocaleString()}
                             </div>
                         )}
 
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1.5 shrink-0">
                             {event.url && (
                                 <Button
                                     variant="stickerIcon"
                                     size="icon"
+                                    className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 sm:h-9 sm:w-9 touch-manipulation"
                                     asChild
                                 >
                                     <a href={event.url} target="_blank" rel="noopener noreferrer">
@@ -165,6 +166,7 @@ export function SortableTimelineEvent({
                                 <Button
                                     variant="stickerIcon"
                                     size="icon"
+                                    className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 sm:h-9 sm:w-9 touch-manipulation"
                                     asChild
                                 >
                                     <a
@@ -183,6 +185,7 @@ export function SortableTimelineEvent({
                                         <Button
                                             variant="stickerIcon"
                                             size="icon"
+                                            className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 sm:h-9 sm:w-9 touch-manipulation"
                                         >
                                             <MoreHorizontal className="h-4 w-4" strokeWidth={2.5} />
                                         </Button>

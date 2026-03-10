@@ -44,7 +44,7 @@ export function PageHeader({
             {badge.label}
           </StickerBadge>
         )}
-        <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-foreground leading-[0.9]">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tighter text-foreground leading-[0.9]">
           {title}
         </h1>
         {description != null && (
