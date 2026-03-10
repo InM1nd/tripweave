@@ -49,7 +49,7 @@ export function AssignToDayPopover({ tripId, eventId, tripStartDate, tripEndDate
             <PopoverTrigger asChild>
                 <button
                     className={cn(
-                        "flex items-center justify-center h-9 w-9 rounded-full font-black border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all",
+                        "flex items-center justify-center min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 h-9 w-9 rounded-full font-black border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all touch-manipulation",
                         assignedDay ? "bg-sticker-green text-foreground" : "bg-foreground text-background"
                     )}
                     onClick={(e) => e.stopPropagation()}

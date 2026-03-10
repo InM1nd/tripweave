@@ -29,7 +29,7 @@ export default async function SuggestedPlacesPage({ params }: { params: Promise<
   const events = await getSuggestedEvents(id);
 
   return (
-    <div className="space-y-6 flex flex-col h-full pb-12">
+    <div className="space-y-6 flex flex-col h-full pb-24 sm:pb-12 min-w-0">
       <PageHeader
         badge={{ label: "💡 Idea Board", color: "pink" }}
         title="Suggested Places"
@@ -37,7 +37,7 @@ export default async function SuggestedPlacesPage({ params }: { params: Promise<
         className="border-b-2 border-border pb-4 shrink-0"
       />
 
-      <div className={`flex-1 min-h-0 bg-card rounded-3xl border-2 border-border overflow-hidden shadow-sticker-sm-soft relative p-2 md:p-6`}>
+      <div className="flex-1 min-h-0 min-w-0 bg-card rounded-2xl sm:rounded-3xl border-2 border-border overflow-hidden shadow-sticker-sm-soft relative p-3 sm:p-4 md:p-6">
         <SuggestedPlacesBoard
           tripId={trip.id}
           events={events}

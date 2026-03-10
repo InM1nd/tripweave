@@ -44,8 +44,8 @@ export function TripTabs({ tripId }: TripTabsProps) {
   return (
     <>
       {/* Desktop: sticky folder-style tabs */}
-      <div className="hidden md:block sticky top-0 z-30 bg-background transition-all w-full min-w-0 overflow-hidden border-b border-border/50">
-        <nav className="flex items-end justify-start gap-0.5 w-full max-w-full px-2 pt-2" aria-label="Trip sections">
+      <div className="hidden md:block sticky top-0 z-30 bg-background transition-all w-full min-w-0 overflow-x-auto overflow-y-hidden border-b border-border/50">
+        <nav className="flex items-end justify-start gap-0.5 w-max min-w-full px-2 pt-2" aria-label="Trip sections">
           {tabs.map((tab) => {
             const isActive = currentTab === tab.href;
             return (

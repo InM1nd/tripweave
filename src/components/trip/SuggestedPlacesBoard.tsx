@@ -55,9 +55,9 @@ export function SuggestedPlacesBoard({ tripId, events, currentUserId, tripStartD
     const sortedEvents = [...events].sort((a, b) => b.votes.length - a.votes.length);
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 items-stretch min-w-0 overflow-hidden">
             {sortedEvents.map((event, i) => (
-                <StickerAnimator key={event.id} delay={i * 0.06} className="h-full flex">
+                <StickerAnimator key={event.id} delay={i * 0.06} className="h-full flex min-w-0">
                     <SuggestedPlaceCard
                         event={event}
                         currentUserId={currentUserId}

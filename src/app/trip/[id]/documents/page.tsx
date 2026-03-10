@@ -41,7 +41,7 @@ export default async function DocumentsPage({ params }: { params: Promise<{ id: 
   const docs = await getTripDocuments(id);
 
   return (
-    <div className="space-y-5 md:space-y-6 pb-12">
+    <div className="space-y-5 md:space-y-6 pb-24 sm:pb-12 min-w-0 w-full">
       <TripDocumentCard
         perforation
         title="Documents"

@@ -27,7 +27,7 @@ export function TripDocumentCard({
   return (
     <StickerSurface
       className={cn(
-        "relative bg-card overflow-hidden",
+        "relative bg-card overflow-hidden min-w-0",
         className
       )}
     >

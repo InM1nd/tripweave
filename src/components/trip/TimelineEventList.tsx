@@ -118,10 +118,10 @@ function DayContainer({
                     </AddEventModal>
                 </div>
 
-                {/* Vertical timeline line */}
+                {/* Vertical timeline line — hidden on mobile to give cards more space */}
                 <div
                     ref={lineRef}
-                    className="ml-2 pl-3 sm:ml-6 sm:pl-6 border-l-2 border-border/50 space-y-2 sm:space-y-3 min-h-[40px] sm:min-h-[50px] relative"
+                    className="pl-0 ml-0 sm:ml-6 sm:pl-6 sm:border-l-2 sm:border-border/50 space-y-2 sm:space-y-3 min-h-[40px] sm:min-h-[50px] relative"
                 >
                     <AnimatePresence>
                         {dotState && (
@@ -140,7 +140,7 @@ function DayContainer({
                                 }}
                                 exit={{ opacity: 0, scale: 0 }}
                                 transition={{ type: "spring", stiffness: 500, damping: 35 }}
-                                className="absolute -left-2.5 top-0 w-5 h-5 rounded-full border-2 border-border shadow-sticker-badge z-20 pointer-events-none"
+                                className="absolute -left-2.5 top-0 w-5 h-5 rounded-full border-2 border-border shadow-sticker-badge z-20 pointer-events-none hidden sm:block"
                             />
                         )}
                     </AnimatePresence>
@@ -319,7 +319,7 @@ export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListPr
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
         >
-            <div className="space-y-6 sm:space-y-8 pb-20 min-w-0">
+            <div className="space-y-6 sm:space-y-8 pb-20 min-w-0 w-full">
                 {sortedDates.map((dateKey) => (
                     <DayContainer
                         key={dateKey}

@@ -36,7 +36,7 @@ export default async function BudgetPage({ params }: { params: Promise<{ id: str
   })).sort((a, b) => b.amount - a.amount);
 
   return (
-    <div className="space-y-5 md:space-y-6 max-w-4xl mx-auto pb-12">
+    <div className="space-y-5 md:space-y-6 max-w-4xl mx-auto pb-24 sm:pb-12 min-w-0 w-full">
       {/* Budget Document Card — wraps the whole section */}
       <TripDocumentCard
         perforation

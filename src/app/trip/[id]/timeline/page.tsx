@@ -28,7 +28,7 @@ export default async function TimelinePage({ params }: { params: Promise<{ id: s
   }, {});
 
   return (
-    <div className="space-y-5 md:space-y-6 max-w-4xl mx-auto pb-24 sm:pb-12 min-w-0 w-full overflow-x-hidden">
+    <div className="space-y-5 md:space-y-6 max-w-4xl mx-auto pb-24 sm:pb-12 min-w-0 w-full">
       <PageHeader
         badge={{ label: "📅 Itinerary", color: "blue" }}
         title="Timeline"

@@ -99,35 +99,38 @@ export function TripHeader({ trip }: TripHeaderProps) {
             <Plane className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-muted-foreground" strokeWidth={2.5} />
             <span className="text-[8px] sm:text-[9px] font-black text-muted-foreground uppercase tracking-widest">TripWeave</span>
           </div>
-          <span className="text-[8px] sm:text-[9px] font-bold text-muted-foreground tabular-nums truncate">TRIP · {trip.id.slice(0, 8).toUpperCase()}</span>
+          <span className="text-[8px] sm:text-[9px] font-bold text-muted-foreground tabular-nums truncate min-w-0">TRIP · {trip.id.slice(0, 8).toUpperCase()}</span>
         </div>
 
         <div className="flex flex-col md:flex-row">
-          {/* Left: cover image — ticket stub with photo */}
-          <div className="relative h-32 sm:h-40 md:h-auto md:w-56 lg:w-72 overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-border">
-            <div className="absolute inset-0 bg-linear-to-t md:bg-linear-to-r from-black/30 via-transparent to-transparent z-1" />
+          {/* Left: cover image — ticket stub with photo, vignette + inset shadow on mobile/desktop */}
+          <div className="relative h-32 sm:h-40 md:h-auto md:w-56 lg:w-72 overflow-hidden shrink-0 border-b md:border-b-0 md:border-r border-border shadow-[inset_0_0_40px_rgba(0,0,0,0.18)]">
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.4)_100%)] z-[1] pointer-events-none" aria-hidden />
+            <div className="absolute inset-0 bg-linear-to-t md:bg-linear-to-r from-black/30 via-transparent to-transparent z-[1] pointer-events-none" aria-hidden />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={trip.coverImage || "/placeholder-trip.jpg"}
               alt={trip.name}
-              className="object-cover w-full h-full"
+              className="object-cover w-full h-full relative z-0"
             />
 
-            {/* Mobile overlay buttons: Back (left), Share & More (right) */}
-            <div className="absolute top-2 left-2 right-2 z-20 md:hidden flex items-center justify-between">
-              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-black/40 backdrop-blur-sm text-white hover:bg-black/60 border-0" asChild>
-                <Link href="/dashboard">
-                  <ArrowLeft className="h-4 w-4" />
-                </Link>
-              </Button>
-              <div className="flex items-center gap-1">
-                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-black/40 backdrop-blur-sm text-white hover:bg-black/60 border-0" aria-label="Share trip">
-                  <Share2 className="h-3.5 w-3.5" strokeWidth={2.5} />
+            {/* Mobile overlay buttons: Back (left), Share & More (right) — sticker-style for visibility */}
+            <div className="absolute top-2 left-2 right-2 z-20 md:hidden flex items-center justify-between pointer-events-none">
+              <div className="pointer-events-auto">
+                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-black/50 backdrop-blur-md text-white hover:bg-black/60 border-2 border-white/30 shadow-sticker-sm" asChild>
+                  <Link href="/dashboard">
+                    <ArrowLeft className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+              <div className="flex items-center gap-1.5 pointer-events-auto">
+                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-black/50 backdrop-blur-md text-white hover:bg-black/60 border-2 border-white/30 shadow-sticker-sm" aria-label="Share trip">
+                  <Share2 className="h-4 w-4" strokeWidth={2.5} />
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-black/40 backdrop-blur-sm text-white hover:bg-black/60 border-0" aria-label="More options">
-                      <MoreHorizontal className="h-3.5 w-3.5" strokeWidth={2.5} />
+                    <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-black/50 backdrop-blur-md text-white hover:bg-black/60 border-2 border-white/30 shadow-sticker-sm" aria-label="More options">
+                      <MoreHorizontal className="h-4 w-4" strokeWidth={2.5} />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="rounded-2xl border-2 border-border shadow-sticker-elevated">
@@ -149,10 +152,7 @@ export function TripHeader({ trip }: TripHeaderProps) {
             </div>
           </div>
 
-          {/* Vertical perforation divider (desktop) */}
-          <div className="hidden md:block w-5 shrink-0 ticket-perforation-v" />
-
-          {/* Right: ticket fields — tighter on mobile */}
+          {/* Right: ticket fields — tighter on mobile (no vertical perforation) */}
           <div className="flex-1 p-2.5 sm:p-4 md:p-5 flex flex-col justify-between gap-2.5 sm:gap-4 min-w-0">
             {/* Row 1: Trip name + status — stack on mobile so nothing clips */}
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-3">
@@ -175,23 +175,23 @@ export function TripHeader({ trip }: TripHeaderProps) {
 
             {/* Row 2: From → To (ticket route) */}
             <div className="flex items-center gap-1 sm:gap-2 py-1.5 sm:py-2 border-y border-dashed border-border min-w-0">
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 shrink">
                 <div className="text-[8px] sm:text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">From</div>
                 <div className="font-black text-[11px] sm:text-sm text-foreground truncate">Your plans</div>
               </div>
-              <div className="shrink-0 flex items-center gap-0.5 sm:gap-1 text-muted-foreground">
+              <div className="shrink-0 flex items-center gap-0.5 text-muted-foreground">
                 <div className="w-2 sm:w-6 border-t-2 border-dashed border-current" />
-                <Plane className="h-2.5 w-2.5 sm:h-3 sm:w-3" strokeWidth={2.5} />
+                <Plane className="h-2.5 w-2.5 sm:h-3 sm:w-3 shrink-0" strokeWidth={2.5} />
                 <div className="w-2 sm:w-6 border-t-2 border-dashed border-current" />
               </div>
-              <div className="flex-1 min-w-0 text-right">
+              <div className="flex-1 min-w-0 shrink text-right">
                 <div className="text-[8px] sm:text-[9px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">To</div>
                 <div className="font-black text-[11px] sm:text-sm text-foreground truncate">{trip.destination}</div>
               </div>
             </div>
 
             {/* Row 3: Depart, Return, Duration — 2 cols on mobile so labels don't squeeze */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-3 gap-y-2 sm:gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-2 gap-y-2 sm:gap-3 md:gap-4 min-w-0">
               <div className="min-w-0 hidden md:block">
                 <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Destination</div>
                 <div className="flex items-center gap-1.5 font-black text-sm text-foreground">

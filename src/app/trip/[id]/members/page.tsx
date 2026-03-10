@@ -52,7 +52,7 @@ export default async function MembersPage({ params }: { params: Promise<{ id: st
   const isOwner = currentUserMember?.role === "OWNER";
 
   return (
-    <div className="space-y-5 md:space-y-6 max-w-4xl mx-auto pb-12">
+    <div className="space-y-5 md:space-y-6 max-w-4xl mx-auto pb-24 sm:pb-12 min-w-0 w-full">
       <TripDocumentCard
         perforation
         title="Members"

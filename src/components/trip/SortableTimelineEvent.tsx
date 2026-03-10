@@ -71,7 +71,7 @@ export function SortableTimelineEvent({
         <div
             ref={setNodeRef}
             style={style}
-            className={cn("relative py-2 group", isDragging && "opacity-50")}
+            className={cn("relative py-2 group w-full min-w-0", isDragging && "opacity-50")}
         >
             <div
                 ref={cardRef}
@@ -95,20 +95,20 @@ export function SortableTimelineEvent({
                     <GripVertical className="h-5 w-5 sm:h-6 sm:w-6 text-foreground/50" strokeWidth={3} />
                 </div>
 
-                <div className="flex-1 p-2 sm:p-4 flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center min-w-0 overflow-hidden">
+                <div className="flex-1 p-3 sm:p-4 flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center min-w-0 overflow-hidden">
                     {/* Time & Type column */}
-                    <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-center w-full sm:w-28 shrink-0 gap-1 sm:gap-1.5">
-                        <div className="text-[9px] sm:text-[11px] uppercase font-bold tracking-widest rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1 bg-foreground/10 border border-foreground/10 flex items-center justify-center truncate max-w-[45%] sm:max-w-none">
+                    <div className="flex sm:flex-col items-center sm:items-start justify-between sm:justify-center w-full sm:w-28 shrink-0 gap-1 sm:gap-1.5 min-w-0">
+                        <div className="text-[9px] sm:text-[11px] uppercase font-bold tracking-widest rounded-lg px-1.5 sm:px-2 py-0.5 sm:py-1 bg-foreground/10 border border-foreground/10 flex items-center justify-center truncate max-w-[40%] sm:max-w-none">
                             {event.type}
                         </div>
-                        <div className="flex items-center text-xs sm:text-sm font-bold whitespace-nowrap opacity-90">
+                        <div className="flex items-center text-xs sm:text-sm font-bold whitespace-nowrap opacity-90 shrink-0">
                             <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 shrink-0" strokeWidth={2.5} />
                             {formatTimeInfo(event.startTime)}
                         </div>
                     </div>
 
                     {/* Main content */}
-                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-1">
+                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-2 overflow-hidden">
                         <h4
                             className="font-bold text-base sm:text-lg leading-tight truncate"
                             title={event.title}
@@ -117,47 +117,46 @@ export function SortableTimelineEvent({
                         </h4>
 
                         {(event.location || event.description) && (
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4 text-sm font-semibold opacity-80 min-w-0">
-                                {event.location && (
-                                    <div
-                                        className="flex items-center gap-1.5 min-w-0 truncate"
-                                        title={event.location}
-                                    >
-                                        <MapPin className="h-4 w-4 shrink-0" strokeWidth={3} />
-                                        <span className="truncate">{event.location}</span>
-                                    </div>
-                                )}
+                            <div className="flex flex-col justify-start gap-1 text-xs sm:text-sm font-semibold opacity-80 min-w-0 overflow-hidden">
                                 {event.description && (
                                     <div
-                                        className="flex items-center gap-1.5 min-w-0 truncate"
+                                        className="flex items-start gap-1.5 min-w-0 overflow-hidden"
                                         title={event.description}
                                     >
-                                        <AlignLeft className="h-4 w-4 shrink-0" strokeWidth={3} />
-                                        <span className="truncate">{event.description}</span>
+                                        <span className="line-clamp-2 break-words">{event.description}</span>
+                                    </div>
+                                )}
+                                {event.location && (
+                                    <div
+                                        className="flex items-center gap-1.5 min-w-0 overflow-hidden"
+                                        title={event.location}
+                                    >
+                                        <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" strokeWidth={3} />
+                                        <span className="truncate">{event.location}</span>
                                     </div>
                                 )}
                             </div>
                         )}
                     </div>
 
-                    {/* Actions & Meta */}
-                    <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-1 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 sm:border-l-2 border-foreground/20 sm:pl-4 shrink-0 gap-1.5 sm:gap-2 min-w-0">
+                    {/* Actions & Meta — smaller buttons on mobile */}
+                    <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto mt-0 sm:mt-0 pt-2 sm:pt-0 border-t sm:border-t-0 sm:border-l-2 border-foreground/20 sm:pl-4 shrink-0 gap-1.5 sm:gap-2 min-w-0">
                         {event.cost && (
-                            <div className="flex items-center text-xs sm:text-sm font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-foreground text-background dark:bg-muted-foreground dark:text-muted shrink-0 border border-border/20 min-w-0 max-w-full truncate" title={`${event.currency} ${event.cost.toLocaleString()}`}>
+                            <div className="flex items-center text-[11px] sm:text-sm font-bold px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-foreground text-background dark:bg-muted-foreground dark:text-muted shrink-0 border border-border/20 min-w-0 max-w-full truncate" title={`${event.currency} ${event.cost.toLocaleString()}`}>
                                 {event.currency} {event.cost.toLocaleString()}
                             </div>
                         )}
 
-                        <div className="flex items-center gap-1.5 shrink-0">
+                        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
                             {event.url && (
                                 <Button
                                     variant="stickerIcon"
                                     size="icon"
-                                    className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 sm:h-9 sm:w-9 touch-manipulation"
+                                    className="h-8 w-8 sm:h-9 sm:w-9 touch-manipulation"
                                     asChild
                                 >
                                     <a href={event.url} target="_blank" rel="noopener noreferrer">
-                                        <ExternalLink className="h-4 w-4" strokeWidth={2.5} />
+                                        <ExternalLink className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} />
                                     </a>
                                 </Button>
                             )}
@@ -166,7 +165,7 @@ export function SortableTimelineEvent({
                                 <Button
                                     variant="stickerIcon"
                                     size="icon"
-                                    className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 sm:h-9 sm:w-9 touch-manipulation"
+                                    className="h-8 w-8 sm:h-9 sm:w-9 touch-manipulation"
                                     asChild
                                 >
                                     <a
@@ -174,7 +173,7 @@ export function SortableTimelineEvent({
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        <MapPin className="h-4 w-4" strokeWidth={2.5} />
+                                        <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} />
                                     </a>
                                 </Button>
                             )}
@@ -185,9 +184,9 @@ export function SortableTimelineEvent({
                                         <Button
                                             variant="stickerIcon"
                                             size="icon"
-                                            className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 sm:h-9 sm:w-9 touch-manipulation"
+                                            className="h-8 w-8 sm:h-9 sm:w-9 touch-manipulation"
                                         >
-                                            <MoreHorizontal className="h-4 w-4" strokeWidth={2.5} />
+                                            <MoreHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} />
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent
