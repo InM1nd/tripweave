@@ -64,7 +64,7 @@ const getIcon = (type: string) => {
 export default function NotificationsPage() {
   return (
     <DashboardLayout>
-      <div className="max-w-3xl mx-auto space-y-6 p-4 md:p-0">
+      <div className="max-w-3xl mx-auto space-y-6">
         <PageHeader
           badge={{ label: "🔔 What's new", color: "coral" }}
           title="Notifications"

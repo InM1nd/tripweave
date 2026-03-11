@@ -11,7 +11,6 @@ import {
   Users,
   Settings,
   Lightbulb,
-  LayoutGrid,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -35,11 +34,18 @@ export function TripTabs({ tripId }: TripTabsProps) {
   const currentTab = pathname.split("/").pop();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Close mobile menu when route changes (e.g. after tapping a section or browser back)
+  // Close mobile menu when route changes
   useEffect(() => {
     const id = requestAnimationFrame(() => setMobileMenuOpen(false));
     return () => cancelAnimationFrame(id);
   }, [pathname]);
+
+  // Open from DashboardLayout bottom nav button
+  useEffect(() => {
+    const handler = () => setMobileMenuOpen(true);
+    window.addEventListener("open-trip-sections", handler);
+    return () => window.removeEventListener("open-trip-sections", handler);
+  }, []);
 
   return (
     <>
@@ -69,23 +75,8 @@ export function TripTabs({ tripId }: TripTabsProps) {
         <div className="h-[2px] bg-border" />
       </div>
 
-      {/* Mobile: floating trigger + grid menu */}
+      {/* Mobile: grid menu (triggered from bottom nav Sections button) */}
       <div className="md:hidden">
-        {/* Trigger dot — above bottom nav */}
-        <button
-          type="button"
-          onClick={() => setMobileMenuOpen(true)}
-          aria-label="Open trip sections"
-          className={cn(
-            "fixed z-40 right-4 rounded-full border-2 border-border bg-card shadow-sticker-card hover:shadow-sticker-card-hover active:scale-95 transition-all flex items-center justify-center",
-            "bottom-[calc(4rem+env(safe-area-inset-bottom))]",
-            "h-12 w-12"
-          )}
-        >
-          <LayoutGrid className="h-5 w-5 text-foreground" strokeWidth={2.5} />
-        </button>
-
-        {/* Overlay when menu open */}
         {mobileMenuOpen && (
           <>
             <button
@@ -100,6 +91,7 @@ export function TripTabs({ tripId }: TripTabsProps) {
                 bottom: "calc(4rem + env(safe-area-inset-bottom) + 0.5rem)",
               }}
             >
+
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-black uppercase tracking-widest text-muted-foreground">
                   Sections

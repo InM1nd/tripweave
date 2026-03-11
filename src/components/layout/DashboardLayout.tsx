@@ -12,7 +12,8 @@ import {
   Plus,
   Plane,
   ChevronRight,
-  Luggage
+  Luggage,
+  LayoutGrid,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -36,8 +37,9 @@ export function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const isTrip = pathname.startsWith("/trip/");
   // Layout key: same for all tabs of a trip so tab switch doesn't remount header/tabs
-  const layoutKey = pathname.startsWith("/trip/")
+  const layoutKey = isTrip
     ? "/" + pathname.split("/").slice(1, 3).join("/")
     : pathname;
   const [trips, setTrips] = useState<Awaited<ReturnType<typeof getTrips>>>([]);
@@ -194,13 +196,13 @@ export function DashboardLayout({
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-h-[100dvh] min-w-0 pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
           {/* Mobile Header */}
-          <header className="md:hidden sticky top-0 z-20 bg-background border-b-2 border-border rounded-b-2xl">
-            <div className="px-4 h-12 flex items-center justify-between">
-              <Link href="/dashboard" className="flex items-center gap-1.5">
-                <div className="h-7 w-7 rounded-lg bg-accent flex items-center justify-center text-accent-text border-2 border-border">
-                  <Plane className="h-3.5 w-3.5" strokeWidth={3} />
+          <header className="md:hidden sticky top-0 z-20 bg-background border-b-2 border-border">
+            <div className="px-4 h-14 flex items-center justify-between">
+              <Link href="/dashboard" className="flex items-center gap-2">
+                <div className="h-9 w-9 rounded-xl bg-accent flex items-center justify-center text-accent-text border-2 border-border shadow-sticker-sm">
+                  <Plane className="h-4.5 w-4.5" strokeWidth={3} />
                 </div>
-                <span className="font-black text-sm text-text-primary">
+                <span className="font-black text-base text-text-primary">
                   TripWeave
                 </span>
               </Link>
@@ -211,7 +213,7 @@ export function DashboardLayout({
             </div>
           </header>
 
-          <main className="flex-1 min-w-0 p-2 md:p-5 lg:p-6 max-w-[1600px] mx-auto w-full">
+          <main className="flex-1 min-w-0 px-4 py-4 md:p-5 lg:p-6 max-w-[1600px] mx-auto w-full">
             <AnimatePresence mode="wait">
               <motion.div
                 key={layoutKey}
@@ -227,10 +229,35 @@ export function DashboardLayout({
           </main>
 
           {/* Mobile Bottom Navigation */}
-          {/* pb-[env(safe-area-inset-bottom)] ensures home-indicator clearance on notched iOS (PWA: viewport-fit=cover) */}
-          <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t-2 border-border bg-background z-50 pb-[env(safe-area-inset-bottom)] rounded-t-2xl">
-            <div className="flex items-center justify-around h-14 px-2">
-              {navItems.slice(0, 4).map((item) => (
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t-2 border-border bg-background z-50 pb-[env(safe-area-inset-bottom)]">
+            <div className="flex items-stretch justify-around h-16 px-1">
+              {navItems.slice(0, 2).map((item) => (
+                <MobileNavLink
+                  key={item.href}
+                  href={item.href}
+                  icon={item.icon}
+                  label={item.label}
+                  active={pathname === item.href}
+                />
+              ))}
+
+              {/* Centre Sections slot — always in DOM to prevent layout shift */}
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent("open-trip-sections"))}
+                aria-label="Open trip sections"
+                className={cn(
+                  "flex flex-col items-center justify-center flex-1 h-full gap-0.5 active:scale-95 transition-all",
+                  isTrip ? "visible" : "invisible pointer-events-none"
+                )}
+              >
+                <div className="p-2 rounded-xl bg-primary/15 border-2 border-primary/30">
+                  <LayoutGrid className="h-5 w-5 text-primary" strokeWidth={2.5} />
+                </div>
+                <span className="text-[10px] font-black text-primary">Sections</span>
+              </button>
+
+              {navItems.slice(2, 4).map((item) => (
                 <MobileNavLink
                   key={item.href}
                   href={item.href}
@@ -270,13 +297,13 @@ function MobileNavLink({
     >
       <div
         className={cn(
-          "p-2 rounded-sticker transition-all duration-200",
-          active && "bg-primary/15 shadow-sticker-sm-soft scale-110"
+          "p-2 rounded-xl transition-all duration-200",
+          active && "bg-primary/15 border-2 border-primary/30 scale-105"
         )}
       >
-        <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 2} />
+        <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.5 : 2} />
       </div>
-      <span className={cn("text-[10px]", active ? "font-black" : "font-medium")}>{label}</span>
+      <span className={cn("text-[11px]", active ? "font-black" : "font-medium")}>{label}</span>
     </Link>
   );
 }

@@ -137,7 +137,7 @@ export default async function DashboardPage() {
   return (
     <DashboardLayout>
       <div className="relative min-h-[80dvh]">
-        <div className="relative z-10 space-y-6 md:space-y-8 max-w-7xl p-4 md:p-0">
+        <div className="relative z-10 space-y-6 md:space-y-8 max-w-7xl">
           {/* Header */}
           <PageHeader
             badge={{ label: "Welcome back", icon: <Sparkles className="h-4 w-4" />, color: "coral" }}

@@ -34,7 +34,7 @@ export default async function TripLayout({ children, params }: TripLayoutProps) 
 
     return (
         <DashboardLayout>
-            <div className="flex flex-col gap-2 md:gap-3 min-w-0 overflow-x-hidden [--trip-tabs-offset:4.5rem] md:[--trip-tabs-offset:3.5rem]">
+            <div className="flex flex-col gap-2 md:gap-3 min-w-0 overflow-x-hidden [--trip-tabs-offset:3.5rem] md:[--trip-tabs-offset:3.5rem]">
                 <TripHeader trip={trip} />
                 <div className="flex flex-col gap-2 md:gap-3 min-w-0">
                     <TripTabs tripId={id} />
