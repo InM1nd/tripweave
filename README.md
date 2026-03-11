@@ -24,6 +24,7 @@ Collaborative travel planning app — plan trips, share timelines, track budgets
 - **Maps**: React Leaflet (OpenStreetMap)
 - **Charts**: Recharts
 - **State**: TanStack React Query, React Hook Form, Zod
+- **AI Code Generation**: The codebase is developed with the assistance of AI coding assistants (using large language models) to ensure best practices, maintain consistency, and accelerate development.
 
 ## Screenshots
 
