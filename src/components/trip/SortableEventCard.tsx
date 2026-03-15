@@ -8,7 +8,12 @@ import { getEventTypeStickerColor } from "@/lib/design-tokens";
 import { StickerBadge } from "@/components/ui/StickerBadge";
 import { Event } from "@prisma/client";
 import { useState } from "react";
-import { EditEventSheet } from "@/components/trip/EditEventSheet";
+import dynamic from "next/dynamic";
+
+const EditEventSheet = dynamic(
+    () => import("@/components/trip/EditEventSheet").then(m => ({ default: m.EditEventSheet })),
+    { ssr: false }
+);
 
 interface SortableEventCardProps {
     event: Event;

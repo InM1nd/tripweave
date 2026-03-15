@@ -255,10 +255,10 @@ export function SocialSpotImporter() {
                     <div className="flex items-center gap-2">
                         <span className="text-[11px] text-muted-foreground">Supports:</span>
                         <div className="flex items-center gap-1.5">
-                            <Badge className="text-[10px] gap-1 py-0 h-5 bg-sticker-pink text-foreground border-2 border-border shadow-sticker-badge rounded-full">
+                            <Badge className="text-[10px] gap-1 py-0 h-5 bg-sticker-pink text-sticker-foreground border-2 border-border shadow-sticker-badge rounded-full">
                                 <Instagram className="h-2.5 w-2.5" /> Instagram
                             </Badge>
-                            <Badge className="text-[10px] gap-1 py-0 h-5 bg-sticker-blue text-foreground border-2 border-border shadow-sticker-badge rounded-full">
+                            <Badge className="text-[10px] gap-1 py-0 h-5 bg-sticker-blue text-sticker-foreground border-2 border-border shadow-sticker-badge rounded-full">
                                 <TikTokIcon className="h-2.5 w-2.5" /> TikTok
                             </Badge>
                             <Badge className="text-[10px] gap-1 py-0 h-5 bg-sticker-coral text-white border-2 border-border shadow-sticker-badge rounded-full">

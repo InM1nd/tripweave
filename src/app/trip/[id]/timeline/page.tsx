@@ -5,7 +5,7 @@ import { Plus, FileSpreadsheet } from "lucide-react";
 import { AddEventModal } from "@/components/trip/AddEventModal";
 import { ImportPlanModal } from "@/components/trip/ImportPlanModal";
 import { format } from "date-fns";
-import { TimelineEventList } from "@/components/trip/TimelineEventList";
+import { TimelineContent } from "@/components/trip/TimelineContent";
 import { TimelineEmptyState } from "@/components/trip/TimelineEmptyState";
 
 type TripEvent = Awaited<ReturnType<typeof getTripEvents>>[number];
@@ -28,7 +28,7 @@ export default async function TimelinePage({ params }: { params: Promise<{ id: s
   }, {});
 
   return (
-    <div className="space-y-5 md:space-y-6 max-w-4xl mx-auto pb-24 sm:pb-12 min-w-0 w-full">
+    <div className="space-y-5 md:space-y-6 pb-24 sm:pb-12 min-w-0 w-full">
       <PageHeader
         badge={{ label: "📅 Itinerary", color: "blue" }}
         title="Timeline"
@@ -52,7 +52,7 @@ export default async function TimelinePage({ params }: { params: Promise<{ id: s
         className="border-b-2 border-border pb-3 sm:pb-4"
       />
 
-      <TimelineEventList groupedEvents={groupedEvents} tripId={id} />
+      <TimelineContent groupedEvents={groupedEvents} tripId={id} />
 
       {Object.keys(groupedEvents).length === 0 && (
         <TimelineEmptyState tripId={id} />

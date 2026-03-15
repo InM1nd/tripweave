@@ -1,9 +1,14 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import dynamic from "next/dynamic";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SocialSpotImporter } from "@/components/explore/SocialSpotImporter";
 import { PlaceCard } from "@/components/explore/PlaceCard";
+
+const SocialSpotImporter = dynamic(
+    () => import("@/components/explore/SocialSpotImporter").then(m => ({ default: m.SocialSpotImporter })),
+    { loading: () => <div className="h-32 rounded-2xl bg-muted/30 animate-pulse border-2 border-border" /> }
+);
 import { StickerAnimator } from "@/components/ui/StickerAnimator";
 import { Place } from "@prisma/client";
 import { Sparkles, Bookmark, LayoutGrid, Zap, Plus, Search } from "lucide-react";
@@ -68,17 +73,17 @@ export function ExploreContent({ myPlaces, recommendations, trips }: ExploreCont
             <Tabs defaultValue="for-you" className="space-y-5 md:space-y-6" onValueChange={setActiveTab}>
                 <div className="flex items-center justify-between">
                     {/* Single bar, no overlap: one container with two clear segments */}
-                    <TabsList className="inline-flex h-auto p-1.5 gap-1 rounded-3xl border-2 border-border bg-muted/40 shadow-sticker-sm-soft">
+                    <TabsList className="inline-flex h-auto p-1.5 gap-1 rounded-full border-2 border-border bg-muted/40 shadow-sticker-sm-soft">
                         <TabsTrigger
                             value="for-you"
-                            className="gap-1.5 font-black text-sm rounded-2xl border-2 border-transparent px-4 py-2 transition-all data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-muted/60 data-[state=inactive]:hover:text-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:border-border data-[state=active]:shadow-sticker-sm"
+                            className="gap-1.5 font-black text-sm rounded-full border-2 border-transparent px-4 py-2 transition-all data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-muted/60 data-[state=inactive]:hover:text-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:border-border data-[state=active]:shadow-sticker-sm"
                         >
                             <Sparkles className="h-4 w-4 fill-current" />
                             For You
                         </TabsTrigger>
                         <TabsTrigger
                             value="my-list"
-                            className="gap-1.5 font-black text-sm rounded-2xl border-2 border-transparent px-4 py-2 transition-all data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-muted/60 data-[state=inactive]:hover:text-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:border-border data-[state=active]:shadow-sticker-sm"
+                            className="gap-1.5 font-black text-sm rounded-full border-2 border-transparent px-4 py-2 transition-all data-[state=inactive]:bg-transparent data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:bg-muted/60 data-[state=inactive]:hover:text-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:border-border data-[state=active]:shadow-sticker-sm"
                         >
                             <Bookmark className="h-4 w-4" strokeWidth={3} />
                             My List
@@ -117,7 +122,7 @@ export function ExploreContent({ myPlaces, recommendations, trips }: ExploreCont
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                 <div className="flex items-center gap-2.5">
-                                    <div className="p-1.5 bg-sticker-yellow border-2 border-border rounded-xl shadow-sticker-badge">
+                                    <div className="p-1.5 bg-sticker-yellow text-sticker-foreground border-2 border-border rounded-xl shadow-sticker-badge">
                                         <LayoutGrid className="h-4 w-4" />
                                     </div>
                                     <h2 className="text-xl font-black tracking-tighter">Saved Places</h2>

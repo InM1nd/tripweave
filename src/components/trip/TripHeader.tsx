@@ -228,7 +228,7 @@ export function TripHeader({ trip }: TripHeaderProps) {
                   )}
                 </div>
               </div>
-              <Button variant="outline" size="sm" className="h-8 px-3 rounded-full border-2 border-border shadow-sticker-badge font-bold text-xs hover:-translate-y-px transition-all shrink-0 gap-1.5" asChild>
+              <Button variant="outline" size="sm" className="h-8 px-4 rounded-full border-2 border-border shadow-sticker-sm font-bold text-xs hover:-translate-y-px transition-all shrink-0 gap-1.5" asChild>
                 <Link href={`/trip/${trip.id}/members`}>
                   <Users className="h-3.5 w-3.5" strokeWidth={2.5} />
                   <span>Invite</span>

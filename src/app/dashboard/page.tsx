@@ -115,11 +115,11 @@ function CouponStatCard({
   return (
     <StickerSurface stickerColor={color} hover className="p-4 md:p-3 flex gap-3 items-center">
       <div className="w-9 h-9 rounded-full flex items-center justify-center bg-white/40 shrink-0">
-        <Icon className="h-4 w-4 text-foreground" strokeWidth={2.5} />
+        <Icon className="h-4 w-4 text-sticker-foreground" strokeWidth={2.5} />
       </div>
       <div className="flex flex-col min-w-0">
-        <div className="font-black text-2xl md:text-xl text-foreground leading-none">{value}</div>
-        <div className="text-[10px] font-bold text-foreground/70 uppercase tracking-widest mt-0.5 truncate">{label}</div>
+        <div className="font-black text-2xl md:text-xl text-sticker-foreground leading-none">{value}</div>
+        <div className="text-[10px] font-bold text-sticker-foreground/70 uppercase tracking-widest mt-0.5 truncate">{label}</div>
       </div>
     </StickerSurface>
   );

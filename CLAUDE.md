@@ -18,6 +18,7 @@ Strictly avoid flat minimalism. UI elements should feel like physical objects (t
 - **Shadows:** Hard offset shadows ONLY (e.g., `shadow-[0_4px_0_rgba(0,0,0,0.08)]`). NO blur. On hover: shift element up and increase shadow offset.
 - **Border Radius:** `rounded-2xl` / `rounded-3xl` for cards, `rounded-full` for badges/buttons.
 - **Colors:** Use the sticker palette (`bg-sticker-yellow`, `sticker-pink`, `sticker-green`, etc.) alongside `primary`, `muted`, `card`. Support `[data-theme="dark"]` and `[data-palette="alternate"]`.
+- **Dark theme — colored components:** For `bg-sticker-*`, badges, pills, colored cards: do NOT add `dark:text-white`. Keep the same text color in both themes (`text-foreground` for most sticker backgrounds). Use `text-white` only when the background is intentionally dark (e.g. danger, destructive).
 - **Typography:** Bold, punchy headings (`font-black tracking-tighter`). Do not bloat heading sizes on internal pages (e.g., avoid `md:text-5xl` in lists).
 - **Transforms:** Use rotation (`rotate-*`) ONLY for decorative badges and the landing page. DO NOT rotate structural cards inside the app (dashboard, trip, notifications).
 

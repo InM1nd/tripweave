@@ -146,7 +146,6 @@ export async function updateEvent(tripId: string, eventId: string, data: Partial
             updateData.endTime = start; // Simplified: end time equals start time for now
 
             delete updateData.startDate;
-            delete updateData.startTime;
         }
         if (data.cost) updateData.cost = parseFloat(data.cost as unknown as string);
 

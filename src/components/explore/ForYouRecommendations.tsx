@@ -93,7 +93,7 @@ export function ForYouRecommendations({ initialPlaces, onAddPlace }: ForYouRecom
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center gap-3 bg-muted/30 p-3 md:p-2.5 rounded-2xl border-2 border-border shadow-sticker-sm-soft">
+            <div className="flex flex-wrap items-center gap-3 bg-muted/30 p-3 md:p-2.5 rounded-3xl border-2 border-border shadow-sticker-sm-soft">
                 <span className="text-xs md:text-md font-bold">Personalize:</span>
                 {FILTER_OPTIONS.map(option => (
                     <div key={option.id} className="flex items-center space-x-2">
@@ -115,7 +115,7 @@ export function ForYouRecommendations({ initialPlaces, onAddPlace }: ForYouRecom
                 <Button
                     variant="secondary"
                     size="sm"
-                    className="ml-auto hover:-translate-y-px font-bold rounded-xl"
+                    className="ml-auto hover:-translate-y-px font-bold rounded-full"
                     onClick={() => loadMore(true)}
                     disabled={isLoading}
                 >

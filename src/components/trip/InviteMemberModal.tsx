@@ -232,7 +232,7 @@ export function InviteMemberModal({ tripId }: InviteMemberModalProps) {
         return (
             <Dialog open={open} onOpenChange={handleOpenChange}>
                 <DialogTrigger asChild>
-                    <Button className="gap-2" size="sm">
+                    <Button className="gap-2 rounded-full" size="sm">
                         <UserPlus className="h-4 w-4" />
                         <span className="hidden sm:inline">Invite</span>
                     </Button>
@@ -253,7 +253,7 @@ export function InviteMemberModal({ tripId }: InviteMemberModalProps) {
     return (
         <Drawer open={open} onOpenChange={handleOpenChange}>
             <DrawerTrigger asChild>
-                <Button className="gap-2" size="sm">
+                <Button className="gap-2 rounded-full" size="sm">
                     <UserPlus className="h-4 w-4" />
                     <span className="hidden sm:inline">Invite</span>
                 </Button>

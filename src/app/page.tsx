@@ -40,7 +40,15 @@ import { RevealOnScroll, RevealItem } from "@/components/landing/RevealOnScroll"
 import { SectionHeader } from "@/components/landing/SectionHeader";
 import { StickerCard, TicketButton } from "@/components/landing/StickerCard";
 import { getStickerBgClass } from "@/lib/design-tokens";
-import { WorldMapBg } from "@/components/landing/WorldMap";
+import dynamic from "next/dynamic";
+
+const WorldMapBg = dynamic(
+  () => import("@/components/landing/WorldMap").then(m => ({ default: m.WorldMapBg })),
+  {
+    ssr: false,
+    loading: () => <div className="absolute inset-0 w-full h-full bg-muted/10" aria-hidden />,
+  }
+);
 import { SectionTape } from "@/components/landing/SectionTape";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { HeroSticker } from "@/components/landing/HeroSticker";

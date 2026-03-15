@@ -21,7 +21,7 @@ const VARIANT_CONFIG: Record<
     bg: "bg-sticker-green",
     border: "border-border",
     icon: CheckCircle2,
-    iconClass: "text-foreground",
+    iconClass: "text-sticker-foreground",
   },
   error: {
     bg: "bg-sticker-coral",
@@ -33,21 +33,21 @@ const VARIANT_CONFIG: Record<
     bg: "bg-sticker-yellow",
     border: "border-border",
     icon: AlertTriangle,
-    iconClass: "text-foreground",
+    iconClass: "text-sticker-foreground",
   },
   info: {
     bg: "bg-sticker-blue",
     border: "border-border",
     icon: Info,
-    iconClass: "text-foreground",
+    iconClass: "text-sticker-foreground",
   },
 };
 
 const VARIANT_TEXT: Record<AlertVariant, { title: string; body: string }> = {
-  success: { title: "text-foreground", body: "text-foreground/80" },
+  success: { title: "text-sticker-foreground", body: "text-sticker-foreground/80" },
   error:   { title: "text-white",      body: "text-white/80" },
-  warning: { title: "text-foreground", body: "text-foreground/80" },
-  info:    { title: "text-foreground", body: "text-foreground/80" },
+  warning: { title: "text-sticker-foreground", body: "text-sticker-foreground/80" },
+  info:    { title: "text-sticker-foreground", body: "text-sticker-foreground/80" },
 };
 
 export function Alert({ variant, title, children, onClose, action, className }: AlertProps) {

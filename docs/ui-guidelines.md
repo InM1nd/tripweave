@@ -28,8 +28,16 @@ The app leverages a dual-palette system controlled by `[data-theme]` (dark/light
 
 **Examples:**
 ```tsx
-<div className="bg-sticker-yellow text-foreground ...">...</div>
+<div className="bg-sticker-yellow text-sticker-foreground ...">...</div>
 ```
+
+**Text on sticker backgrounds:** Use `text-sticker-foreground` (dark #16151A in both themes) for readable text on pastel sticker backgrounds. Exception: `text-white` for coral/olive/danger.
+
+**Dark theme — colored components:**
+- Do NOT add `dark:text-white` or `dark:text-foreground` to override text on sticker backgrounds.
+- Keep the same text color in both themes: `text-foreground` for most sticker backgrounds.
+- The sticker palette adapts in dark theme (muted tones), so `text-foreground` remains readable.
+- Exception: Use `text-white` only when the background is explicitly dark (e.g. danger, destructive, coral/olive badges that need high contrast).
 
 ### 2.2 Borders & Rounding
 - **Thickness**:

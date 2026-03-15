@@ -10,23 +10,23 @@ export default function OfflinePage() {
     <div className="min-h-dvh bg-background flex items-center justify-center p-6">
       {/* Decorative sticker top-left */}
       <div className="pointer-events-none fixed top-8 left-6 rotate-[-8deg] opacity-40 select-none hidden sm:block">
-        <div className="bg-sticker-yellow border-2 border-border rounded-full p-3 shadow-sticker-card">
-          <Plane className="h-5 w-5 text-foreground" />
+        <div className="bg-sticker-yellow text-sticker-foreground border-2 border-border rounded-full p-3 shadow-sticker-card">
+          <Plane className="h-5 w-5" />
         </div>
       </div>
 
       {/* Decorative sticker bottom-right */}
       <div className="pointer-events-none fixed bottom-10 right-8 rotate-[6deg] opacity-30 select-none hidden sm:block">
-        <div className="bg-sticker-pink border-2 border-border rounded-full p-3 shadow-sticker-card">
-          <Plane className="h-4 w-4 text-foreground" />
+        <div className="bg-sticker-pink text-sticker-foreground border-2 border-border rounded-full p-3 shadow-sticker-card">
+          <Plane className="h-4 w-4" />
         </div>
       </div>
 
       <div className="w-full max-w-sm">
         <StickerSurface className="bg-card p-8 flex flex-col items-center gap-5 text-center">
           {/* Icon block */}
-          <div className="bg-sticker-blue border-2 border-border rounded-2xl p-5 shadow-sticker-card">
-            <WifiOff className="h-10 w-10 text-foreground" strokeWidth={2.5} />
+          <div className="bg-sticker-blue text-sticker-foreground border-2 border-border rounded-2xl p-5 shadow-sticker-card">
+            <WifiOff className="h-10 w-10" strokeWidth={2.5} />
           </div>
 
           {/* Badge */}

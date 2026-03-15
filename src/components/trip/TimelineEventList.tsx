@@ -1,19 +1,22 @@
 "use client";
 
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
+import dynamic from "next/dynamic";
 import {
     DndContext,
     DragOverlay,
-    closestCorners,
+    closestCenter,
     KeyboardSensor,
     PointerSensor,
+    TouchSensor,
     useSensor,
     useSensors,
     DragStartEvent,
     DragEndEvent,
     defaultDropAnimationSideEffects,
     DropAnimation,
-    useDroppable
+    useDroppable,
+    CollisionDetection,
 } from "@dnd-kit/core";
 import {
     SortableContext,
@@ -23,8 +26,13 @@ import {
 } from "@dnd-kit/sortable";
 import { motion, AnimatePresence } from "framer-motion";
 import { format, parseISO } from "date-fns";
-import { EditEventSheet } from "@/components/trip/EditEventSheet";
 import { SortableTimelineEvent } from "@/components/trip/SortableTimelineEvent";
+import { MoveEventDialog } from "@/components/trip/MoveEventDialog";
+
+const EditEventSheet = dynamic(
+    () => import("@/components/trip/EditEventSheet").then(m => ({ default: m.EditEventSheet })),
+    { ssr: false }
+);
 import { updateEvent, deleteEvent } from "@/actions/event";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -39,6 +47,19 @@ interface TimelineEventListProps {
     groupedEvents: Record<string, Event[]>;
     tripId: string;
 }
+
+// ─── Pending cross-day move state ────────────────────────────────────────────
+
+interface PendingMove {
+    event: Event;
+    sourceDateKey: string;
+    targetDateKey: string;
+    currentTime: string; // "HH:mm"
+    /** Snapshot of groups before the optimistic move — used for cancel/rollback */
+    previousGroups: Record<string, Event[]>;
+}
+
+// ─── DayContainer ────────────────────────────────────────────────────────────
 
 function DayContainer({
     dateKey,
@@ -60,14 +81,12 @@ function DayContainer({
         const lineRect = lineRef.current?.getBoundingClientRect();
         if (!lineRect) return;
         const elRect = el.getBoundingClientRect();
-        // Center dot on the card; 10 = half of the 20px dot height
         const y = elRect.top - lineRect.top + elRect.height / 2 - 10;
         setDotState({ y, color: getEventTypeDotHex(type) });
     }, []);
 
     const onLeave = useCallback(() => setDotState(null), []);
 
-    // Stable context value — only recreates when callbacks change (they don't)
     const ctxValue = useMemo(
         () => ({ lineRef, onHover, onLeave }),
         [onHover, onLeave]
@@ -79,10 +98,10 @@ function DayContainer({
                 ref={setNodeRef}
                 className={cn(
                     "relative transition-colors rounded-xl p-2 -m-2",
-                    isOver && "bg-primary/5"
+                    isOver && "bg-primary/5 ring-2 ring-primary/20 ring-inset"
                 )}
             >
-                {/* Sticky date header — below header on mobile, below tabs on desktop */}
+                {/* Sticky date header */}
                 <div
                     className="flex items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-4 sticky z-10 bg-background py-2 sm:py-3 border-b border-border/40 min-w-0"
                     style={{ top: "var(--trip-tabs-offset, 4.5rem)" }}
@@ -118,7 +137,7 @@ function DayContainer({
                     </AddEventModal>
                 </div>
 
-                {/* Vertical timeline line — hidden on mobile to give cards more space */}
+                {/* Vertical timeline line */}
                 <div
                     ref={lineRef}
                     className="pl-0 ml-0 sm:ml-6 sm:pl-6 sm:border-l-2 sm:border-border/50 space-y-2 sm:space-y-3 min-h-[40px] sm:min-h-[50px] relative"
@@ -151,16 +170,51 @@ function DayContainer({
     );
 }
 
+// ─── TimelineEventList ───────────────────────────────────────────────────────
+
 export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListProps) {
     const [localGroups, setLocalGroups] = useState(groupedEvents);
     const [activeEvent, setActiveEvent] = useState<Event | null>(null);
     const [selectedEventToEdit, setSelectedEventToEdit] = useState<Event | null>(null);
     const [isDeleteLoading, setIsDeleteLoading] = useState<string | null>(null);
+    const [pendingMove, setPendingMove] = useState<PendingMove | null>(null);
 
-    // Sync local state when server sends fresh data (e.g. after router.refresh() from Add/Edit)
+    // Sync local state when server sends fresh data
     useEffect(() => {
         setLocalGroups(groupedEvents);
     }, [groupedEvents]);
+
+    // ── Sensors ──────────────────────────────────────────────────────────────
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: { distance: 8 },
+        }),
+        useSensor(TouchSensor, {
+            activationConstraint: { delay: 200, tolerance: 6 },
+        }),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    // ── Custom collision detection ──────────────────────────────────────────
+    // Day containers (useDroppable with dateKey ids) swallow collisions from
+    // individual sortable event cards.  We run closestCenter on everything,
+    // then strip out day-container hits whenever an event-card hit exists.
+    // For cross-day drops onto empty days the day-container is the only hit,
+    // so we keep it as a fallback.
+
+    const dayKeySet = useMemo(() => new Set(Object.keys(localGroups)), [localGroups]);
+
+    const collisionDetection: CollisionDetection = useCallback((args) => {
+        const collisions = closestCenter(args);
+        // Separate event-card collisions from day-container collisions
+        const eventHits = collisions.filter((c) => !dayKeySet.has(c.id as string));
+        return eventHits.length > 0 ? eventHits : collisions;
+    }, [dayKeySet]);
+
+    // ── Handlers ─────────────────────────────────────────────────────────────
 
     const handleDeleteEvent = async (eventId: string) => {
         setIsDeleteLoading(eventId);
@@ -179,10 +233,94 @@ export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListPr
         }
     };
 
-    const sensors = useSensors(
-        useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-        useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-    );
+    /** Move to day — used from dropdown menu on mobile as fallback for drag */
+    const handleMoveToDay = useCallback((eventId: string, targetDateKey: string) => {
+        let sourceDateKey = "";
+        let eventData: Event | null = null;
+        for (const [date, events] of Object.entries(localGroups)) {
+            const found = events.find((e: Event) => e.id === eventId);
+            if (found) { sourceDateKey = date; eventData = found; break; }
+        }
+        if (!eventData || sourceDateKey === targetDateKey) return;
+
+        const previousGroups = { ...localGroups };
+        const targetDate = parseISO(targetDateKey);
+        const oldStart = new Date(eventData.startTime);
+        const newStart = new Date(targetDate);
+        newStart.setHours(oldStart.getHours(), oldStart.getMinutes());
+
+        // Optimistic move
+        const newGroups = { ...localGroups };
+        newGroups[sourceDateKey] = newGroups[sourceDateKey].filter(
+            (e: Event) => e.id !== eventId
+        );
+        const updatedEvent = { ...eventData, startTime: newStart };
+        if (!newGroups[targetDateKey]) newGroups[targetDateKey] = [];
+        newGroups[targetDateKey] = [...newGroups[targetDateKey], updatedEvent as unknown as Event].sort(
+            (a: Event, b: Event) =>
+                new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+        );
+        setLocalGroups(newGroups);
+
+        // Show time picker dialog
+        setPendingMove({
+            event: eventData,
+            sourceDateKey,
+            targetDateKey,
+            currentTime: format(oldStart, "HH:mm"),
+            previousGroups,
+        });
+    }, [localGroups]);
+
+    /** Reorder within a day — used from dropdown menu (Move up / Move down) */
+    const handleReorderInDay = useCallback(async (eventId: string, direction: "up" | "down") => {
+        // Find which day and index
+        let dateKey = "";
+        let group: Event[] = [];
+        for (const [d, events] of Object.entries(localGroups)) {
+            const idx = events.findIndex((e: Event) => e.id === eventId);
+            if (idx !== -1) { dateKey = d; group = events; break; }
+        }
+        if (!dateKey || group.length < 2) return;
+
+        const oldIndex = group.findIndex((e: Event) => e.id === eventId);
+        const newIndex = direction === "up" ? oldIndex - 1 : oldIndex + 1;
+        if (newIndex < 0 || newIndex >= group.length) return;
+
+        // Swap times so visual order matches persisted order
+        const times = group.map((e: Event) => new Date(e.startTime));
+        const reordered = arrayMove([...group], oldIndex, newIndex);
+        const updatedGroup = reordered.map((ev: Event, idx: number) => ({
+            ...ev,
+            startTime: times[idx],
+        }));
+
+        setLocalGroups(prev => ({ ...prev, [dateKey]: updatedGroup }));
+
+        // Persist changed events
+        const changed = updatedGroup.filter((ev: Event) => {
+            const orig = group.find((e: Event) => e.id === ev.id);
+            return orig && new Date(orig.startTime).getTime() !== new Date(ev.startTime).getTime();
+        });
+
+        if (changed.length > 0) {
+            try {
+                await Promise.all(
+                    changed.map((ev: Event) =>
+                        updateEvent(tripId, ev.id, {
+                            startDate: new Date(ev.startTime),
+                            startTime: format(new Date(ev.startTime), "HH:mm"),
+                        })
+                    )
+                );
+            } catch {
+                toast.error("Failed to reorder events");
+                setLocalGroups(groupedEvents);
+            }
+        }
+    }, [localGroups, tripId, groupedEvents]);
+
+    // ── Drag callbacks ───────────────────────────────────────────────────────
 
     const onDragStart = (event: DragStartEvent) => {
         const { active } = event;
@@ -219,11 +357,10 @@ export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListPr
         }
         if (isNaN(Date.parse(targetDateKey))) return;
 
-        // ── Same-day reorder ──────────────────────────────────────────────
+        // ── Same-day reorder ─────────────────────────────────────────────
         if (sourceDateKey === targetDateKey) {
             const group = localGroups[sourceDateKey] ?? [];
             const oldIndex = group.findIndex((e: Event) => e.id === activeId);
-            // If dropped on the container (not an event), move to end
             const overIndex =
                 overId === sourceDateKey
                     ? group.length - 1
@@ -231,7 +368,6 @@ export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListPr
 
             if (oldIndex === -1 || overIndex === -1 || oldIndex === overIndex) return;
 
-            // Redistribute the original time slots to the new order
             const times = group.map((e: Event) => new Date(e.startTime));
             const reordered = arrayMove([...group], oldIndex, overIndex);
             const updatedGroup = reordered.map((ev: Event, idx: number) => ({
@@ -241,7 +377,6 @@ export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListPr
 
             setLocalGroups({ ...localGroups, [sourceDateKey]: updatedGroup });
 
-            // Only persist events whose time actually changed
             const changed = updatedGroup.filter((ev: Event) => {
                 const orig = group.find((e: Event) => e.id === ev.id);
                 return (
@@ -269,33 +404,65 @@ export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListPr
             return;
         }
 
-        // ── Cross-day move ────────────────────────────────────────────────
+        // ── Cross-day move → show time picker dialog ─────────────────────
+        const previousGroups = { ...localGroups };
         const targetDate = parseISO(targetDateKey);
         const oldStart = new Date(activeEventData.startTime);
         const newStart = new Date(targetDate);
         newStart.setHours(oldStart.getHours(), oldStart.getMinutes());
 
+        // Optimistic UI update
         const newGroups = { ...localGroups };
         newGroups[sourceDateKey] = newGroups[sourceDateKey].filter(
             (e: Event) => e.id !== activeId
         );
-        const updatedEvent = {
-            ...activeEventData,
-            startTime: newStart,
-            time: format(newStart, "HH:mm"),
-        };
+        const updatedEvent = { ...activeEventData, startTime: newStart };
         if (!newGroups[targetDateKey]) newGroups[targetDateKey] = [];
-        newGroups[targetDateKey].push(updatedEvent as unknown as Event);
-        newGroups[targetDateKey].sort(
+        newGroups[targetDateKey] = [...newGroups[targetDateKey], updatedEvent as unknown as Event].sort(
             (a: Event, b: Event) =>
                 new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
         );
         setLocalGroups(newGroups);
 
+        // Open dialog to confirm time
+        setPendingMove({
+            event: activeEventData,
+            sourceDateKey,
+            targetDateKey,
+            currentTime: format(oldStart, "HH:mm"),
+            previousGroups,
+        });
+    };
+
+    // ── Move dialog callbacks ────────────────────────────────────────────────
+
+    const confirmMove = async (time: string) => {
+        if (!pendingMove) return;
+        const { event: movedEvent, targetDateKey } = pendingMove;
+        const targetDate = parseISO(targetDateKey);
+        const [hours, minutes] = time.split(":").map(Number);
+        const newStart = new Date(targetDate);
+        newStart.setHours(hours, minutes, 0, 0);
+
+        setPendingMove(null);
+
         try {
-            await updateEvent(tripId, activeId, {
+            await updateEvent(tripId, movedEvent.id, {
                 startDate: newStart,
-                startTime: format(newStart, "HH:mm"),
+                startTime: time,
+            });
+            // Re-sort the target day with the confirmed time
+            setLocalGroups(prev => {
+                const updated = { ...prev };
+                if (updated[targetDateKey]) {
+                    updated[targetDateKey] = updated[targetDateKey].map((e: Event) =>
+                        e.id === movedEvent.id ? { ...e, startTime: newStart } as unknown as Event : e
+                    ).sort(
+                        (a: Event, b: Event) =>
+                            new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+                    );
+                }
+                return updated;
             });
             toast.success("Event moved");
         } catch {
@@ -303,6 +470,14 @@ export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListPr
             setLocalGroups(groupedEvents);
         }
     };
+
+    const cancelMove = () => {
+        if (!pendingMove) return;
+        setLocalGroups(pendingMove.previousGroups);
+        setPendingMove(null);
+    };
+
+    // ── Render ───────────────────────────────────────────────────────────────
 
     const sortedDates = Object.keys(localGroups).sort();
 
@@ -313,57 +488,79 @@ export function TimelineEventList({ groupedEvents, tripId }: TimelineEventListPr
     };
 
     return (
-        <DndContext
-            sensors={sensors}
-            collisionDetection={closestCorners}
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-        >
-            <div className="space-y-6 sm:space-y-8 pb-0 md:pb-20 min-w-0 w-full">
-                {sortedDates.map((dateKey) => (
-                    <DayContainer
-                        key={dateKey}
-                        dateKey={dateKey}
-                        count={localGroups[dateKey]?.length || 0}
-                        tripId={tripId}
-                    >
-                        <SortableContext
-                            items={localGroups[dateKey]?.map((e: Event) => e.id) || []}
-                            strategy={verticalListSortingStrategy}
+        <>
+            <DndContext
+                sensors={sensors}
+                collisionDetection={collisionDetection}
+                onDragStart={onDragStart}
+                onDragEnd={onDragEnd}
+            >
+                <div className="space-y-6 sm:space-y-8 pb-0 md:pb-20 min-w-0 w-full">
+                    {sortedDates.map((dateKey) => (
+                        <DayContainer
+                            key={dateKey}
+                            dateKey={dateKey}
+                            count={localGroups[dateKey]?.length || 0}
+                            tripId={tripId}
                         >
-                            {localGroups[dateKey]?.map((event: Event) => (
-                                <SortableTimelineEvent
-                                    key={event.id}
-                                    event={event}
-                                    isDeleteLoading={isDeleteLoading}
-                                    onDelete={handleDeleteEvent}
-                                    onEdit={(e) => setSelectedEventToEdit(e)}
-                                />
-                            ))}
-                        </SortableContext>
-                    </DayContainer>
-                ))}
-            </div>
+                            <SortableContext
+                                items={localGroups[dateKey]?.map((e: Event) => e.id) || []}
+                                strategy={verticalListSortingStrategy}
+                            >
+                                {localGroups[dateKey]?.map((event: Event, idx: number) => (
+                                    <SortableTimelineEvent
+                                        key={event.id}
+                                        event={event}
+                                        isDeleteLoading={isDeleteLoading}
+                                        onDelete={handleDeleteEvent}
+                                        onEdit={(e) => setSelectedEventToEdit(e)}
+                                        onMoveToDay={handleMoveToDay}
+                                        onReorderInDay={handleReorderInDay}
+                                        availableDays={sortedDates}
+                                        eventIndex={idx}
+                                        dayEventCount={localGroups[dateKey]?.length || 0}
+                                    />
+                                ))}
+                            </SortableContext>
+                        </DayContainer>
+                    ))}
+                </div>
 
-            <DragOverlay dropAnimation={dropAnimation}>
-                {activeEvent ? (
-                    <SortableTimelineEvent
-                        event={activeEvent}
-                        isDeleteLoading={null}
-                        onDelete={() => {}}
-                        onEdit={() => {}}
-                    />
-                ) : null}
-            </DragOverlay>
+                <DragOverlay dropAnimation={dropAnimation}>
+                    {activeEvent ? (
+                        <SortableTimelineEvent
+                            event={activeEvent}
+                            isDeleteLoading={null}
+                            onDelete={() => {}}
+                            onEdit={() => {}}
+                            availableDays={[]}
+                            eventIndex={0}
+                            dayEventCount={1}
+                        />
+                    ) : null}
+                </DragOverlay>
+            </DndContext>
 
             {selectedEventToEdit && (
                 <EditEventSheet
                     event={selectedEventToEdit}
                     open={!!selectedEventToEdit}
-                    onOpenChange={(open) => !open && setSelectedEventToEdit(null)}
+                    onOpenChange={(open: boolean) => !open && setSelectedEventToEdit(null)}
                     tripId={tripId}
                 />
             )}
-        </DndContext>
+
+            {pendingMove && (
+                <MoveEventDialog
+                    open
+                    eventTitle={pendingMove.event.title}
+                    targetDate={parseISO(pendingMove.targetDateKey)}
+                    currentTime={pendingMove.currentTime}
+                    onKeepTime={() => confirmMove(pendingMove.currentTime)}
+                    onChangeTime={(newTime) => confirmMove(newTime)}
+                    onCancel={cancelMove}
+                />
+            )}
+        </>
     );
 }

@@ -39,7 +39,7 @@ export function SuggestedPlacesBoard({ tripId, events, currentUserId, tripStartD
                 title="No suggested places yet"
                 description="Anyone in the trip can add places here from the Explore tab for the group to vote on."
                 action={
-                    <Button variant="stickerCoral" asChild>
+                    <Button variant="default" asChild>
                         <Link href="/explore">
                             <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={3} />
                             Find Places

@@ -3,14 +3,17 @@ import { getTrips } from "@/actions/trip";
 import { ExploreContent } from "@/components/explore/ExploreContent";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { mockTrips } from "@/lib/mock-data";
 import { Compass, Sparkles } from "lucide-react";
 
 export default async function ExplorePage() {
-    // Generate recommendations based on "upcoming" trips
-    const upcomingTrip = mockTrips.find(t => t.startDate > new Date()) || mockTrips[0];
-    const myPlaces = await getMyPlaces();
-    const trips = await getTrips();
+    const [myPlaces, trips] = await Promise.all([
+        getMyPlaces(),
+        getTrips(),
+    ]);
+
+    // Pick upcoming trip from real data
+    const now = new Date();
+    const upcomingTrip = trips.find(t => new Date(t.startDate) > now) || trips[0];
 
     // Mock recommendations related to the upcoming trip destination (e.g., Japan)
     const recommendations = [
@@ -51,10 +54,12 @@ export default async function ExplorePage() {
                         badge={{ label: "Discover places", icon: <Compass className="h-4 w-4" />, color: "green" }}
                         title="Explore & Discover"
                         description={
-                            <span className="flex flex-wrap items-center gap-1.5">
-                                <Sparkles className="w-5 h-5 text-sticker-yellow fill-current" />
-                                Curated for your upcoming trip to <span className="font-black text-foreground bg-sticker-yellow/30 px-2 py-0.5 rounded-md border-2 border-sticker-yellow/40">{upcomingTrip.destination}</span>
-                            </span>
+                            upcomingTrip ? (
+                                <span className="flex flex-wrap items-center gap-1.5">
+                                    <Sparkles className="w-5 h-5 text-sticker-yellow fill-current" />
+                                    Curated for your upcoming trip to <span className="font-black text-sticker-foreground bg-sticker-yellow/30 px-2 py-0.5 rounded-md border-2 border-sticker-yellow/40">{upcomingTrip.destination}</span>
+                                </span>
+                            ) : "Discover and save places for your next adventure"
                         }
                         className="border-b-2 border-border pb-4 mb-1"
                     />

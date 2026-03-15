@@ -25,13 +25,13 @@ const buttonVariants = cva(
         sticker:
           `${getStickerBgClass("yellow")} rounded-sticker border-2 border-border shadow-sticker-card`,
         stickerGreen:
-          `${getStickerBgClass("green")} border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:bg-sticker-green/90`,
+          `${getStickerBgClass("green")} border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:bg-sticker-green/90 rounded-full`,
         stickerCoral:
-          `${getStickerBgClass("coral")} border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:bg-sticker-coral/90`,
+          `${getStickerBgClass("coral")} border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:bg-sticker-coral/90 rounded-full`,
         stickerOutline:
           "border-2 border-border bg-card text-foreground shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all rounded-full font-bold",
         stickerIcon:
-          "rounded-full border-2 border-border bg-card text-foreground shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all",
+          "rounded-full border-2 border-border bg-card text-foreground shadow-sticker-sm hover:-translate-y-1 hover:shadow-sticker-card-hover hover:scale-105 transition-all duration-200",
       },
       size: {
         default: "h-9 px-4 py-2",

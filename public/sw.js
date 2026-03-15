@@ -1,5 +1,5 @@
 /**
- * TripWeave Service Worker v1.3.0
+ * TripWeave Service Worker v1.4.0
  *
  * Cache strategy summary
  * ──────────────────────
@@ -9,7 +9,13 @@
  *      is guaranteed to be immutable. Misses fall back to network and
  *      populate the cache for next time.
  *
- * 2. NAVIGATE requests  (mode === "navigate", i.e. full-page HTML)
+ * 2. OPTIMIZED IMAGES  (/_next/image?*)
+ *    → Stale-while-revalidate.
+ *      Next.js Image Optimization API serves resized/transcoded images.
+ *      URLs include hash params so they're safe to cache. SWR ensures
+ *      fresh images while providing instant offline/revisit loads.
+ *
+ * 3. NAVIGATE requests  (mode === "navigate", i.e. full-page HTML)
  *    → Stale-while-revalidate.
  *      The cached page is returned immediately so the UI appears instantly,
  *      while a background fetch updates the cache entry for the NEXT visit.
@@ -19,16 +25,16 @@
  *      of each page.
  *      Network error + no page cache → serve /offline from OFFLINE_CACHE.
  *
- * 3. POST / Server Actions  (/api/**, RSC action POSTs)
+ * 4. POST / Server Actions  (/api/**, RSC action POSTs)
  *    → Always network. POST responses are not cacheable by spec and must
  *      never be served stale (they mutate data).
  *
- * 4. OFFLINE page  (/offline)
+ * 5. OFFLINE page  (/offline)
  *    → Pre-cached at install in a dedicated cache. Served as last-resort
  *      fallback for failed navigations when the specific page is not in
  *      PAGE_CACHE.
  *
- * 5. PRE-CACHED routes  (/, /dashboard, /login, /offline)
+ * 6. PRE-CACHED routes  (/, /dashboard, /login, /explore, /offline)
  *    → Fetched and stored in PAGE_CACHE at install. These critical routes
  *      are available offline even if the user has never visited them.
  *
@@ -39,16 +45,18 @@
  * 3. Inline HTML response → absolute last resort
  */
 
-const SW_VERSION = "1.3.0";
+const SW_VERSION = "1.4.0";
 
-const OFFLINE_CACHE = "tw-offline-v1";   // /offline page only
-const STATIC_CACHE  = "tw-static-v1";   // /_next/static/** + /icons/**
-const PAGE_CACHE    = "tw-pages-v1";    // navigate responses (SWR + pre-cache)
+// Cache names include version for clean invalidation on deploy
+const OFFLINE_CACHE = `tw-offline-v${SW_VERSION}`;
+const STATIC_CACHE  = `tw-static-v${SW_VERSION}`;
+const PAGE_CACHE    = `tw-pages-v${SW_VERSION}`;
+const IMAGE_CACHE   = `tw-images-v${SW_VERSION}`;
 
 const OFFLINE_URL   = "/offline";
 
 /** Critical routes pre-cached at install so they work offline immediately. */
-const PRECACHE_ROUTES = ["/", "/dashboard", "/login", "/offline"];
+const PRECACHE_ROUTES = ["/", "/dashboard", "/login", "/explore", "/offline"];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -58,6 +66,11 @@ function isStaticAsset(url) {
     url.pathname.startsWith("/_next/static/") ||
     url.pathname.startsWith("/icons/")
   );
+}
+
+/** True for Next.js optimized images. */
+function isOptimizedImage(url) {
+  return url.pathname.startsWith("/_next/image");
 }
 
 /** True for full-page navigations (browser address-bar requests). */
@@ -101,7 +114,7 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   console.log("[SW] activate v" + SW_VERSION);
-  const KNOWN_CACHES = [OFFLINE_CACHE, STATIC_CACHE, PAGE_CACHE];
+  const KNOWN_CACHES = [OFFLINE_CACHE, STATIC_CACHE, PAGE_CACHE, IMAGE_CACHE];
   event.waitUntil(
     caches
       .keys()
@@ -136,13 +149,19 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // 4. Full-page navigation → Stale-while-revalidate, offline fallback.
+  // 4. Optimized images → Stale-while-revalidate (image-specific cache).
+  if (isOptimizedImage(url)) {
+    event.respondWith(imageSwr(event.request));
+    return;
+  }
+
+  // 5. Full-page navigation → Stale-while-revalidate, offline fallback.
   if (isNavigate(event.request)) {
     event.respondWith(staleWhileRevalidate(event));
     return;
   }
 
-  // 5. Everything else (Next.js RSC payloads, internal GETs) → network only.
+  // 6. Everything else (Next.js RSC payloads, internal GETs) → network only.
   // We intentionally do NOT cache RSC payloads (_rsc param) because they
   // are tightly coupled to the server state and go stale immediately.
 });
@@ -163,6 +182,31 @@ async function cacheFirst(request, cacheName) {
   } catch {
     return new Response("Asset unavailable offline", { status: 503 });
   }
+}
+
+// ─── Strategy: SWR for optimized images ───────────────────────────────────────
+
+async function imageSwr(request) {
+  const cache = await caches.open(IMAGE_CACHE);
+  const cached = await cache.match(request);
+
+  const networkPromise = fetch(request)
+    .then((response) => {
+      if (response.ok) {
+        cache.put(request, response.clone());
+      }
+      return response;
+    })
+    .catch(() => null);
+
+  // Return cached immediately if available, update in background
+  if (cached) return cached;
+
+  // No cache → wait for network
+  const response = await networkPromise;
+  if (response) return response;
+
+  return new Response("Image unavailable offline", { status: 503 });
 }
 
 // ─── Strategy: Stale-while-revalidate with offline fallback ──────────────────

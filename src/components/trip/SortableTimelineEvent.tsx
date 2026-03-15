@@ -10,6 +10,9 @@ import {
     MoreHorizontal,
     Pencil,
     Trash2,
+    CalendarDays,
+    ArrowUp,
+    ArrowDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,8 +21,12 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { format, parseISO } from "date-fns";
 import { useDayTimeline } from "./DayTimelineContext";
 import { getEventTypeStyle } from "@/lib/design-tokens";
 
@@ -28,6 +35,11 @@ interface SortableTimelineEventProps {
     isDeleteLoading: string | null;
     onDelete: (eventId: string) => void;
     onEdit: (event: Event) => void;
+    onMoveToDay?: (eventId: string, targetDateKey: string) => void;
+    onReorderInDay?: (eventId: string, direction: "up" | "down") => void;
+    availableDays: string[];
+    eventIndex: number;
+    dayEventCount: number;
     currentUserId?: string;
 }
 
@@ -36,6 +48,11 @@ export function SortableTimelineEvent({
     isDeleteLoading,
     onDelete,
     onEdit,
+    onMoveToDay,
+    onReorderInDay,
+    availableDays,
+    eventIndex,
+    dayEventCount,
     currentUserId,
 }: SortableTimelineEventProps) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
@@ -89,7 +106,7 @@ export function SortableTimelineEvent({
                 <div
                     {...attributes}
                     {...listeners}
-                    className="flex sm:w-10 items-center justify-center bg-foreground/10 cursor-grab hover:bg-foreground/20 transition-colors py-2.5 sm:py-0 min-h-[44px] sm:min-h-0 border-b-2 sm:border-b-0 sm:border-r-2 border-border min-w-[44px] sm:min-w-0 touch-manipulation"
+                    className="flex sm:w-10 items-center justify-center bg-foreground/10 cursor-grab hover:bg-foreground/20 transition-colors py-2.5 sm:py-0 min-h-[44px] sm:min-h-0 border-b-2 sm:border-b-0 sm:border-r-2 border-border min-w-[44px] sm:min-w-0 touch-none"
                 >
                     <GripVertical className="h-5 w-5 sm:h-6 sm:w-6 text-foreground/50" strokeWidth={3} />
                 </div>
@@ -199,6 +216,63 @@ export function SortableTimelineEvent({
                                             <Pencil className="mr-2 h-4 w-4" strokeWidth={2.5} />
                                             Edit Event
                                         </DropdownMenuItem>
+                                        {onMoveToDay && availableDays.length > 1 && (
+                                            <DropdownMenuSub>
+                                                <DropdownMenuSubTrigger className="cursor-pointer focus:bg-muted">
+                                                    <CalendarDays className="mr-2 h-4 w-4" strokeWidth={2.5} />
+                                                    Move to Day
+                                                </DropdownMenuSubTrigger>
+                                                <DropdownMenuSubContent className="font-bold border-2 border-border shadow-sticker-elevated rounded-xl max-h-60 overflow-y-auto">
+                                                    {availableDays
+                                                        .filter((d) => {
+                                                            const eventDateKey = format(new Date(event.startTime), "yyyy-MM-dd");
+                                                            return d !== eventDateKey;
+                                                        })
+                                                        .map((dateKey) => {
+                                                            const d = parseISO(dateKey);
+                                                            return (
+                                                                <DropdownMenuItem
+                                                                    key={dateKey}
+                                                                    className="cursor-pointer focus:bg-muted"
+                                                                    onSelect={(e) => {
+                                                                        e.preventDefault();
+                                                                        onMoveToDay(event.id, dateKey);
+                                                                    }}
+                                                                >
+                                                                    {format(d, "EEE, MMM d")}
+                                                                </DropdownMenuItem>
+                                                            );
+                                                        })}
+                                                </DropdownMenuSubContent>
+                                            </DropdownMenuSub>
+                                        )}
+                                        {onReorderInDay && dayEventCount > 1 && (
+                                            <>
+                                                <DropdownMenuSeparator className="bg-foreground/10" />
+                                                <DropdownMenuItem
+                                                    disabled={eventIndex === 0}
+                                                    className="cursor-pointer focus:bg-muted"
+                                                    onSelect={(e) => {
+                                                        e.preventDefault();
+                                                        onReorderInDay(event.id, "up");
+                                                    }}
+                                                >
+                                                    <ArrowUp className="mr-2 h-4 w-4" strokeWidth={2.5} />
+                                                    Move Up
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    disabled={eventIndex === dayEventCount - 1}
+                                                    className="cursor-pointer focus:bg-muted"
+                                                    onSelect={(e) => {
+                                                        e.preventDefault();
+                                                        onReorderInDay(event.id, "down");
+                                                    }}
+                                                >
+                                                    <ArrowDown className="mr-2 h-4 w-4" strokeWidth={2.5} />
+                                                    Move Down
+                                                </DropdownMenuItem>
+                                            </>
+                                        )}
                                         <DropdownMenuSeparator className="bg-foreground/10" />
                                         <DropdownMenuItem
                                             className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer"

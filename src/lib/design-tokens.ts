@@ -16,11 +16,11 @@ export type StickerColorKey =
 
 /** Tailwind classes for sticker backgrounds. Use with border-border, shadow tokens. */
 export const STICKER_BG_CLASSES: Record<StickerColorKey, string> = {
-  pink: "bg-sticker-pink text-foreground",
-  blue: "bg-sticker-blue text-foreground",
-  green: "bg-sticker-green text-foreground",
-  lilac: "bg-sticker-lilac text-foreground",
-  yellow: "bg-sticker-yellow text-foreground",
+  pink: "bg-sticker-pink text-sticker-foreground",
+  blue: "bg-sticker-blue text-sticker-foreground",
+  green: "bg-sticker-green text-sticker-foreground",
+  lilac: "bg-sticker-lilac text-sticker-foreground",
+  yellow: "bg-sticker-yellow text-sticker-foreground",
   coral: "bg-sticker-coral text-white",
   olive: "bg-sticker-olive text-white",
 };
@@ -59,7 +59,7 @@ export type EventTypeKey =
   | "OTHER";
 
 export interface EventTypeStyle {
-  /** Card background + text (e.g. bg-sticker-yellow text-foreground) */
+  /** Card background + text (e.g. bg-sticker-yellow text-sticker-foreground) */
   card: string;
   /** Dot/badge border (e.g. bg-sticker-yellow border-foreground) */
   dot?: string;
@@ -75,11 +75,11 @@ export interface EventTypeStyle {
  * Aligns with docs: yellow = emphasis, blue = info, green = activities, etc.
  */
 export const EVENT_TYPE_STICKER_STYLES: Record<EventTypeKey, EventTypeStyle> = {
-  TRANSPORT:  { card: "bg-sticker-blue text-foreground",   dot: "bg-sticker-blue border-foreground",   dotHex: "#85B8EA" },
-  HOTEL:      { card: "bg-sticker-lilac text-foreground",  dot: "bg-sticker-lilac border-foreground",  dotHex: "#B89CF7" },
-  ACTIVITY:   { card: "bg-sticker-yellow text-foreground", dot: "bg-sticker-yellow border-foreground", dotHex: "#FFCF5C" },
-  RESTAURANT: { card: "bg-sticker-pink text-foreground",   dot: "bg-sticker-pink border-foreground",   dotHex: "#F0A0AE" },
-  OTHER:      { card: "bg-sticker-green text-foreground",  dot: "bg-sticker-green border-foreground",  dotHex: "#7EC89A" },
+  TRANSPORT:  { card: "bg-sticker-blue text-sticker-foreground",   dot: "bg-sticker-blue border-foreground",   dotHex: "#85B8EA" },
+  HOTEL:      { card: "bg-sticker-lilac text-sticker-foreground",  dot: "bg-sticker-lilac border-foreground",  dotHex: "#B89CF7" },
+  ACTIVITY:   { card: "bg-sticker-yellow text-sticker-foreground", dot: "bg-sticker-yellow border-foreground", dotHex: "#FFCF5C" },
+  RESTAURANT: { card: "bg-sticker-pink text-sticker-foreground",   dot: "bg-sticker-pink border-foreground",   dotHex: "#F0A0AE" },
+  OTHER:      { card: "bg-sticker-green text-sticker-foreground",  dot: "bg-sticker-green border-foreground",  dotHex: "#7EC89A" },
 };
 
 const DEFAULT_EVENT_STYLE: EventTypeStyle = EVENT_TYPE_STICKER_STYLES.OTHER;
@@ -118,21 +118,21 @@ export function getEventTypeDotHex(type: string): string {
 // ── Place type (from Explore AI) → sticker style ─────────────────────────
 // Mirrors the color logic in PlaceCard's getCategoryInfo.
 const PLACE_TYPE_STICKER_STYLES: Record<string, EventTypeStyle> = {
-  food:        { card: "bg-sticker-pink text-foreground",   dotHex: "#F0A0AE" },
-  restaurant:  { card: "bg-sticker-pink text-foreground",   dotHex: "#F0A0AE" },
-  cafe:        { card: "bg-sticker-pink text-foreground",   dotHex: "#F0A0AE" },
-  bar:         { card: "bg-sticker-pink text-foreground",   dotHex: "#F0A0AE" },
-  nature:      { card: "bg-sticker-green text-foreground",  dotHex: "#7EC89A" },
-  park:        { card: "bg-sticker-green text-foreground",  dotHex: "#7EC89A" },
-  culture:     { card: "bg-sticker-blue text-foreground",   dotHex: "#85B8EA" },
-  history:     { card: "bg-sticker-blue text-foreground",   dotHex: "#85B8EA" },
-  museum:      { card: "bg-sticker-blue text-foreground",   dotHex: "#85B8EA" },
+  food:        { card: "bg-sticker-pink text-sticker-foreground",   dotHex: "#F0A0AE" },
+  restaurant:  { card: "bg-sticker-pink text-sticker-foreground",   dotHex: "#F0A0AE" },
+  cafe:        { card: "bg-sticker-pink text-sticker-foreground",   dotHex: "#F0A0AE" },
+  bar:         { card: "bg-sticker-pink text-sticker-foreground",   dotHex: "#F0A0AE" },
+  nature:      { card: "bg-sticker-green text-sticker-foreground",  dotHex: "#7EC89A" },
+  park:        { card: "bg-sticker-green text-sticker-foreground",  dotHex: "#7EC89A" },
+  culture:     { card: "bg-sticker-blue text-sticker-foreground",   dotHex: "#85B8EA" },
+  history:     { card: "bg-sticker-blue text-sticker-foreground",   dotHex: "#85B8EA" },
+  museum:      { card: "bg-sticker-blue text-sticker-foreground",   dotHex: "#85B8EA" },
   "must see":  { card: "bg-sticker-coral text-white",       dotHex: "#FF8A75" },
   "must-see":  { card: "bg-sticker-coral text-white",       dotHex: "#FF8A75" },
   attraction:  { card: "bg-sticker-coral text-white",       dotHex: "#FF8A75" },
-  instagram:   { card: "bg-sticker-lilac text-foreground",  dotHex: "#B89CF7" },
-  tiktok:      { card: "bg-sticker-lilac text-foreground",  dotHex: "#B89CF7" },
-  youtube:     { card: "bg-sticker-lilac text-foreground",  dotHex: "#B89CF7" },
+  instagram:   { card: "bg-sticker-lilac text-sticker-foreground",  dotHex: "#B89CF7" },
+  tiktok:      { card: "bg-sticker-lilac text-sticker-foreground",  dotHex: "#B89CF7" },
+  youtube:     { card: "bg-sticker-lilac text-sticker-foreground",  dotHex: "#B89CF7" },
 };
 
 /**

@@ -82,7 +82,7 @@ export function SuggestedPlaceCard({ event, currentUserId, tripId, tripStartDate
     const cardColorClass = getPlaceTypeStyle(event.placeType, event.type).card;
 
     return (
-        <div className={cn("overflow-hidden group flex flex-col transition-transform duration-300 rounded-2xl p-4 sm:p-5 md:p-4 border-2 border-border hover:-translate-y-1 sm:hover:-translate-y-2 relative h-full flex-1 min-h-[220px] sm:min-h-[260px] md:min-h-[280px] cursor-pointer shadow-sticker-card hover:shadow-sticker-elevated w-full min-w-0", cardColorClass)}>
+        <div className={cn("overflow-hidden group flex flex-col rounded-2xl p-4 sm:p-5 md:p-4 border-2 border-border relative h-full flex-1 min-h-[220px] sm:min-h-[260px] md:min-h-[280px] cursor-pointer shadow-sticker-card w-full min-w-0", cardColorClass)}>
 
             <MapPin className="absolute -bottom-6 -left-6 h-24 w-24 sm:h-32 sm:w-32 md:h-28 md:w-28 opacity-10 pointer-events-none" strokeWidth={3} />
 
@@ -130,9 +130,9 @@ export function SuggestedPlaceCard({ event, currentUserId, tripId, tripStartDate
                     <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-between min-h-9">
                         {voteCount > 0 ? (
                             <div className="flex items-center gap-2 min-w-0 overflow-hidden">
-                                <span className="text-[10px] font-black uppercase tracking-wider text-foreground/70 bg-black/5 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-full border border-black/10 shrink-0">
-                                    Votes
-                                </span>
+                                <div className="flex items-center gap-1.5 bg-muted/60 text-muted-foreground border-2 border-border rounded-full px-2 sm:px-2.5 py-1 sm:py-1.5 shadow-sticker-badge shrink-0">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider">Votes</span>
+                                </div>
                                 <div className="flex -space-x-2 overflow-hidden min-w-0">
                                     {event.votes.slice(0, 5).map(vote => {
                                         let userAvatar = null;
@@ -163,8 +163,8 @@ export function SuggestedPlaceCard({ event, currentUserId, tripId, tripStartDate
                             onClick={(e) => { e.stopPropagation(); handleToggleVote(); }}
                             disabled={isVoting}
                             className={cn(
-                                "flex items-center gap-1.5 rounded-full font-black text-xs sm:text-sm border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all pl-2.5 sm:pl-3 pr-3 sm:pr-3.5 py-1.5 sm:py-2 min-h-[44px] sm:min-h-0 min-w-[44px] sm:min-w-0 justify-center shrink-0 touch-manipulation",
-                                hasVoted ? getStickerBgClass("pink") : "bg-card/90 text-foreground hover:bg-sticker-lilac/30 border-border"
+                                "flex items-center gap-1.5 rounded-full font-black text-xs sm:text-sm border-2 border-border shadow-sticker-sm hover:-translate-y-1 hover:shadow-sticker-card-hover hover:scale-[1.03] transition-all duration-200 pl-2.5 sm:pl-3 pr-3 sm:pr-3.5 py-1.5 sm:py-2 min-h-[44px] sm:min-h-0 min-w-[44px] sm:min-w-0 justify-center shrink-0 touch-manipulation",
+                                hasVoted ? getStickerBgClass("pink") : "bg-card/90 text-foreground hover:bg-sticker-lilac/40 hover:border-sticker-lilac/50 border-border"
                             )}
                             title={hasVoted ? "Remove vote" : "Vote"}
                         >
@@ -176,11 +176,11 @@ export function SuggestedPlaceCard({ event, currentUserId, tripId, tripStartDate
                     {/* Row 2: Map + Link (left), Calendar (right) */}
                     <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-between pt-1 border-t border-black/5">
                         <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                            <a href={mapsUrl} target="_blank" rel="noreferrer" title="Open in Maps" className={`flex items-center justify-center h-10 w-10 sm:h-9 sm:w-9 rounded-full font-bold ${getStickerBgClass("green")} border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all shrink-0 touch-manipulation`} onClick={(e) => e.stopPropagation()}>
+                            <a href={mapsUrl} target="_blank" rel="noreferrer" title="Open in Maps" className={`flex items-center justify-center h-10 w-10 sm:h-9 sm:w-9 rounded-full font-bold ${getStickerBgClass("green")} border-2 border-border shadow-sticker-sm hover:-translate-y-1 hover:shadow-sticker-card-hover hover:scale-105 transition-all duration-200 shrink-0 touch-manipulation`} onClick={(e) => e.stopPropagation()}>
                                 <MapPin className="h-4 w-4" strokeWidth={3} />
                             </a>
                             {event.url && (
-                                <a href={event.url} target="_blank" rel="noreferrer" title="Open source" className={`flex items-center justify-center h-10 w-10 sm:h-9 sm:w-9 rounded-full font-bold ${getStickerBgClass("blue")} border-2 border-border shadow-sticker-sm hover:-translate-y-px hover:shadow-sticker-card transition-all shrink-0 touch-manipulation`} onClick={(e) => e.stopPropagation()}>
+                                <a href={event.url} target="_blank" rel="noreferrer" title="Open source" className={`flex items-center justify-center h-10 w-10 sm:h-9 sm:w-9 rounded-full font-bold ${getStickerBgClass("blue")} border-2 border-border shadow-sticker-sm hover:-translate-y-1 hover:shadow-sticker-card-hover hover:scale-105 transition-all duration-200 shrink-0 touch-manipulation`} onClick={(e) => e.stopPropagation()}>
                                     <ExternalLink className="h-4 w-4" strokeWidth={3} />
                                 </a>
                             )}

@@ -210,7 +210,9 @@ const VISION_PROMPT = `Analyze this image from a social media travel post. Descr
 3. Location clues (city, country, neighborhood, landmarks)
 4. What activity is shown (eating, sightseeing, shopping, etc.)
 5. Any prices, menus, or practical details visible
+6. If an address or coordinates are visible on the image (e.g. on a sign, map), include them.
 
+Focus on NAMED places (restaurant names, signs, landmarks) — not generic descriptions.
 Be specific. If you see Japanese/Korean/Chinese text on signs, transliterate it AND translate it.
 Format: a concise paragraph, max 200 words.`;
 
@@ -488,7 +490,7 @@ export async function importSocialSpots(input: SpotInput): Promise<ImporterResul
         normalizedUrl = resolvedUrl;
     }
 
-    const hasContext = extraContext.length > 10;
+    const hasContext = extraContext.replace(/[\s\-]/g, '').length > 20;
 
     const prompt = `You are TRIPWEAVE SOCIAL SPOT IMPORTER AGENT.
 IMPORTANT: You have NO internet access. You can ONLY use the information provided below.
@@ -507,17 +509,53 @@ ${hasContext ? `The post content above was scraped from the URL. Analyze it thor
 - Named places (restaurants, cafes, landmarks, hotels, etc.)
 - Addresses or location hints (city names, neighborhoods, districts)
 - Activity mentions (ramen spot, hidden cafe, rooftop bar, etc.)
+- Use hashtags (#tokyo, #ramen) and location tags (📍 Shibuya, 📍 Tokyo) as location clues.
 - Even if the caption is in Russian/Japanese/Korean, extract the place names and translate to English.
 - If the author username hints at a location (e.g. "tokyo_food"), use that as a location clue.` : `Could not extract content from the URL automatically. Return empty spots with reason "Unable to fetch post content. Try pasting the post caption manually."`}
 
 RULES:
-1) Extract 1-7 spots. Even a SINGLE mentioned place counts.
+1) Extract ALL mentioned spots (typically 1–15). Even a SINGLE mentioned place counts.
 2) VERY IMPORTANT: If the same location is mentioned in both the text caption and the visual analysis, MERGE all details into a SINGLE spot item. Do NOT create duplicate spots for the same place.
 3) For each spot: name, address (city + country minimum), description, tips, category, latlng, confidence, source_evidence.
 4) Categories must be ONE of the following (choose the most matching): "Food", "Nature", "Culture", "Must See", "Other".
-5) Provide latlng coordinates from your knowledge of real places.
+5) latlng: Provide coordinates ONLY if you are confident about the real-world location. If unsure or unknown, use null. Do NOT guess coordinates.
 6) Output in English only (translate from any language).
 7) confidence: 0.0-1.0 based on how certain you are about the identification.
+8) source_evidence: 1–2 sentences max. Explain how you identified the place from the content.
+
+EXAMPLE INPUT:
+Post caption: Best ramen in Shibuya! 🍜 Ichiran and Fuunji are must-visit. #tokyo #ramen
+Author: @tokyo_foodie
+Visual analysis: Restaurant interior, ramen bowls, Japanese signage.
+
+EXAMPLE OUTPUT:
+{
+  "spots": [
+    {
+      "name": "Ichiran",
+      "address": "Shibuya, Tokyo, Japan",
+      "description": "Famous tonkotsu ramen chain known for solo dining booths.",
+      "tips": "",
+      "category": "Food",
+      "latlng": [35.6595, 139.7004],
+      "confidence": 0.85,
+      "source_evidence": "Named in caption as must-visit ramen spot in Shibuya."
+    },
+    {
+      "name": "Fuunji",
+      "address": "Shinjuku, Tokyo, Japan",
+      "description": "Popular tsukemen (dipping ramen) restaurant.",
+      "tips": "",
+      "category": "Food",
+      "latlng": [35.6896, 139.6998],
+      "confidence": 0.80,
+      "source_evidence": "Named in caption alongside Ichiran."
+    }
+  ],
+  "post_title": "Best ramen in Shibuya",
+  "author": "@tokyo_foodie",
+  "reason": null
+}
 
 OUTPUT FORMAT (strict JSON, no markdown fences):
 {
@@ -530,13 +568,16 @@ OUTPUT FORMAT (strict JSON, no markdown fences):
       "category": "Food",
       "latlng": [35.6523, 139.7967],
       "confidence": 0.9,
-      "source_evidence": "Why you identified this from the content."
+      "source_evidence": "How you identified this from the content (1-2 sentences)."
     }
   ],
   "post_title": "Short title or null",
   "author": "Author username or null",
   "reason": null
 }
+
+If coordinates are unknown, use null for latlng:
+{ "name": "Some Cafe", "latlng": null, ... }
 
 If truly no places found:
 { "spots": [], "post_title": null, "author": null, "reason": "explanation" }`;
@@ -583,22 +624,40 @@ If truly no places found:
         }
 
         // Build ExtractedSpot[] with generated IDs and maps URLs
-        const spots: ExtractedSpot[] = aiResult.spots.map((s, index) => ({
-            spot_id: generateSpotId(s.name || `spot_${index}`, index),
-            name: s.name || "Unknown Place",
-            address: s.address || "",
-            description: s.description || "",
-            tips: s.tips || "",
-            category: s.category || "other",
-            latlng: s.latlng && Array.isArray(s.latlng) && s.latlng.length === 2 ? s.latlng : null,
-            maps_url: buildMapsUrl(
-                s.latlng && Array.isArray(s.latlng) && s.latlng.length === 2 ? s.latlng : null,
-                s.name || "",
-                s.address
-            ),
-            confidence: typeof s.confidence === "number" ? s.confidence : 0.5,
-            source_evidence: s.source_evidence || "",
-        }));
+        const VALID_CATEGORIES = ["food", "nature", "culture", "must see", "other"];
+
+        const spots: ExtractedSpot[] = aiResult.spots.map((s, index) => {
+            // Validate latlng: must be array of 2 numbers within valid ranges
+            let latlng: [number, number] | null = null;
+            if (s.latlng && Array.isArray(s.latlng) && s.latlng.length === 2) {
+                const [lat, lng] = s.latlng;
+                if (
+                    typeof lat === "number" && typeof lng === "number" &&
+                    lat >= -90 && lat <= 90 &&
+                    lng >= -180 && lng <= 180 &&
+                    !(lat === 0 && lng === 0)
+                ) {
+                    latlng = [lat, lng];
+                }
+            }
+
+            // Normalize category to valid values
+            const rawCategory = (s.category || "other").toLowerCase();
+            const category = VALID_CATEGORIES.includes(rawCategory) ? rawCategory : "other";
+
+            return {
+                spot_id: generateSpotId(s.name || `spot_${index}`, index),
+                name: s.name || "Unknown Place",
+                address: s.address || "",
+                description: s.description || "",
+                tips: s.tips || "",
+                category,
+                latlng,
+                maps_url: buildMapsUrl(latlng, s.name || "", s.address),
+                confidence: typeof s.confidence === "number" ? s.confidence : 0.5,
+                source_evidence: s.source_evidence || "",
+            };
+        });
 
         return {
             success: true,

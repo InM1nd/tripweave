@@ -45,7 +45,7 @@ export default async function BudgetPage({ params }: { params: Promise<{ id: str
         badge={<DocumentBadge color="green">💰 Finances</DocumentBadge>}
         actions={
           <AddExpenseModal tripId={id} members={members}>
-            <Button variant="stickerGreen" className="w-full md:w-auto gap-2">
+            <Button variant="stickerGreen" className="w-full md:w-auto gap-2 rounded-full">
               <Plus className="h-5 w-5" strokeWidth={3} />
               Add Expense
             </Button>
@@ -60,7 +60,7 @@ export default async function BudgetPage({ params }: { params: Promise<{ id: str
                 <div className={`h-9 w-9 rounded-xl bg-background border-2 border-border shadow-sticker-sm-soft flex items-center justify-center`}>
                   <Wallet className="h-4 w-4 md:h-5 md:w-5 text-foreground" strokeWidth={2.5} />
                 </div>
-                <span className="text-xs font-bold text-foreground/80 leading-tight">Total<br />Budget</span>
+                <span className="text-xs font-bold text-sticker-foreground/80 leading-tight">Total<br />Budget</span>
               </div>
               <p className="text-xl md:text-2xl font-black">{currency} {limit.toLocaleString()}</p>
             </StickerSurface>
@@ -71,7 +71,7 @@ export default async function BudgetPage({ params }: { params: Promise<{ id: str
                 <div className={`h-9 w-9 rounded-xl bg-background border-2 border-border shadow-sticker-sm-soft flex items-center justify-center`}>
                   <TrendingDown className="h-4 w-4 md:h-5 md:w-5 text-foreground" strokeWidth={2.5} />
                 </div>
-                <span className="text-xs font-bold text-foreground/80 leading-tight">Total<br />Spent</span>
+                <span className="text-xs font-bold text-sticker-foreground/80 leading-tight">Total<br />Spent</span>
               </div>
               <p className="text-xl md:text-2xl font-black">{currency} {totalSpent.toLocaleString()}</p>
               <div className="mt-2 h-1.5 w-full bg-background border-2 border-border rounded-full overflow-hidden">
@@ -85,9 +85,9 @@ export default async function BudgetPage({ params }: { params: Promise<{ id: str
                 <div className={`h-9 w-9 rounded-xl bg-background border-2 border-border shadow-sticker-sm-soft flex items-center justify-center`}>
                   <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-foreground" strokeWidth={2.5} />
                 </div>
-                <span className="text-xs font-bold text-foreground/80 leading-tight">Total<br />Remaining</span>
+                <span className="text-xs font-bold text-sticker-foreground/80 leading-tight">Total<br />Remaining</span>
               </div>
-              <p className={`text-xl md:text-2xl font-black ${remaining < 0 ? "text-sticker-coral" : "text-foreground"}`}>
+              <p className={`text-xl md:text-2xl font-black ${remaining < 0 ? "text-destructive" : "text-sticker-foreground"}`}>
                 {currency} {remaining.toLocaleString()}
               </p>
             </StickerSurface>

@@ -9,7 +9,14 @@ import { prisma } from "@/lib/prisma";
 
 export default async function SuggestedPlacesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const trip = await getTrip(id);
+  const [trip, events] = await Promise.all([
+    getTrip(id),
+    getSuggestedEvents(id),
+  ]);
+
+  if (!trip) {
+    notFound();
+  }
 
   const supabase = await createClient();
   const { data: { user: authUser } } = await supabase.auth.getUser();
@@ -21,12 +28,6 @@ export default async function SuggestedPlacesPage({ params }: { params: Promise<
     });
     if (dbUser) currentUserId = dbUser.id;
   }
-
-  if (!trip) {
-    notFound();
-  }
-
-  const events = await getSuggestedEvents(id);
 
   return (
     <div className="space-y-6 flex flex-col h-full pb-24 sm:pb-12 min-w-0">

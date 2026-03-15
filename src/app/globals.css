@@ -35,6 +35,7 @@
   --color-sticker-yellow: var(--sticker-yellow);
   --color-sticker-coral: var(--sticker-coral);
   --color-sticker-olive: var(--sticker-olive);
+  --color-sticker-foreground: var(--sticker-foreground);
 
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
@@ -85,6 +86,8 @@
   --sticker-yellow: #FFCF5C;
   --sticker-coral: #FF6F61;
   --sticker-olive: #8CA06A;
+  /** Dark text on sticker backgrounds — stays dark in both themes */
+  --sticker-foreground: #16151A;
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -129,6 +132,7 @@
   --sticker-yellow: #E6B040;
   --sticker-coral: #E05A4D;
   --sticker-olive: #728A55;
+  --sticker-foreground: #16151A;
 }
 
 [data-palette="alternate"] {
@@ -155,6 +159,7 @@
   --sticker-yellow: #E6D48A;
   --sticker-coral: #D98A82;
   --sticker-olive: #9BAF7E;
+  --sticker-foreground: #16151A;
 }
 
 [data-palette="alternate"][data-theme="dark"] {
@@ -183,6 +188,7 @@
   --sticker-yellow: #C4B46A;
   --sticker-coral: #B8726A;
   --sticker-olive: #7A8E5E;
+  --sticker-foreground: #16151A;
 }
 
 @layer base {

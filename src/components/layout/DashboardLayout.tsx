@@ -19,10 +19,9 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useEffect, useState } from "react";
-import { getTrips } from "@/actions/trip";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTrips } from "@/hooks/use-trips";
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
@@ -42,22 +41,7 @@ export function DashboardLayout({
   const layoutKey = isTrip
     ? "/" + pathname.split("/").slice(1, 3).join("/")
     : pathname;
-  const [trips, setTrips] = useState<Awaited<ReturnType<typeof getTrips>>>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadTrips() {
-      try {
-        const data = await getTrips();
-        setTrips(data);
-      } catch (error) {
-        console.error("Failed to load trips", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadTrips();
-  }, []);
+  const { data: trips = [], isLoading: loading } = useTrips();
 
   return (
     <TooltipProvider delayDuration={0}>

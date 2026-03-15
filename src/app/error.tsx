@@ -45,8 +45,8 @@ export default function GlobalError({
     <div className="min-h-dvh bg-background flex items-center justify-center p-6">
       <div className="w-full max-w-sm">
         <StickerSurface className="bg-card p-8 flex flex-col items-center gap-5 text-center">
-          <div className="bg-sticker-blue border-2 border-border rounded-2xl p-5 shadow-sticker-card">
-            <BadgeIcon className="h-10 w-10 text-foreground" strokeWidth={2.5} />
+          <div className="bg-sticker-blue text-sticker-foreground border-2 border-border rounded-2xl p-5 shadow-sticker-card">
+            <BadgeIcon className="h-10 w-10" strokeWidth={2.5} />
           </div>
 
           <StickerBadge color="pink" uppercase>
